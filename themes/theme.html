@@ -49,7 +49,7 @@ function stateChanged()
 {
 if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
  {
- document.getElementById("celda_div").innerHTML=xmlHttp.responseText
+ document.getElementById("resultado_div").innerHTML=xmlHttp.responseText
  }
 }
 
@@ -79,7 +79,7 @@ return xmlHttp;
 
 </head><body>
 <div id="header">
-<div align="right"><h6><a href="#">[login]</a></h6></div>
+<div align="right"><h6><a href="index.php?action=login">[login]</a></h6></div>
  <form action="javascript:ajax_index();" name="form_fabrica" id="form_fabrica_id">
  <table>
  <tr>
@@ -105,14 +105,13 @@ return xmlHttp;
 
 <div id="content">
 <pre>
-<span id="celda_div"></span>
-        <!-- INCLUDE content.inc -->
+<span id="resultado_div"></span>
 </pre>
 
 </div>
 
 <div id="footer">
-<div align="center"<h6>Desarrollado por <a href="http://www.luchorossi.com.ar">Lucho Rossi</a> - Licencia <a href="http://sam.zoy.org/wtfpl/">WTFPL</h6><div>
+        <!-- INCLUDE footer.inc -->
 </div>
 
 </body>

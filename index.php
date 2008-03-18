@@ -66,7 +66,19 @@ if(!session_is_registered('user_autenticado')){
             /**
              * Evaluo el $_GET['action']
              **/
-            print "Evaluo el action: ".$_GET['action']."\nValor: ".$_GET['q'];
+            require_once('fabrica.php');
+            $action = $_GET['action'];
+
+            if ($action == "serie")
+                buscar_nserie($_GET['q']);
+            if ($action == "lote_embalado")
+                buscar_lote_embalado($_GET['q']);
+            if ($action == "lote_produccion")
+                buscar_lote_produccion($_GET['q']);
+            if ($action == "login")
+                login();
+            else
+                die("action no definida");
     }
 
 }else{
