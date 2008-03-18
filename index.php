@@ -11,12 +11,12 @@
 if(!session_is_registered('user_autenticado')){
    /**
     * Usuario anónimo
-    * Esta seteado el $_GET['action'?
+    * Esta seteado el $_POST['action'?
     *  No -> Primera vez, entonces escribo la pagina
     *  Si -> viene de una consulta, evaluo el action.
     **/
 
-    //if(!defined($_GET['action']){
+    if(!$_GET['action']){
     /**
     * El action no esta definido.
     * Primera vez que carga la páge
@@ -62,11 +62,12 @@ if(!session_is_registered('user_autenticado')){
 
         $it->show(); //mostramos el resultado
         
-      //  }else{
+        }else{
             /**
              * Evaluo el $_GET['action']
              **/
-   // }
+            print "Evaluo el action: ".$_GET['action']."\nValor: ".$_GET['q'];
+    }
 
 }else{
     /* Usuario autentificado */

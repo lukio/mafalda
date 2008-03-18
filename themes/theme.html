@@ -12,8 +12,21 @@
 <meta name="description" content="Consultar Flexar" />
 <script type="text/javascript">
 
-function nserie (){
-datocelda = document.getElementById('celda_id').value
+function clear_textbox()
+{
+    document.getElementById('celda_id').value = ""
+    document.getElementById('lote_embalado_id').value = ""
+    document.getElementById('lote_produccion_id').value = ""
+}
+
+function ajax_index(){
+
+if ( dato_evaluo = document.getElementById('celda_id').value)
+    action = "serie"
+else if( dato_evaluo = document.getElementById('lote_embalado_id').value)
+    action = "lote_embalado"
+else if (dato_evaluo = document.getElementById('lote_produccion_id').value)
+    action = "lote_produccion"
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -21,8 +34,11 @@ if (xmlHttp==null)
  alert ("Browser no soporta HTTP Request")
  return
  }
-var url="../por_serie.php"
-url=url+"?celda="+datocelda
+var url="index.php"
+url=url+"?q="+dato_evaluo
+//evaluar si esta definido action. 
+url=url+"&action="+action
+//
 url=url+"&sid="+Math.random()
 xmlHttp.onreadystatechange=stateChanged
 xmlHttp.open("GET",url,true)
@@ -64,19 +80,19 @@ return xmlHttp;
 </head><body>
 <div id="header">
 <div align="right"><h6><a href="#">[login]</a></h6></div>
- <form action="javascript:nserie();" name="form_fabrica" id="form_fabrica_id">
+ <form action="javascript:ajax_index();" name="form_fabrica" id="form_fabrica_id">
  <table>
  <tr>
  <td>
     <!-- BEGIN input_der -->
     <div align="left">
-         <h6>{DATO}<input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}"></h6>
+         <h6>{DATO}<input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" onFocus="clear_textbox()"></h6>
     </div>
     <!-- END input_der -->
     </td><td>
     <!-- BEGIN input_cen -->
     <div align="center">
-         <h6>{DATO}<input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}"></h6>
+         <h6>{DATO}<input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" onFocus="clear_textbox()"></h6>
     </div>
     <!-- END input_cen -->
    </td></tr>
