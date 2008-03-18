@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title> Consulta Base de Datos - Flexar </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<script language=JavaScript type="text/javascript">
+function clear_textbox()
+{
+document.form2.celda.value = "";
+document.form3.nlote_emba.value = "";
+document.form4.nlotepro.value = "";
+ }
+</script>
+</head>
+
+<body>
+<div style="position:absolute; left:20; top:35;">
+	<form name="form1" method="POST" action="verifica_login.php" target="">
+		<font size=2>Nombre: </font><input type="text" name="username" size="10" onFocus=clear_textbox() ><br>
+		<font size=2>Password: </font><input type="password" name="password" size="10" onFocus=clear_textbox() ><br>
+		<input type="submit" name="Submit" value="Ingresar">		
+	</form>
+
+</div>
+<div style="position:absolute; left:215; top:35;">
+	<form name="form2" method="GET" action="por_serie.php" target="resultados">
+		<b>Numero Serie : </b><input type="text" name="celda" size="7" value="" onFocus=clear_textbox()>
+			<input type="submit" name="Submit" value="Consulte">
+			</form>
+</div>
+
+
+<div style="position:absolute; left:480; top:35;">
+	<form name="form3" method="GET" action="lote_emb2.php" target="resultados">
+		<b>Lote de Emba: </b><input type="text" name="nlote_emba" size="7" value="" onFocus=clear_textbox()>
+			<input type="submit" name="Submit" value="Consulte">
+	</form>
+</div>
+<div style="position:absolute; left:480; top:60;">
+	<form name="form4" method="GET" action="lote_pro3.php" target="resultados">
+		<b>Lote de Produ: </b><input type="text" name="nlotepro" size="7" value="" onFocus=clear_textbox()>
+			<input type="submit" name="Submit" value="Consulte">
+			</form>
+</div>
+<div style="position:absolute; left:20; top:120;"><hr noshade width="100%"> </div>
+
+<div style="position:absolute; left:20; top:150;">
+<iframe style="width: 790px; height: 1000px" name="resultados" frameborder="0" scrolling="auto" /></iframe>
+
+</div>
+</body>
+</html>

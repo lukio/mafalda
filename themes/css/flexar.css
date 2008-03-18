@@ -1,0 +1,181 @@
+body {
+        margin: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 0px;
+        font-family: verdana, arial, helvetica, sans-serif;
+        color: #ccc;
+        background-color: #333;
+        text-align: center;
+/* part 1 of 2 centering hack */
+        }
+a {
+        text-decoration: none;
+        font-weight: bold;
+        color:  #ccc;
+        outline: none;
+        }
+a:visited {
+        color:  #ccc;
+        }
+a:active {
+        color:  #ccc;
+        }
+a:hover {
+        color: #ccc;
+        text-decoration: underline;
+        }
+.ahem {
+        display: none;
+        }
+strong, b {
+        font-weight: bold;
+        }
+p {
+        font-size: 12px;
+        line-height: 22px;
+        margin-top: 20px;
+        margin-bottom: 10px; 
+        }
+
+/* weird ie5win bug: all line-height to font-size ratios must agree or box gets pushed around. UPDATE: this has turned out to be very rare. my current recommendation is IGNORE this warning. at the moment i'm leaving it in only in case the issue turns up again. possibly the original bug in march 2001 was caused by an unusual combination of factors, although this solved it at the time.*/
+
+h1 {
+        font-size: 24px;
+        line-height: 44px;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 0;
+        }
+h2 {
+        font-size: 18px;
+        line-height: 40px;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 0;
+        }
+h3 {
+        font-size: 16px;
+        line-height: 22px;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 0;
+        }
+h4 {
+        font-size: 14px;
+        line-height: 26px;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 0;
+        }
+h5 {
+        font-size: 12px;
+        line-height: 22px;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 0;
+        }
+h6 {
+        font-size: 10px;
+        line-height: 18px;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 0;
+        }
+img {
+        border: 0;
+        }
+.nowrap {
+        white-space: nowrap;
+        font-size: 10px;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 0;
+/* must be combined with nobr in html for ie5win */
+        }
+.tiny {
+        font-size: 9px;
+        line-height: 16px;
+        margin-top: 15px;
+        margin-bottom: 5px; 
+        }
+#content {
+        padding: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        margin-right: auto;
+        margin-left: auto;  /* opera does not like 'margin:20px auto' */
+        background: #666;
+/*        border: 5px solid #ccc;*/
+        text-align:left; /* part 2 of 2 centering hack */
+        width: 570px; /* ie5win fudge begins */
+        voice-family: "\"}\"";
+        voice-family:inherit;
+        width: 570px;
+        }
+html>body #content {
+        width: 570px; /* ie5win fudge ends */
+        }
+#header {
+        padding: 10px;
+        margin-top: 20px;
+        margin-bottom: 2px;
+        margin-right: auto;
+        margin-left: auto;  /* opera does not like 'margin:20px auto' */
+        background: #661;
+/*        border: 5px green solid; */
+        text-align:left; /* part 2 of 2 centering hack */
+        height:75px;
+        width: 570px; /* ie5win fudge begins */
+        voice-family: "\"}\"";
+        voice-family:inherit;
+        width: 570px;
+        }
+#footer {
+        padding: 0px;
+        margin-top: 0px;
+        margin-bottom: 10px;
+        margin-right: auto;
+        margin-left: auto;  /* opera does not like 'margin:20px auto' */
+        background: #333;
+        border: 0px green solid;
+        text-align:left; /* part 2 of 2 centering hack */
+        height:15px;
+        width: 570px; /* ie5win fudge begins */
+        voice-family: "\"}\"";
+        voice-family:inherit;
+        width: 570px;
+        }
+pre {
+        font-size: 12px;
+        line-height: 22px;
+        margin-top: 20px;
+        margin-bottom: 10px; 
+        }
+
+input { 
+        font-family: Tahoma, Verdana, Arial; font-size: 11px; 
+        color: #FFFFFF; 
+        background-color: #6699CC; 
+        border: #000099; 
+        border-style: solid; 
+        border-top-width: 1px; 
+        border-right-width: 1px; 
+        border-bottom-width: 1px; 
+        border-left-width: 1px
+}
+select { 
+        font-family: Tahoma, Verdana, Arial; 
+        font-size: 11px; 
+        color: #FFFFFF; 
+        background-color: #6699CC; 
+        border: #000099; 
+        border-style: solid; 
+        border-top-width: 1px; 
+        border-right-width: 1px; 
+        border-bottom-width: 1px; 
+        border-left-width: 1px
+}
+
+
+
+
+

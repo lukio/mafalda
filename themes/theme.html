@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><title>Mafalda - Consulta Flexar</title>
+<link rel="stylesheet" type="text/css" media="all" href="themes/css/flexar.css" />
+
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+<meta name="MSSmartTagsPreventParsing" content="TRUE" />
+<meta http-equiv="expires" content="-1" />
+<meta http-equiv= "pragma" content="no-cache" />
+<meta name="robots" content="all" />
+<meta name="author" content="Lucho Rossi" />
+<meta name="description" content="Consultar Flexar" />
+<script type="text/javascript">
+
+function nserie (){
+datocelda = document.getElementById('celda_id').value
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="../por_serie.php"
+url=url+"?celda="+datocelda
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
+
+function stateChanged()
+{
+if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+ {
+ document.getElementById("celda_div").innerHTML=xmlHttp.responseText
+ }
+}
+
+function GetXmlHttpObject()
+{
+var xmlHttp=null;
+try
+ {
+ // Firefox, Opera 8.0+, Safari
+ xmlHttp=new XMLHttpRequest();
+ }
+catch (e)
+ {
+ //Internet Explorer
+ try
+  {
+  xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+  }
+ catch (e)
+  {
+  xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+ }
+return xmlHttp;
+}
+</script>
+
+</head><body>
+<div id="header">
+<div align="right"><h6><a href="#">[login]</a></h6></div>
+ <form action="javascript:nserie();" name="form_fabrica" id="form_fabrica_id">
+     <h6>Numero Serie: <input type="text" name="celda" size="10" id="celda_id"></h6>
+     <div align="right">
+        <input type="submit" name="Submit" value="Buscar">
+     </div>
+  </form>
+</div>
+
+<div id="content">
+<pre>
+<span id="celda_div"></span>
+        <!-- INCLUDE content.inc -->
+</pre>
+
+</div>
+
+<div id="footer">
+<div align="center"<h6>Desarrollado por <a href="http://www.luchorossi.com.ar">Lucho Rossi</a> - Licencia <a href="http://sam.zoy.org/wtfpl/">WTFPL</h6><div>
+</div>
+
+</body>
+</html>
