@@ -174,7 +174,9 @@ select {
         border-bottom-width: 1px; 
         border-left-width: 1px
 }
-
+table {
+border: 1px;
+}
 
 
 

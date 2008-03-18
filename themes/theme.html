@@ -65,8 +65,23 @@ return xmlHttp;
 <div id="header">
 <div align="right"><h6><a href="#">[login]</a></h6></div>
  <form action="javascript:nserie();" name="form_fabrica" id="form_fabrica_id">
-     <h6>Numero Serie: <input type="text" name="celda" size="10" id="celda_id"></h6>
-     <div align="right">
+ <table>
+ <tr>
+ <td>
+    <!-- BEGIN input_der -->
+    <div align="left">
+         <h6>{DATO}<input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}"></h6>
+    </div>
+    <!-- END input_der -->
+    </td><td>
+    <!-- BEGIN input_cen -->
+    <div align="center">
+         <h6>{DATO}<input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}"></h6>
+    </div>
+    <!-- END input_cen -->
+   </td></tr>
+</table>
+    <div align="right">
         <input type="submit" name="Submit" value="Buscar">
      </div>
   </form>
