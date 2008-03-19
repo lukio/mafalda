@@ -67,16 +67,29 @@ if(!session_is_registered('user_autenticado')){
              * Evaluo el $_GET['action']
              **/
             require_once('fabrica.php');
+            require_once('include/autentifica.php');
             $action = $_GET['action'];
 
-            if ($action == "serie")
+            if ($action == "serie"){
                 buscar_nserie($_GET['q']);
-            if ($action == "lote_embalado")
+                exit();
+            }
+            elseif ($action == "lote_embalado"){
                 buscar_lote_embalado($_GET['q']);
-            if ($action == "lote_produccion")
+                exit();
+            }
+            elseif ($action == "lote_produccion"){
                 buscar_lote_produccion($_GET['q']);
-            if ($action == "login")
-                login();
+                exit();
+            }
+            elseif ($action == "login"){
+                formulario_login();
+                exit();
+            }
+            elseif ($action == "postlogin"){
+                autentifica($_GET['user'],$_GET['pass']);
+                exit();
+            }
             else
                 die("action no definida");
     }
