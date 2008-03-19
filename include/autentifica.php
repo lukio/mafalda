@@ -33,7 +33,7 @@ function formulario_login(){
 }
 
 function autentifica(){
-    require_once('dbinfo.php');
+    require_once('../dbinfo.php');
     // start the session
     session_start();
     header("Cache-control: private"); //IE 6 Fix
@@ -41,12 +41,11 @@ function autentifica(){
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-   
-    print "CHEQUEO SI USUARIO Y PASSWORD SON CORRECTOS";
     $query ="SELECT ID_user FROM Usuarios WHERE login='$username' AND password='$password'";
 
-    if ( odbc_result($result,1) )
-        $_SESSION['user_autenticado'] = 1;
+    //Hago el query. Si el resultado es OK, entonces usuario autentificado. Sino, pues no :)
+//    if ( odbc_result($result,1) )
+//        $_SESSION['user_autenticado'] = 1;
 
     unset($_POST['username']);
     unset($username);
@@ -54,18 +53,20 @@ function autentifica(){
     unset($password);
 
     if (!isset($_SESSION['user_autenticado'])){
-        require_once 'pear/Sigma.php'; //insertamos la libreria
-        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
-        $it->loadTemplatefile('login.html'); //seleccionamos la plantilla
-
-        $it->setCurrentBlock('texto'); //buscamos bloque
-
-        $it->setVariable('TEXTO', "<h3>Usuario o password NO validos</h3>");
-        $it->parseCurrentBlock('texto');
-        $it-show();
+        echo "<html><head><script language='Javascript'>
+                function cargarindex(){
+                    setTimeout(\"location.replace('../index.php')\",2000);
+                }
+                </script>
+            </head>
+            <body onload='cargarindex()'>
+                <div align='center'>
+                    <h3>Usuario o password NO valido</h3>
+                </div>
+            </body></html>";
+    }else{
+        header("Location: ../index.php");
     }
-
-
 
 }
 

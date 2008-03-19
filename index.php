@@ -8,7 +8,11 @@
  */
 
 //creamos el codigo puente
-if(!session_is_registered('user_autenticado')){
+
+session_start();
+header("Cache-control: private"); //IE 6 Fix
+
+if(!isset($_SESSION['user_autenticado'])){
    /**
     * Usuario anónimo
     * Esta seteado el $_POST['action'?
@@ -96,8 +100,10 @@ if(!session_is_registered('user_autenticado')){
 
 }else{
     /* Usuario autentificado */
-    header('location:');
-    session_start();
+//    header('location:');
+//
+   // session_start();
+   print "USUARIO AUTENTIFICADO".$_SESSION['user_autenticado'];
 }        
 
 ?>
