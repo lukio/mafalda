@@ -98,7 +98,7 @@ if(!isset($_SESSION['user_autenticado'])){
     /* Usuario autentificado
      * Lo seguimos manejando desde aca
      **/
-    if(!$_GET['action']){
+    if(!$_GET['action'] && !$_GET['modulo']){
         require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('gerencia.html'); //seleccionamos la plantilla
@@ -111,13 +111,15 @@ if(!isset($_SESSION['user_autenticado'])){
              require_once('include/autentifica.php');
              logout();
              exit();
+         }else{
+             switch($modulo){
+                 case "consulta_gerencia": break;
+                 case "abm_modelos":require_once('gerencia/abm_modelo.php'); cual_action($action); break;
+                 case "abro_planos": break;
+             }
          }
-         else
-             die("action no definida");
-            
             
     }
-
 }        
 
 ?>
