@@ -20,14 +20,10 @@ function clear_textbox()
     document.getElementById('lote_produccion_id').value = ""
 }
 
-function ajax_index(){
+function ajax_index(modulo){
 
-if ( dato_evaluo = document.getElementById('celda_id').value)
-    action = "serie"
-else if( dato_evaluo = document.getElementById('lote_embalado_id').value)
-    action = "lote_embalado"
-else if (dato_evaluo = document.getElementById('lote_produccion_id').value)
-    action = "lote_produccion"
+if (modulo == "abm_modelos")
+    action = "alta"
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -36,7 +32,7 @@ if (xmlHttp==null)
  return
  }
 var url="index.php"
-url=url+"?q="+dato_evaluo
+url=url+"?modulo="+modulo
 //evaluar si esta definido action. 
 url=url+"&action="+action
 //
@@ -81,9 +77,9 @@ return xmlHttp;
 </head><body>
 <div id="header">
 <div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
-    <a class="nav" href="index.html" title="Consulta Gerencia">Consulta Gerencia</a>
-    <a class="nav" href="#" onclick="ajax_index()" title="ABM Modelos">ABM Modelos</a>
-    <a class="nav" href="grietas.html" title="Buscar Planos">Buscar Planos</a>
+    <a class="nav" href="#" onclick="ajax_index(this.id)" title="Consulta Gerencia" id="consulta_gerencia">Consulta Gerencia</a>
+    <a class="nav" href="#" onclick="ajax_index(this.id)" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
+    <a class="nav" href="#" onclick="ajax_index(this.id)" title="Buscar Planos" id="buscar_panos">Buscar Planos</a>
 </div>
 
 <div id="content">
