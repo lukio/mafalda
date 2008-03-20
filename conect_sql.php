@@ -3,17 +3,10 @@ require_once ('include/pear/MDB2.php');
 
 $dsn = array(
             'phptype'  => 'mssql',
-            'username' => 'administrator',
+            'username' => 'appflexar',
             'password' => 'vamosmujer',
             'hostspec' => '10.1.1.2',
             'database' => 'flexar',
-        );
-$dsnmysql = array(
-            'phptype'  => 'mysql',
-            'username' => 'root',
-            'password' => 'agitatormiike',
-            'hostspec' => '127.0.0.1',
-            'database' => 'usla',
         );
 
 $options = array(
@@ -21,7 +14,7 @@ $options = array(
             'portability' => MDB2_PORTABILITY_ALL,
         );
 
-/*$mdb2 = mssql_connect("10.1.1.2", "administrator","vamosmujer");
+/*$mdb2 = mssql_connect("10.1.1.2", "appflexar", "vamosmujer");
 mssql_select_db("flexar", $mdb2)
     or die ("Can't connect to Database");
 
@@ -34,12 +27,12 @@ mssql_select_db("flexar", $mdb2)
  // and also attempts to connect to the host
 
   
-$mdb2 =& MDB2::connect($dsnmysql, $options);
+$mdb2 =& MDB2::connect($dsn, $options);
 if (PEAR::isError($mdb2)) {
      die($mdb2->getMessage());
 }
 
-$res =& $mdb2->query('select * from usla_session');
+$res =& $mdb2->query('select * from modelos');
 
 echo $res->numCols();
 
@@ -51,9 +44,9 @@ echo $res->numCols();
 if (PEAR::isError($res)) {
         die($res->getMessage());
 }
-*/
-$mdb2->disconnect();
 
+$mdb2->disconnect();
+*/
 
 ?>
 
