@@ -7,12 +7,12 @@
 *			Baja = 2 
 *			Modificaciones = 3 
 **/
-require 'validaciones.php';
-require 'dbinfo.php';
-require 'DB.php';
+require '../include/validaciones.php';
+//require 'dbinfo.php';
+//require 'DB.php';
 ini_set('session.gc_probability', '100');
 ini_set('session.gc_maxlifetime', '600');
-session_start();
+//session_start();
 
 //require 'DB_Table.php';
 //#define NUEVO_MODELO 1;
@@ -21,16 +21,16 @@ session_start();
 //#define CANT_CAMPOS  41;
 // se hacen las conexiones al principio. Si falla no continua
  //conectar a la db flexar
- $id_db_flexar = DB::connect("$program_db_flexar://$usuarioflexar:$pwdflexar@$host/$db_flexar");
- if (DB::isError($id_db_flexar)) { die("No se puede conectar: " . $id_db_flexar ->getMessage()); }
+ //$id_db_flexar = DB::connect("$program_db_flexar://$usuarioflexar:$pwdflexar@$host/$db_flexar");
+ //if (DB::isError($id_db_flexar)) { die("No se puede conectar: " . $id_db_flexar ->getMessage()); }
  //establezco gestion automatica de errores
- $id_db_flexar -> setErrorHandling(PEAR_ERROR_DIE);
+ //$id_db_flexar -> setErrorHandling(PEAR_ERROR_DIE);
 
  //conectar a la db Tango
- $id_db_tango = DB::connect("$program_db_tango://$usuariotango:$pwdtango@$host/$db_tango");
- if (DB::isError($id_db_tango)) { die("No se puede conectar: " . $id_db_tango ->getMessage()); }
+ //$id_db_tango = DB::connect("$program_db_tango://$usuariotango:$pwdtango@$host/$db_tango");
+ //if (DB::isError($id_db_tango)) { die("No se puede conectar: " . $id_db_tango ->getMessage()); }
  //establezco gestion automatica de errores
- $id_db_tango -> setErrorHandling(PEAR_ERROR_DIE);
+ //$id_db_tango -> setErrorHandling(PEAR_ERROR_DIE);
 
 
  

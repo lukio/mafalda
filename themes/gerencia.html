@@ -9,18 +9,86 @@
 <meta http-equiv= "pragma" content="no-cache" />
 <meta name="robots" content="all" />
 <meta name="author" content="Lucho Rossi" />
-<meta name="description" content="Consultar Flexar" />
+<meta name="description" content="Consultas Flexar" />
+
+<script type="text/javascript">
+
+function clear_textbox()
+{
+    document.getElementById('celda_id').value = ""
+    document.getElementById('lote_embalado_id').value = ""
+    document.getElementById('lote_produccion_id').value = ""
+}
+
+function ajax_index(){
+
+if ( dato_evaluo = document.getElementById('celda_id').value)
+    action = "serie"
+else if( dato_evaluo = document.getElementById('lote_embalado_id').value)
+    action = "lote_embalado"
+else if (dato_evaluo = document.getElementById('lote_produccion_id').value)
+    action = "lote_produccion"
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?q="+dato_evaluo
+//evaluar si esta definido action. 
+url=url+"&action="+action
+//
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
+
+function stateChanged()
+{
+if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+ {
+ document.getElementById("resultado_div").innerHTML=xmlHttp.responseText
+ }
+}
+
+function GetXmlHttpObject()
+{
+var xmlHttp=null;
+try
+ {
+ // Firefox, Opera 8.0+, Safari
+ xmlHttp=new XMLHttpRequest();
+ }
+catch (e)
+ {
+ //Internet Explorer
+ try
+  {
+  xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+  }
+ catch (e)
+  {
+  xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+ }
+return xmlHttp;
+}
+</script>
 
 </head><body>
 <div id="header">
-<div align="right"><h6><a href="index.php?action=logut">[logut]</a></h6></div>
+<div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
     <a class="nav" href="index.html" title="Consulta Gerencia">Consulta Gerencia</a>
-    <a class="nav" href="biografia.html" title="ABM Modelos">ABM Modelos</a>
+    <a class="nav" href="#" onclick="ajax_index()" title="ABM Modelos">ABM Modelos</a>
     <a class="nav" href="grietas.html" title="Buscar Planos">Buscar Planos</a>
 </div>
 
 <div id="content">
 <pre>
+
 <span id="resultado_div"></span>
 </pre>
 </div>

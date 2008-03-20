@@ -45,7 +45,7 @@ function autentifica(){
 
     //Hago el query. Si el resultado es OK, entonces usuario autentificado. Sino, pues no :)
 //    if ( odbc_result($result,1) )
-//        $_SESSION['user_autenticado'] = 1;
+        $_SESSION['user_autenticado'] = 1;
 
     unset($_POST['username']);
     unset($username);
@@ -68,6 +68,11 @@ function autentifica(){
         header("Location: ../index.php");
     }
 
+}
+
+function logout(){
+    unset($_SESSION['user_autenticado']);
+    header("Location:index.php");
 }
 
 ?>

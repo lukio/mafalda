@@ -95,11 +95,29 @@ if(!isset($_SESSION['user_autenticado'])){
     }
 
 }else{
-    /* Usuario autentificado */
-//    header('location:');
-//
-   // session_start();
-   print "USUARIO AUTENTIFICADO".$_SESSION['user_autenticado'];
+    /* Usuario autentificado
+     * Lo seguimos manejando desde aca
+     **/
+    if(!$_GET['action']){
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('gerencia.html'); //seleccionamos la plantilla
+        $it->show();
+    }else{
+        /* Evaluo de que modulo y que action requiere*/
+        $action = $_GET['action'];
+        $modulo = $_GET['modulo'];
+         if ($action == "logout"){
+             require_once('include/autentifica.php');
+             logout();
+             exit();
+         }
+         else
+             die("action no definida");
+            
+            
+    }
+
 }        
 
 ?>
