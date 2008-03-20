@@ -108,13 +108,13 @@ img {
         background: #ffd;
 /*        border: 5px solid #ccc;*/
         text-align:left; /* part 2 of 2 centering hack */
-        width: 570px; /* ie5win fudge begins */
+        width: 795px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
-        width: 570px;
+        width: 795px;
         }
 html>body #content {
-        width: 570px; /* ie5win fudge ends */
+        width: 795px; /* ie5win fudge ends */
         }
 #header {
         padding: 10px;
@@ -147,16 +147,16 @@ html>body #content {
         width: 570px;
         }
 pre {
-        font-size: 14px;
-        line-height: 22px;
-        margin-top: 20px;
-        margin-bottom: 10px; 
+        font-size: 11px;
+        line-height: 5px;
+        margin-top: 5px;
+        margin-bottom: 8px; 
         }
 
 input { 
         font-family: Tahoma, Verdana, Arial; font-size: 11px; 
-        color: #FFFFFF; 
-        background-color: #6699CC; 
+        color: #000; 
+        background-color:; 
         border: #000099; 
         border-style: solid; 
         border-top-width: 1px; 
@@ -186,9 +186,8 @@ td{
 }
 
 table.fabrica{ 
-    width: 580px;
     background-color: #fafafa;
-    border: 1px #000000 solid;
+    border: 0px #000000 solid;
     border-collapse: collapse;
     border-spacing: 0px; 
 }
@@ -212,9 +211,9 @@ td.fabricatd{
     font-size: .7em;
     color: #404040;
     background-color: #fafafa;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 8px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
     padding-right: 0px; 
 }
 

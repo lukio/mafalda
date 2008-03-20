@@ -20,10 +20,7 @@ function clear_textbox()
     document.getElementById('lote_produccion_id').value = ""
 }
 
-function ajax_index(modulo){
-
-if (modulo == "abm_modelos")
-    action = "alta"
+function ajax_index(modulo, action){
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -77,9 +74,9 @@ return xmlHttp;
 </head><body>
 <div id="header">
 <div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
-    <a class="nav" href="#" onclick="ajax_index(this.id)" title="Consulta Gerencia" id="consulta_gerencia">Consulta Gerencia</a>
-    <a class="nav" href="#" onclick="ajax_index(this.id)" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
-    <a class="nav" href="#" onclick="ajax_index(this.id)" title="Buscar Planos" id="buscar_panos">Buscar Planos</a>
+    <a class="nav" href="#" onclick="ajax_index(this.id, '')" title="Consulta Gerencia" id="consulta_gerencia">Consulta Gerencia</a>
+    <a class="nav" href="#" onclick="ajax_index(this.id, 'alta')" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
+    <a class="nav" href="#" onclick="ajax_index(this.id, '')" title="Buscar Planos" id="buscar_panos">Buscar Planos</a>
 </div>
 
 <div id="content">
