@@ -90,10 +90,6 @@ if(!isset($_SESSION['user_autenticado'])){
                 formulario_login();
                 exit();
             }
-            elseif ($action == "postlogin"){
-                autentifica($_GET['user'],$_GET['pass']);
-                exit();
-            }
             else
                 die("action no definida");
     }
