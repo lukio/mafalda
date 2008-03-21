@@ -1,4 +1,10 @@
-<form action="javascript:ajax_index('abm_modelos','procesa:alta');" name="form_fabrica" id="form_fabrica_id">
+<div align=right><h6><a href="#" onclick="ajax_index('abm_modelos', 'alta')" id=>[alta]</a> <a href="#" onclick="ajax_index('abm_modelos', 'baja')" id=>[baja]</a> <a href="#" onclick="ajax_index('abm_modelos', 'modificacion')" id=>[modificacion]</a></h6></div>
+<!-- BEGIN ERROR -->
+{DATO}
+<!-- END ERROR -->
+<form action="index.php" name="form_fabrica" id="form_fabrica_id" method=GET>
+<input type="hidden" name="modulo" value="abm_modelos">
+<input type="hidden" name="action" value="procesa:alta">
 <table>
     <tbody>
         <tr>

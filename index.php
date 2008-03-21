@@ -107,6 +107,11 @@ if(!isset($_SESSION['user_autenticado'])){
         /* Evaluo de que modulo y que action requiere*/
         $action = $_GET['action'];
         $modulo = $_GET['modulo'];
+        $flag = $_GET['flag'];
+        unset($_GET['flag']);
+        unset($_GET['action']);
+        unset($_GET['modulo']);
+
          if ($action == "logout"){
              require_once('include/autentifica.php');
              logout();
@@ -114,7 +119,7 @@ if(!isset($_SESSION['user_autenticado'])){
          }else{
              switch($modulo){
                  case "consulta_gerencia": break;
-                 case "abm_modelos":require_once('gerencia/abm_modelo.php'); cual_action($action); break;
+                 case "abm_modelos":require_once('gerencia/abm_modelo.php'); cual_action($action, $flag); break;
                  case "abro_planos": break;
              }
          }

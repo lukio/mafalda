@@ -10,17 +10,17 @@ body {
 a {
         text-decoration: none;
         font-weight: bold;
-        color:  #ccc;
+        color:  #000;
         outline: none;
         }
 a:visited {
-        color:  #ccc;
+        color:  #000;
         }
 a:active {
-        color:  #ccc;
+        color:  #000;
         }
 a:hover {
-        color: #ccc;
+        color: #000;
         text-decoration: underline;
         }
         
@@ -99,21 +99,22 @@ img {
         margin-bottom: 5px; 
         }
 #content {
+        color: #000;
         padding: 10px;
         margin-top: 10px;
         margin-bottom: 20px;
         margin-right: auto;
         margin-left: auto;  /* opera does not like 'margin:20px auto' */
-        background: #666;
+        background: #ffd;
 /*        border: 5px solid #ccc;*/
         text-align:left; /* part 2 of 2 centering hack */
-        width: 570px; /* ie5win fudge begins */
+        width: 795px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
-        width: 570px;
+        width: 795px;
         }
 html>body #content {
-        width: 570px; /* ie5win fudge ends */
+        width: 795px; /* ie5win fudge ends */
         }
 #header {
         padding: 10px;
@@ -124,7 +125,7 @@ html>body #content {
         background: #366;
 /*        border: 5px green solid; */
         text-align:center; /* part 2 of 2 centering hack */
-        height:50px;
+        height:60px;
         width: 570px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
@@ -146,16 +147,16 @@ html>body #content {
         width: 570px;
         }
 pre {
-        font-size: 12px;
-        line-height: 22px;
-        margin-top: 20px;
-        margin-bottom: 10px; 
+        font-size: 11px;
+        line-height: 5px;
+        margin-top: 5px;
+        margin-bottom: 8px; 
         }
 
 input { 
         font-family: Tahoma, Verdana, Arial; font-size: 11px; 
-        color: #FFFFFF; 
-        background-color: #6699CC; 
+        color: #000; 
+        background-color:; 
         border: #000099; 
         border-style: solid; 
         border-top-width: 1px; 
@@ -167,7 +168,7 @@ select {
         font-family: Tahoma, Verdana, Arial; 
         font-size: 11px; 
         color: #FFFFFF; 
-        background-color: #6699CC; 
+        background-color: #99999C; 
         border: #000099; 
         border-style: solid; 
         border-top-width: 1px; 
@@ -185,9 +186,8 @@ td{
 }
 
 table.fabrica{ 
-    width: 580px;
     background-color: #fafafa;
-    border: 1px #000000 solid;
+    border: 0px #000000 solid;
     border-collapse: collapse;
     border-spacing: 0px; 
 }
@@ -211,19 +211,19 @@ td.fabricatd{
     font-size: .7em;
     color: #404040;
     background-color: #fafafa;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 8px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
     padding-right: 0px; 
 }
 
 /* barra de navegaacion */
 a.nav, a.nav:link, a.nav:visited {
-    width:100px; 
+    width:140px; 
     height:25px; 
-    background:#531; 
+    background:#221; 
     border:1px solid #000; 
-    margin-top:2px; 
+    margin-top:0px; 
     text-align:center; 
     text-decoration:none; 
     font-family:verdana, arial, sans-serif; 
@@ -232,11 +232,9 @@ a.nav, a.nav:link, a.nav:visited {
     line-height:25px; 
     overflow:hidden; 
     float:left;
-    position:relative;
 }
 a.nav:hover {
     color:#fff; 
     background:#000;
-    position:relative;
 }
 
