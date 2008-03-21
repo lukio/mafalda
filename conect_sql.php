@@ -27,26 +27,26 @@ mssql_select_db("flexar", $mdb2)
  // and also attempts to connect to the host
 
   
-$mdb2 =& MDB2::connect($dsn, $options);
+$mdb2 =& MDB2::singleton($dsn, $options);
 if (PEAR::isError($mdb2)) {
      die($mdb2->getMessage());
 }
 
-$res =& $mdb2->query('select * from modelos');
+$res =& $mdb2->query('insert into modelos (modelo, cero) values ("cd-10", "32.34")');
 
-echo $res->numCols();
+//echo $res->numCols();
 
 /*while (($row = $res->fetchrow())) {
        // Assuming MDB2's default fetchmode is MDB2_FETCHMODE_ORDERED
      echo $row[0] . "\n";
      }
-
+*/
 if (PEAR::isError($res)) {
         die($res->getMessage());
 }
 
 $mdb2->disconnect();
-*/
+
 
 ?>
 

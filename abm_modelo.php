@@ -13,6 +13,7 @@ function cual_action ($action){
         case "modificacion": modificacion(); break;
         case "procesa": procesa($action[1]); break;
         case "borrarmodelo": borra_modelo($action[1]); break;
+        case "modificamodelo":modifica_modelo($action[1]); break;
         default: print "No existe tal acción"; 
     }
 }
@@ -101,6 +102,15 @@ function alta(){
             "DeltaRb: ", "text", "35", "10", "impedancia_id",
             "Etiqueta: ", "text", "36", "10", "grupocorrhorno_id",
         );
+    $data_13 = array (
+            "Apareo: ", "checkbox", "37", "10", "sensibilidad_id",
+            "Car Lat: ", "checkbox", "38", "10", "impedancia_id",
+            "Certificado: ", "checkbox", "39", "10", "grupocorrhorno_id",
+        );
+    $data_14 = array (
+            "Chequeo: ", "checkbox", "40", "10", "sensibilidad_id",
+            "Modelo nuevo: ", "text", "modelo_nuevo", "10", "impedancia_id",
+        );
 
 /** Nose porque. Pero no funciona si escribo el form con el template
         $it->setCurrentBlock("FORM");
@@ -120,6 +130,8 @@ function alta(){
         imprimirfila_alta($data_10, "10", $it);
         imprimirfila_alta($data_11, "11", $it);
         imprimirfila_alta($data_12, "12", $it);
+        imprimirfila_alta($data_13, "13", $it);
+        imprimirfila_alta($data_14, "14", $it);
 
         $it->setCurrentBlock("FIN_FORM");
         $it->setVariable('TIPO',"submit");
@@ -147,7 +159,18 @@ function baja(){
 }
 
 function modificacion(){
-    print "1º MOSTRAR MODELOS A MODIFICAR 2º  MOSTRAR DATOS DEL MODELO A MODIFICAR";
+    require_once 'include/pear/Sigma.php'; //insertamos la libreria
+    $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+    $it->loadTemplatefile('abm_modificacion.html'); //seleccionamos la plantilla
+    
+    $select_baja = array ("CD", "CD-10", "CD-20");
+
+    for($i=0 ; $i < count($select_baja); ) {
+    $it->setCurrentBlock("MODELOS");
+    $it->setVariable('MODELO',$select_baja[$i++]);
+    $it->parseCurrentBlock("MODELOS");
+    }
+    $it->show();
 }
 
 function procesa($action){
@@ -220,9 +243,14 @@ function validar_datos($action){
     }
 }
 
-function borra_modelo($borramodelo){
-    /* Hacer un query que ponga el valor delete=1*/    
-    print "Se ha borrado el modelo: ".$borramodelo;
+function borra_modelo($borrarmodelo){
+    /* Hacer un query que ponga el valor Inactivo=1 */
+    // global $id_db_flexar; Ubicar el conector sin usar globales
+
+    //$query = "UPDATE Modelos SET Inactivo=1 WHERE Modelos.Modelo = '$borrarmodelo'";
+    //$q = $id_db_flexar -> query($query);
+
+    print "Se ha borrado el modelo: ".$borrarmodelo;
 }
 
 
@@ -309,6 +337,17 @@ function carga_modelo(){
         $id_db_flexar -> query($query);
 
 }
+
+function modifica_modelo($modelo){
+    /*Query buscando todos los datos del modelo
+     * Mostrar campos del modelo con sus respectivos valores
+     * */
+    //$query = "select * from modelos where modelo='.$modelo.'";
+    //$resultado = $id_db_flexar -> query($query);
+    print "modifico el modelo".$modelo;
+
+}
+
 
 function checkbox_to_SQL(){
         for ($i = 1; $i < 5; $i++)

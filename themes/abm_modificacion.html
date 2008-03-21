@@ -1,0 +1,14 @@
+<div align=right><h6><a href="#" onclick="ajax_index('abm_modelos', 'alta')" id=>[alta]</a> <a href="#" onclick="ajax_index('abm_modelos', 'baja')" id=>[baja]</a> <a href="#" onclick="ajax_index('abm_modelos', 'modificacion')" id=>[modificacion]</a></h6></div>
+<form action="#" name="form_fabrica" id="form_fabrica_id">
+<div align="center">
+<table>
+    <tbody><tr><td>
+            <select name="bajamodelo" id="bajamodelo_id">
+                <!-- BEGIN MODELOS -->
+                <option>{MODELO}</option>
+                <!-- END MODELOS -->
+            </select>
+            </td>
+            <td><a href="#" onclick="javascript:ajax_abm('abm_modelos','modificamodelo:'+document.getElementById('bajamodelo_id').value)">[Modifica Modelo]</a> </td>
+</div>
+</form>
