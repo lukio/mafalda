@@ -1,7 +1,5 @@
 <?php
 
-
-
 function cual_action ($action){
     /* Depende de que action nos llega hacemos:
     * alta, baja, modificacion, procesa. 
@@ -14,6 +12,7 @@ function cual_action ($action){
         case "baja": baja(); break;
         case "modificacion": modificacion(); break;
         case "procesa": procesa($action[1]); break;
+        case "borrarmodelo": borra_modelo($action[1]); break;
         default: print "No existe tal acción"; 
     }
 }
@@ -133,10 +132,6 @@ function alta(){
 }
 function baja(){
 
-    if (isset($_POST['bajamodelo'])){
-        borra_modelo($_POST['bajamodelo']);
-    }
-
     require_once 'include/pear/Sigma.php'; //insertamos la libreria
     $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
     $it->loadTemplatefile('abm_baja.html'); //seleccionamos la plantilla
@@ -157,11 +152,9 @@ function modificacion(){
 
 function procesa($action){
     $paso_validacion = 1;
-    print $_POST['bajamodelo'];
 
     switch($action){
         case "alta": $paso_validacion = validar_datos($action); break;
-        case "baja": borra_modelo(); break;
         case "modificacion": modificacion(); break;
         default: print "No existe tal acción"; 
 
@@ -228,17 +221,8 @@ function validar_datos($action){
 }
 
 function borra_modelo($borramodelo){
-    //$_POST['bajamodelo'];
-    unset($_POST['bajamodelo']);
-
-    require_once 'include/pear/Sigma.php'; //insertamos la libreria
-    $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
-    $it->loadTemplatefile('baja_gerencia.html'); //seleccionamos la plantilla
-    $it->setCurrentBlock("ERROR");
-    $it->setVariable('DATO',"borrar modelo".$borramodelo);
-    $it->parseCurrentBlock("ERROR");
-    $it->show();
-
+    /* Hacer un query que ponga el valor delete=1*/    
+    print "Se ha borrado el modelo: ".$borramodelo;
 }
 
 

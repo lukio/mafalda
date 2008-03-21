@@ -12,10 +12,28 @@
 <meta name="description" content="Consultas Flexar" />
 
 <script type="text/javascript">
+function ajax_abm(modulo, action){
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?modulo="+modulo
+//evaluar si esta definido action. 
+url=url+"&action="+action
+
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
 
 function ajax_index(modulo, action){
 
-//num1 = getElementById('xsensibilidad_id').value
+//modelabajar = getElementById('bajamodelo_id').value
 
 
 xmlHttp=GetXmlHttpObject()
@@ -78,6 +96,9 @@ return xmlHttp;
 
 <div id="content">
 <pre>
+<!-- BEGIN BAJA -->
+{DATO}
+<!-- END BAJA -->
 <span id="resultado_div"></span>
 </pre>
 </div>

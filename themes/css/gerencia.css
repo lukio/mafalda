@@ -164,6 +164,8 @@ input {
         border-bottom-width: 1px; 
         border-left-width: 1px
 }
+
+
 select { 
         font-family: Tahoma, Verdana, Arial; 
         font-size: 11px; 
@@ -237,4 +239,3 @@ a.nav:hover {
     color:#fff; 
     background:#000;
 }
-
