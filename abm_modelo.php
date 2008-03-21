@@ -226,7 +226,7 @@ function validar_datos($action){
             </body></html>";
 
 
-    if ($flag_error > 0){
+//    if ($flag_error > 0){
     /*  require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('gerencia.html'); //seleccionamos la plantilla
@@ -235,8 +235,8 @@ function validar_datos($action){
         $it->parseCurrentBlock("ERROR");
         $it->show();
     */
-    print $error;
-    }
+//    print $error;
+//    }
     return 0;
 
 
@@ -303,19 +303,37 @@ function carga_modelo(){
                                 'Etiqueta'
                             );
 
-
+    /**
+     * 1º incluimos el archivo de MDB2.php
+     * 2º Hacemos el conect con singleton.
+     * */
+    require_once ('include/pear/MDB2.php');
+    require_once ('dbinfo.php');
+    
+    /*Bloque para conectarme a la DB*/
+    $mdb2 =& MDB2::singleton($dsn, $options);
+    if (PEAR::isError($mdb2)) {
+         die($mdb2->getMessage());
+    }
+    
     $query = "SELECT Modelos.Modelo FROM Modelos";
 
-    $q = $id_db_flexar -> query($query);
-    while ($row_flexar = $q -> fetchRow()){
+    $res =& $mdb2->query($query);
+
+    // Si hay algun error finaliza el programa. 
+    if (PEAR::isError($res)) {
+        die($res->getMessage());
+    }
+
+    while ($row_flexar = $res -> fetchRow()){
         if ( strtoupper($_GET['modelo_nuevo'])== strtoupper($row_flexar[0])){
-            impresion_error("El Modelo que desea ingresar ya existe");
-            exit();
+                print "El nombre de modelo ya existe");
+                exit();
         }
     }
-    $q -> free();
+    $res -> free();
 
-    checkbox_to_SQL(); //paso el valor check a valores true o false
+   /* checkbox_to_SQL(); //paso el valor check a valores true o false
     $_GET['modelo_nuevo'] = strtoupper($_GET['modelo_nuevo']); 
 
     // tengo un array con el nombre de todos los campos. 
@@ -335,6 +353,7 @@ function carga_modelo(){
 
         // Hacemos el insert
         $id_db_flexar -> query($query);
+    */
 
 }
 
