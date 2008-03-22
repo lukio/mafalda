@@ -1,5 +1,17 @@
 <?php
 
+function mostrar_select($data,$bloque, $it){
+
+    for($i=0 ; $i < count($data);) {
+        $it->setCurrentBlock($bloque); //buscamos bloque
+
+        $it->setVariable('NAME_DATO',$data[$i++]);
+
+        $it->parseCurrentBlock($bloque); //generamos la parte del bloque analizado
+    }
+
+}
+
 function mostrar_inputs($data,$bloque, $it){
 
     for($i=0 ; $i < count($data);) {
@@ -31,16 +43,27 @@ function pagina_consulta_gerencia ($action){
 
     $data_der = array (
                       "Numero serie:  ", "text", "celda", "10", "celda_id",
-                      "Numero OT:&nbsp;&nbsp;&nbsp;&nbsp; ", "text", "numero_ot", "10", "numero_ot_id",
+                      "Numero OT: ", "text", "numero_ot", "10", "numero_ot_id"
                     );
 
     $data_cen = array (
                        "Nombre Operario: ", "text", "nombre_operario", "10", "nombre_operario_id",
+                       "Sector: ", "text", "sector", "10", "sector_id"
                     );
+    $data_fecha = array (
+                   "Fecha Inicio: ", "text", "fecha_inicio", "12", "fecha_inicio_id",
+                   "Fecha Final: ", "text", "fecha_final", "12", "fecha_final_id"
+            );
+    $data_busqueda = array (
+                   "Embalado por fecha", "Probatuti por operario y fecha", "Probatuti por sector y fecha", 
+                   "Ensayos por operario y fecha", "Cableado (OT Asignada)", "Lima (OT Asignada)", 
+                   "Num OT por fecha", "OT por operario"
+            );
 
     mostrar_inputs($data_der,"input_der", $it);
     mostrar_inputs($data_cen,"input_cen", $it);
-
+    mostrar_inputs($data_fecha,"FECHAS", $it);
+    mostrar_select($data_busqueda,"BUSQUEDA", $it);
     
     $it->show(); //mostramos el resultado
 }

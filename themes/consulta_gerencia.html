@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head><title>Mafalda - Consulta Flexar</title>
 <link rel="stylesheet" type="text/css" media="all" href="themes/css/consulta_gerencia.css" />
+<link rel="stylesheet" type="text/css" href="themes/css/ui.datepicker.css">
 
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
 <meta name="MSSmartTagsPreventParsing" content="TRUE" />
@@ -10,7 +11,19 @@
 <meta name="robots" content="all" />
 <meta name="author" content="Lucho Rossi" />
 <meta name="description" content="Consultar Flexar" />
+<script src="include/jquery-1.2.3.js"></script>
+<script  src="include/ui.datepicker.js"></script>
+
+<script>
+
+  $(document).ready(function(){
+    $('#fecha_inicio_id').datepicker();
+    $('#fecha_final_id').datepicker();
+$('#exampleRange').datepicker({rangeSelect: true, firstDay: 1});
+  });
+</script>
 <script type="text/javascript">
+  
 
 function clear_textbox()
 {
@@ -78,10 +91,12 @@ return xmlHttp;
 </script>
 
 </head><body>
+
+
 <div id="header">
 <div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
- <form action="javascript:ajax_index();" name="form_fabrica" id="form_fabrica_id">
- <table>
+ <form action="javascript:ajax_index();" name="form_gerencia" id="form_gerencia_id">
+ <table class="header">
  <tbody>
      <tr>
     <!-- BEGIN input_der -->
@@ -94,10 +109,34 @@ return xmlHttp;
    </tr>
 </tbody>
 </table>
-    <div align="right">
+<br />
+<table class="header">
+<tbody>
+    <tr>
+    <!-- BEGIN FECHAS -->
+    <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="Click calendario"></td>
+    <!-- END FECHAS -->
+    </tr>
+</tbody>
+</table>
+<br />
+<table class="header">
+<tbody>
+    <tr>
+    <td><h6>Tipo de Busqueda: </h6></td>
+    <td><select name="tipo_busqueda">
+    <!-- BEGIN BUSQUEDA -->
+    <h6>{DATO}</h6><option>{NAME_DATO}</option>
+    <!-- END BUSQUEDA -->
+    </select>
+    </td>
+    </tr>
+</tbody>
+</table>
+     <div align="right">
         <input type="submit" name="Submit" value="Buscar">
      </div>
-  </form>
+</form>
 </div>
 
 <div id="content">

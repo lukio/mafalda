@@ -117,19 +117,20 @@ html>body #content {
         width: 795px; /* ie5win fudge ends */
         }
 #header {
-        padding: 10px;
-        margin-top: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 10px;
         margin-bottom: 10px;
         margin-right: auto;
         margin-left: auto;  /* opera does not like 'margin:20px auto' */
         background: #366;
 /*        border: 5px green solid; */
         text-align:center; /* part 2 of 2 centering hack */
-        height:150px;
-        width: 570px; /* ie5win fudge begins */
+        height:210px;
+        width: 510px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
-        width: 570px;
+        width: 510px;
         }
 #footer {
         padding: 0px;
@@ -178,9 +179,9 @@ select {
         border-bottom-width: 1px; 
         border-left-width: 1px
 }
-table {
+table.header {
         border: 1px #000000 solid;
-        border-spacing: 6px;
+        border-spacing: 4px;
 }
 td{
     padding-right: 5px;
