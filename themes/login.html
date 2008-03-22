@@ -15,19 +15,17 @@
 
 <body>
 <div id="content">
- <form action="include/autentifica.php" name="form_login" id="form_login_id" method=POST>
- <table><tr>
+<form action="include/autentifica.php" name="form_login" id="form_login_id" method=POST>
+<input type="hidden" name="action" value="postlogin">
+<div align="center">
+ <table><tbody>
     <!-- BEGIN input -->
-    <div align="center">
+        <tr><td>
          <h5>{DATO}<input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}"></h5>
-    </div>
+        </td></tr>
     <!-- END input -->
-         <input type="hidden" name="action" value="postlogin">
-    <!-- BEGIN texto -->
-        {TEXTO}
-    <!-- END texto -->
-
-</tr></table>
+    </tbody></table>
+</div>
     <div align="right">
         <input type="submit" name="Submit" value="Log in">
      </div>

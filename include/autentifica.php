@@ -13,7 +13,7 @@ function formulario_login(){
     $it->loadTemplatefile('login.html'); //seleccionamos la plantilla
     $data_der = array (
                         "Usuario: &nbsp;&nbsp;&nbsp;&nbsp;", "text", "username","10","username_id",
-                        "Password: ", "password", "password","10","password_id",                        
+                        "Password: ", "password", "password","10","password_id"                        
                     );
 
     for($i=0 ; $i < count($data_der);) {
@@ -36,7 +36,7 @@ function autentifica(){
     require_once('../dbinfo.php');
     // start the session
     session_start();
-    header("Cache-control: private"); //IE 6 Fix
+//    header("Cache-control: private"); //IE 6 Fix
 
     $username = $_POST['username'];
     $password = $_POST['password'];
