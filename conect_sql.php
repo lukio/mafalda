@@ -32,13 +32,17 @@ if (PEAR::isError($mdb2)) {
      die($mdb2->getMessage());
 }
 
-$res =& $mdb2->query('insert into modelos (modelo, cero) values ("cd-10", "32.34")');
+//$res =& $mdb2->query("select * from modelos where modelo='cd-10'");
+$res = $mdb2->prepare('INSERT INTO Modelos (Sensibilidad, Impedancia) VALUES (?,?)');
+$data = array ('23','32');
+$res->execute($data);
 
-//echo $res->numCols();
-
-/*while (($row = $res->fetchrow())) {
+//$row= $res->fetchrow();
+//print_r ($row);
+/*
+while (($row = $res->fetchrow())) {
        // Assuming MDB2's default fetchmode is MDB2_FETCHMODE_ORDERED
-     echo $row[0] . "\n";
+     print "algo: ".$row['sensibilidad'] . "\n";
      }
 */
 if (PEAR::isError($res)) {

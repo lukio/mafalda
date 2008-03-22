@@ -148,14 +148,28 @@ function baja(){
     $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
     $it->loadTemplatefile('abm_baja.html'); //seleccionamos la plantilla
     
-    $select_baja = array ("CD", "CD-10", "CD-20");
+    require_once ('MDB2.php');
+    require_once('dbinfo.php');
+    $mdb2 =& MDB2::singleton($dsn, $options);
 
-    for($i=0 ; $i < count($select_baja); ) {
+    if (PEAR::isError($mdb2)) {
+         die($mdb2->getMessage());
+    }
+
+    $query = "SELECT Modelo FROM Modelos where Inactivo='0' order by Modelo";
+
+    $res = $mdb2->queryCol($query);
+    if (PEAR::isError($res)) {
+         die($mdb2->getMessage());
+    }
+
+    for($i=0 ; $i < count($res); ) {
     $it->setCurrentBlock("MODELOS");
-    $it->setVariable('MODELO',$select_baja[$i++]);
+    $it->setVariable('MODELO',$res[$i++]);
     $it->parseCurrentBlock("MODELOS");
     }
     $it->show();
+    $mdb2->disconnect();
 }
 
 function modificacion(){
@@ -163,14 +177,29 @@ function modificacion(){
     $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
     $it->loadTemplatefile('abm_modificacion.html'); //seleccionamos la plantilla
     
-    $select_baja = array ("CD", "CD-10", "CD-20");
+    require_once ('MDB2.php');
+    require_once('dbinfo.php');
+    $mdb2 =& MDB2::singleton($dsn, $options);
 
-    for($i=0 ; $i < count($select_baja); ) {
+    if (PEAR::isError($mdb2)) {
+         die($mdb2->getMessage());
+    }
+
+//    $query = "SELECT Modelo FROM Modelos where Inactivo='0' order by Modelo";
+    $query = "SELECT Modelo FROM Modelos order by Modelo";
+
+    $res = $mdb2->queryCol($query);
+    if (PEAR::isError($res)) {
+         die($mdb2->getMessage());
+    }
+
+    for($i=0 ; $i < count($res); ) {
     $it->setCurrentBlock("MODELOS");
-    $it->setVariable('MODELO',$select_baja[$i++]);
+    $it->setVariable('MODELO',$res[$i++]);
     $it->parseCurrentBlock("MODELOS");
     }
     $it->show();
+    $mdb2->disconnect();
 }
 
 function procesa($action){
@@ -180,6 +209,7 @@ function procesa($action){
         case "alta": $paso_validacion = validar_datos($action); break;
         case "modificacion": modificacion(); break;
         default: print "No existe tal acción"; 
+    }
 
     if (!$paso_validacion){
     /* Cargo la Alta de nuevo */
@@ -190,7 +220,6 @@ function procesa($action){
 
 
      }
-    }
 }
 
 function validar_datos($action){
@@ -212,7 +241,6 @@ function validar_datos($action){
                 $flag_error++;
             }
 */
-//    $error = "<h5>Hubo un error en alguno de los campos. Vuelva a cargar<h5>";
     $error = "<html><head><script language='Javascript'>
                 function cargarindex(){
                     setTimeout(\"location.replace('index.php')\",2000);
@@ -227,30 +255,35 @@ function validar_datos($action){
 
 
 //    if ($flag_error > 0){
-    /*  require_once 'include/pear/Sigma.php'; //insertamos la libreria
-        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
-        $it->loadTemplatefile('gerencia.html'); //seleccionamos la plantilla
-        $it->setCurrentBlock("ERROR");
-        $it->setVariable('DATO',$error);
-        $it->parseCurrentBlock("ERROR");
-        $it->show();
-    */
-//    print $error;
+    //    limpiarGet();
+    //    print $error;
 //    }
     return 0;
-
-
     }
 }
 
 function borra_modelo($borrarmodelo){
     /* Hacer un query que ponga el valor Inactivo=1 */
     // global $id_db_flexar; Ubicar el conector sin usar globales
+    require_once ('MDB2.php');
+    require_once('dbinfo.php');
+    $mdb2 =& MDB2::singleton($dsn, $options);
 
-    //$query = "UPDATE Modelos SET Inactivo=1 WHERE Modelos.Modelo = '$borrarmodelo'";
-    //$q = $id_db_flexar -> query($query);
+    if (PEAR::isError($mdb2)) {
+         die($mdb2->getMessage());
+    }
 
-    print "Se ha borrado el modelo: ".$borrarmodelo;
+    $query = "UPDATE Modelos SET Inactivo='1' WHERE Modelos.Modelo = '$borrarmodelo'";
+
+    $res = $mdb2->query($query);
+
+    if (PEAR::isError($res)) {
+         die($mdb2->getMessage());
+    }
+    $res->free();
+    $mdb2->disconnect();
+    print "Se ha dado de baja el modelo: ".$borrarmodelo;
+    
 }
 
 
@@ -299,15 +332,25 @@ function carga_modelo(){
                                 'pPrensa',
                                 'pCable',
                                 'pArnes',
-                                'DeltaRb', 
-                                'Etiqueta'
+                                'DeltaRb'
                             );
 
+    $error_modelo = "<html><head><script language='Javascript'>
+                function cargarindex(){
+                    setTimeout(\"location.replace('index.php')\",2000);
+                }
+                </script>
+            </head>
+            <body onload='cargarindex()'>
+                <div align='center'>
+                    <h3>Nombre de modelo existente. Vuelva a realizar la carga</h3>
+                </div>
+            </body></html>";
     /**
      * 1º incluimos el archivo de MDB2.php
      * 2º Hacemos el conect con singleton.
      * */
-    require_once ('include/pear/MDB2.php');
+    require_once ('MDB2.php');
     require_once ('dbinfo.php');
     
     /*Bloque para conectarme a la DB*/
@@ -316,45 +359,69 @@ function carga_modelo(){
          die($mdb2->getMessage());
     }
     
-    $query = "SELECT Modelos.Modelo FROM Modelos";
+    $query = "SELECT Modelo FROM Modelos where Inactivo='0' order by Modelo";
 
-    $res =& $mdb2->query($query);
+    $res = & $mdb2->query($query);
 
     // Si hay algun error finaliza el programa. 
     if (PEAR::isError($res)) {
         die($res->getMessage());
     }
 
-    while ($row_flexar = $res -> fetchRow()){
+    while ($row_flexar = $res->fetchRow()){
         if ( strtoupper($_GET['modelo_nuevo'])== strtoupper($row_flexar[0])){
-                print "El nombre de modelo ya existe");
-                exit();
+            print ($error_modelo); // Si existe el modelo se redirecciona al index.php
+            exit();
         }
     }
-    $res -> free();
-
-   /* checkbox_to_SQL(); //paso el valor check a valores true o false
-    $_GET['modelo_nuevo'] = strtoupper($_GET['modelo_nuevo']); 
-
-    // tengo un array con el nombre de todos los campos. 
-    // contador para el array = j 
-    for ($i = 1, $j=0; $i < 40; $i++)
-        if (!empty($_GET[$i])){
-            $array_campos_insert[$j] = $array_nombre_campos[$i];
-            $array_values[$j] = $_GET[$i];
-            $array_interrogacion[$j++]='?';
-        }
+    $res->free();
     
-        $modelonuevo = $_GET['modelo_nuevo'];
-        $etiqueta = $_GET['40'];
+    // paso el valor check a valores 1 o 0
+   checkbox_to_SQL();
 
-        // Armamos el query usando el implode
-        $query = "INSERT INTO Modelos (Modelo, ".implode(', ',$array_campos_insert).", Etiqueta) VALUES ('".$modelonuevo."', ".implode(', ', $array_values).", '".$etiqueta."')";
+    // nombre de modelo en mayusculas
+   $_GET['modelo_nuevo'] = strtoupper($_GET['modelo_nuevo']); 
 
+    /**
+     * Armamos el query usando el implode
+     * $query = "INSERT INTO Modelos (Modelo, ".implode(', ',$array_campos_insert).", Etiqueta) VALUES ('".$modelonuevo."', ".implode(', ', $array_values).", '".$etiqueta."')";
+     *
+     * Resulta que hacer el query sin usar el implode va a ser mejor :)
+    */ 
+
+    $res = $mdb2->prepare('INSERT INTO Modelos (
+            Sensibilidad, Impedancia, GrupoCorrHorno, ImpEnt, ImpSal, [Tol ImpEnt], TolImpSal, Cero, TolCero, TolSens, 
+            CapNominal, Ruta, Alin, Hister, Rep, Creep, CorCeroTemp, CorSpanTemp, VMaxAlim, RangTemp, 
+            Sobrecarga, LimRot, Cable, TolR2, TolPendHorno, TolH, CantPorLote, pSg, CantSg, pRb,
+            CantRb, pPrensa, pCable, pArnes, DeltaRb, Etiqueta, Apareo, CarLat, Certificado, Chequeo, 
+            Modelo ) VALUES  (
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+            ?)');
+
+     $data = array(
+       $_GET['1'], $_GET['2'], $_GET['3'], $_GET['4'], $_GET['5'], $_GET['6'], $_GET['7'], $_GET['8'], $_GET['9'],$_GET['10'], 
+       $_GET['11'], $_GET['12'], $_GET['13'], $_GET['14'], $_GET['15'], $_GET['16'], $_GET['17'], $_GET['18'], $_GET['19'], $_GET['20'], 
+       $_GET['21'], $_GET['22'], $_GET['23'], $_GET['24'], $_GET['25'], $_GET['26'], $_GET['27'], $_GET['28'], $_GET['29'], $_GET['30'],
+       $_GET['31'], $_GET['32'], $_GET['33'], $_GET['34'], $_GET['35'], $_GET['36'], $_GET['37'], $_GET['38'], $_GET['39'], $_GET['40'],
+       $_GET['modelo_nuevo'] );
+              
         // Hacemos el insert
-        $id_db_flexar -> query($query);
-    */
+       $res->execute($data);
+       $res->free();
 
+        if (PEAR::isError($res)) {
+            die($res->getMessage());
+        }
+        $res->free();
+        $mdb2->disconnect();
+        // liberar los GET
+        limpiarGet();
+        $_GET['modulo']="abm_modelos";
+        $_GET['action']="alta";
+        header('location:index.php');
 }
 
 function modifica_modelo($modelo){
@@ -369,14 +436,16 @@ function modifica_modelo($modelo){
 
 
 function checkbox_to_SQL(){
-        for ($i = 1; $i < 5; $i++)
-            if($_GET[$i] == "on") $_GET[$i] = 'true'; else $_GET[$i] = 'false';
+        for ($i = 37; $i < 41; $i++){
+            if($_GET[$i] == "on") $_GET[$i] = '1'; else $_GET[$i] = '0';
+        }
 }
 
 function limpiarGet(){
 
     unset($_GET['modelo_nuevo']);
-    for ($i = 0; $i < 41; $i++)
+
+    for ($i = 1; $i < 41; $i++)
         unset($_GET[$i]);
 }
 
