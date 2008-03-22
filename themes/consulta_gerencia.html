@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head><title>Mafalda - Gerencia Consulta Flexar</title>
-<link rel="stylesheet" type="text/css" media="all" href="themes/css/gerencia.css" />
+<head><title>Mafalda - Consulta Flexar</title>
+<link rel="stylesheet" type="text/css" media="all" href="themes/css/consulta_gerencia.css" />
 
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
 <meta name="MSSmartTagsPreventParsing" content="TRUE" />
@@ -9,32 +9,24 @@
 <meta http-equiv= "pragma" content="no-cache" />
 <meta name="robots" content="all" />
 <meta name="author" content="Lucho Rossi" />
-<meta name="description" content="Consultas Flexar" />
-
+<meta name="description" content="Consultar Flexar" />
 <script type="text/javascript">
-function ajax_abm(modulo, action){
 
-xmlHttp=GetXmlHttpObject()
-if (xmlHttp==null)
- {
- alert ("Browser no soporta HTTP Request")
- return
- }
-var url="index.php"
-url=url+"?modulo="+modulo
-//evaluar si esta definido action. 
-url=url+"&action="+action
-
-url=url+"&sid="+Math.random()
-xmlHttp.onreadystatechange=stateChanged
-xmlHttp.open("GET",url,true)
-xmlHttp.send(null)
+function clear_textbox()
+{
+    document.getElementById('celda_id').value = ""
+    document.getElementById('lote_embalado_id').value = ""
+    document.getElementById('lote_produccion_id').value = ""
 }
 
-function ajax_index(modulo, action){
+function ajax_index(){
 
-//modelabajar = getElementById('bajamodelo_id').value
-
+if ( dato_evaluo = document.getElementById('celda_id').value)
+    action = "serie"
+else if( dato_evaluo = document.getElementById('lote_embalado_id').value)
+    action = "lote_embalado"
+else if (dato_evaluo = document.getElementById('lote_produccion_id').value)
+    action = "lote_produccion"
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -43,11 +35,10 @@ if (xmlHttp==null)
  return
  }
 var url="index.php"
-url=url+"?modulo="+modulo
+url=url+"?q="+dato_evaluo
 //evaluar si esta definido action. 
 url=url+"&action="+action
-//url=url+"&1="+num1
-
+//
 url=url+"&sid="+Math.random()
 xmlHttp.onreadystatechange=stateChanged
 xmlHttp.open("GET",url,true)
@@ -89,18 +80,32 @@ return xmlHttp;
 </head><body>
 <div id="header">
 <div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
-    <a class="nav" href="index.php?modulo=consulta_gerencia" title="Consulta Gerencia" id="consulta_gerencia">Consulta Gerencia</a>
-    <a class="nav" href="#" onclick="ajax_index(this.id, 'alta')" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
-    <a class="nav" href="#" onclick="ajax_index(this.id, '')" title="Buscar Planos" id="buscar_panos">Buscar Planos</a>
+ <form action="javascript:ajax_index();" name="form_fabrica" id="form_fabrica_id">
+ <table>
+ <tbody>
+     <tr>
+    <!-- BEGIN input_der -->
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}"></td>
+    <!-- END input_der -->
+    </tr><tr>
+    <!-- BEGIN input_cen -->
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}"></td>
+    <!-- END input_cen -->
+   </tr>
+</tbody>
+</table>
+    <div align="right">
+        <input type="submit" name="Submit" value="Buscar">
+     </div>
+  </form>
 </div>
 
 <div id="content">
 <pre>
-<!-- BEGIN BAJA -->
-{DATO}
-<!-- END BAJA -->
+
 <span id="resultado_div"></span>
 </pre>
+
 </div>
 
 <div id="footer">

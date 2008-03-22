@@ -1,23 +1,5 @@
 <?php
 
-session_start();
-
-	if (!array_key_exists('username', $_SESSION)) {
-		print '<center><h2>session ha sido finalizada</h2></center>';
-//		print '<a href="login.html">Pagina Login</a>';
-//		print "Hello, $_SESSION[username].";
-?>
-		<html>
-			<head>
-			 <script language="Javascript">
-				setTimeout("location.replace('consulta.html')",2000);
-			</script>
-			</head>
-		<html>
-<?php
-		}else {
-			
-	
 
 $months = array(01 => 'Enero', 02 => 'Febrero', 03 => 'Marzo', 04 => 'Abril', 
 				05 => 'Mayo', 06 => 'Junio', 07 => 'Julio', 08 => 'Agosto', 
@@ -147,5 +129,5 @@ print '<div style="position:absolute; left:0; top:190;"><hr /></div>';
 print '<div style="position:absolute; left:20; top:200;"><iframe  style="width: 790px; height: 800px" name=resultados border=0 frameborder=0 ></iframe></div>';
 
 
-	}
+	
 ?>

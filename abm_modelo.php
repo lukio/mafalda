@@ -394,19 +394,19 @@ function carga_modelo(){
             CapNominal, Ruta, Alin, Hister, Rep, Creep, CorCeroTemp, CorSpanTemp, VMaxAlim, RangTemp, 
             Sobrecarga, LimRot, Cable, TolR2, TolPendHorno, TolH, CantPorLote, pSg, CantSg, pRb,
             CantRb, pPrensa, pCable, pArnes, DeltaRb, Etiqueta, Apareo, CarLat, Certificado, Chequeo, 
-            Modelo ) VALUES  (
+            Modelo, Inactivo ) VALUES  (
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?)');
+            ?,?)');
 
      $data = array(
        $_GET['1'], $_GET['2'], $_GET['3'], $_GET['4'], $_GET['5'], $_GET['6'], $_GET['7'], $_GET['8'], $_GET['9'],$_GET['10'], 
        $_GET['11'], $_GET['12'], $_GET['13'], $_GET['14'], $_GET['15'], $_GET['16'], $_GET['17'], $_GET['18'], $_GET['19'], $_GET['20'], 
        $_GET['21'], $_GET['22'], $_GET['23'], $_GET['24'], $_GET['25'], $_GET['26'], $_GET['27'], $_GET['28'], $_GET['29'], $_GET['30'],
        $_GET['31'], $_GET['32'], $_GET['33'], $_GET['34'], $_GET['35'], $_GET['36'], $_GET['37'], $_GET['38'], $_GET['39'], $_GET['40'],
-       $_GET['modelo_nuevo'] );
+       $_GET['modelo_nuevo'],'0' );
               
         // Hacemos el insert
        $res->execute($data);

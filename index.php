@@ -118,13 +118,12 @@ if(!isset($_SESSION['user_autenticado'])){
              exit();
          }else{
              switch($modulo){
-                 case "consulta_gerencia": break;
-                 case "abm_modelos":require_once('abm_modelo.php'); cual_action($action); break;
+                 case "consulta_gerencia": require_once('gerencia/consulta_gerencia.php'); pagina_consulta_gerencia($action); break;
+                 case "abm_modelos":require_once('gerencia/abm_modelo.php'); cual_action($action); break;
                  case "abro_planos": break;
              }
          }
             
     }
 }        
-
 ?>
