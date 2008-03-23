@@ -171,13 +171,8 @@ function buscar_nserie($ncelda){
 
 }
 
-function buscar_lote_embalado($q){
-    print "BUSCAR POR LOTE EMABALADO";
-}
-
-
 function buscar_lote_produccion($lote_produccion){
-    print "LOTE PRODUCCION: ".$lote_produccion;
+    print "LOTE PRODUCCION: ".$lote_produccion."<br />";
 
     if (!is_numeric($lote_produccion)){
             print "Dato de tipo NO VALIDO";
@@ -212,7 +207,10 @@ function buscar_lote_produccion($lote_produccion){
          }
         $statement->Free();
         $row_header = $result_header->fetchrow();
-        
+        if (!isset($row_header['0'])){
+            print "<br>No existe número de producción";
+            exit();
+        }
         // devuelve varias filas
         $query = "SELECT Impedancias.Serie AS NroSerie, round(Impedancias.ImpSG,3), ROUND(Impedancias.ImpRB,3), round(Impedancias.ImpRs,3) 
                   FROM Impedancias
@@ -257,6 +255,52 @@ function buscar_lote_produccion($lote_produccion){
     }
 
 
+}
+
+
+function buscar_lote_embalado($lote_embalado){
+
+    print "LOTE EMBALADO: ".$lote_embalado;
+
+    if (!is_numeric($lote_embalado)){
+            print "Dato de tipo NO VALIDO";
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+
+    //consulta a dbms  . Selecciona nroserie, dia embalado segun el nro lote embalado
+        $query = "SELECT embalado.serie, (SELECT Lote FROM Impedancias WHERE embalado.serie=impedancias.serie) as lotepro,
+                  LEFT(embalado.fecha,20) as fecha
+                  FROM embalado
+                  WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')."";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('lote_embalado_fabrica.html', true, true); //seleccionamos la plantilla
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("LOTEEM");
+                $it->setVariable("N_SERIE", $name['serie']);
+                $it->setVariable("LOTE_PRODUCCION", $name['lotepro']);
+                $it->setVariable("FECHA", $name['fecha']);
+                $it->parseCurrentBlock("LOTEEM");
+            $it->parse("row_lemba");
+        }
+       $it->show(); 
+    }
 }
 
 function buscar_tabla_probatuti($ncelda, $lote_produccion){
