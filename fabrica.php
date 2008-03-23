@@ -9,160 +9,147 @@
 */
 
 function buscar_nserie($ncelda){
-    print "BUSCAR POR SERIE";
 
     require_once('include/validaciones.php');
     require_once('dbinfo.php');
-    /**
-    Variables para conectarme al tango
+    require_once ('MDB2.php');
 
-    $program_db_tango;
-    $db_tango;
-    $usuariotango;
-    $pwdtango;
+    /* variables
+     * $modelo
+     * $ncelda
+     *
+     **/
 
-    Variables para conectarme al flexar
-    $sql_program_db_flexar;
-    $sql_db_flexar;
-    $sql_usuarioflexar;
-    $sql_pwdflexar;
+    if ( is_numeric($ncelda) ){
 
-    */
+        $modelo="";
 
-    // Inicializo variables
-    $modelo="";
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
 
-    if (is_number($ncelda) && !is_text($ncelda)){
+        $query = "select impsg, imprb, lote, imprs
+                  FROM impedancias 
+                  where serie='$ncelda'";
 
-	// Conecto a DB Flexar
-	if (!($connectstring = odbc_connect($sql_db_flexar,$sql_usuarioflexar, $sql_pwdflexar))){
-		echo 'Fallo conexion base de datos flexar';
-		exit();
-		}
+        //SI NO OBTENGO NINGUN RESULTADO EN ESTA CONSULTA ENTONCES NO EXISTE el NUMERO DE SERIE DADO
+        $res =& $mdb2->query($query);
 
-//consulta a dbms  . Selecciona campo NRO_SERIE from tabla ENSAYOS
-$_query_ = "SELECT e.RANGO_FIN, e.MODELO, i.ImpSG, i.ImpRB, i.Lote, dh.Cero, dh.Pendiente, dh.R2, em.ID_Grupo 
-            FROM ENSAYOS e, Impedancias i, DataHorno dh, EMBALADO em 
-           WHERE e.NRO_SERIE=$ncelda AND i.Serie=$ncelda AND dh.Serie=$ncelda";
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
 
-	  $query = "SELECT ENSAYOS.RANGO_FIN, Left (ENSAYOS.FECHA,11), ENSAYOS.VSC_INI, ENSAYOS.VSC_FIN, ENSAYOS.GOLPES, ENSAYOS.ESPEC FROM ENSAYOS WHERE NRO_SERIE=$ncelda";
+        $row = $res->fetchrow();
+        if (!($lote_pro= $row['2'])){
+            echo 'Número de serie inexistente';
+            exit();
+        }
+        $impsg = $row['0'];
+        $imprb = $row['1'];
+        $imprs = $row['3'];
 
-	//tomo resultados de ensayos 
-	if(!($result = odbc_do($connectstring, $query))){
-		echo 'Fallo query a ensayos';
-		exit();
-		}
+        $query = "SELECT ENSAYOS.RANGO_FIN, LEFT(ENSAYOS.FECHA,11), ENSAYOS.VSC_INI, ENSAYOS.VSC_FIN, ENSAYOS.GOLPES, ENSAYOS.ESPEC 
+                  FROM ENSAYOS 
+                  WHERE NRO_SERIE='$ncelda'";
 
-	$rfinal = array();
-	$ien=0;
-	 while (odbc_fetch_row($result)){
-		$rfinal[]  = odbc_result($result,1);
-		$fecha_ensayo[]  = odbc_result($result,2);
-		$vsc_ini[]  = odbc_result($result,3);
-		$vsc_fin[]  = odbc_result($result,4);
-		$golpes[]  = odbc_result($result,5);
-		$ien++;
-		}
-	$espec = odbc_result($result, 6);
+        //tomo resultados de ensayos 
+        $res_ensayos = $mdb2->queryAll($query);
 
-	/** quiero seleccionar una fila donde el nro de serie sera nrocelda (proveniente de consulta.html)
-	 * entonces el query debe ser = "SELECT * from ENSAYOS where (NRO_SERIE='nroceda')
-	 * tomo resultados
-	 * tomo el numero de registros totales
-	 * $nroregistro = odbc_num_rows ($result);
-	 * me paro en el ultimo registro (que es el que me interesa)
-	 * odbc_fetch_row($result, $nroregistro);
-	 *
-	 * $rfinal = odbc_result($result, 1);
-	 * nuevo query Impedancias (grupo 2)
-	*/
-	
-	$query = "SELECT Impedancias.ImpSG, Impedancias.ImpRB, Impedancias.Lote, Impedancias.ImpRs FROM Impedancias WHERE Impedancias.Serie=$ncelda";
-	 
-	if(!($result = odbc_do($connectstring, $query))){
-		echo 'Fallo query tabla: Impedancias';
-		exit ();
-	}
-		
-	//SI NO OBTENGO NINGUN RESULTADO EN ESTA CONSULTA ENTONCES NO EXISTE el NUMERO DE SERIE DADO
-	if (!($lote_pro= odbc_result($result, 3))){
-		echo '<center><b>Num. de Serie INCORRECTO</b></center>';
-		exit();
-	}
-	$impsg = odbc_result($result, 1);
-	$imprb = odbc_result($result, 2);
-	$imprs = odbc_result($result, 4);
-		
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
 
-	/** nuevo query DataHorno (grupo 1)
-	* $query = "SELECT dh.Cero AS Cero, dh.Pendiente AS Pendiente, dh.R2 AS R2, dh.H AS H, dh.Horno AS Horno,  (SELECT hr.Fecha FROM HornoResumen hr WHERE hr.Horneda=dh.Horneada) AS Fecha FROM DataHorno dh WHERE dh.Serie=$ncelda";
-	 */
+        //hago uso de esta variable a lo ultimo
+//        $espec = $row['5'];
 
-$query = "SELECT DataHorno.Cero, DataHorno.Pendiente, DataHorno.R2, DataHorno.H, DataHorno.Horno, LEFT(HornoResumen.Fecha, 11)
-	FROM DataHorno INNER JOIN HornoResumen ON DataHorno.Horneada = HornoResumen.Horneada
-       	WHERE (((DataHorno.Serie)=$ncelda)) AND DataHorno.Horno=HornoResumen.Horno";
+        $query = "SELECT DataHorno.Cero, DataHorno.Pendiente, DataHorno.R2, DataHorno.H, DataHorno.Horno, LEFT(HornoResumen.Fecha, 11)
+                  FROM DataHorno INNER JOIN HornoResumen ON DataHorno.Horneada = HornoResumen.Horneada
+                  WHERE (((DataHorno.Serie)='$ncelda')) AND DataHorno.Horno=HornoResumen.Horno";
 
-	if(!($result = odbc_do($connectstring, $query))){
-		echo 'Fallo conexion odbc_do: DataHorno';
-		exit ();
-	}
-	//tomo el numero de registros totales
-			
-	$idh=0;
-	 while (odbc_fetch_row($result)){ 
-		$cero[] = odbc_result($result, 1);
-		$pendiente[] = odbc_result($result, 2); //castear este numero
-		$r2[] = odbc_result($result, 3);  //se castea
-		$h[] = odbc_result($result, 4);  //se castea
-		$horno[] = odbc_result($result, 5);  //se castea
-		$fechah[] = odbc_result($result, 6);  //se castea
-		$idh++;
-	 }
-	//traigo el lote de embalado de la celda. chequeo que este el campo abierto en falso para chequear que no fue abiert
-	// PREGUNTA: si fue abierto, como se cual es el nuevo lote de embalado?
-	$query = "SELECT EMBALADO.ID_Grupo FROM EMBALADO WHERE EMBALADO.serie=$ncelda AND EMBALADO.abierto=0";
+        //tomo el numero de registros totales
+        $res =& $mdb2->query($query);
 
-	if(!($result = odbc_do($connectstring, $query))){
-		echo 'Fallo tabla: EMBALADO';
-		exit();
-	}
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
 
-	$lote_emba = odbc_result($result, 1);	
+        $idh=0;
+         while ($row = $res->fetchrow()){
+            $cero[] = $row['0'];
+            $pendiente[] = $row['1']; //castear este numero
+            $r2[] = $row['2'];  //se castea
+            $h[] = $row['3'];  //se castea
+            $horno[] = $row['4'];  //se castea
+            $fechah[] = $row['5'];  //se castea
+            $idh++;
+         }
+        //traigo el lote de embalado de la celda. chequeo que este el campo abierto en falso para chequear que no fue abiert
+        // PREGUNTA: si fue abierto, como se cual es el nuevo lote de embalado?
+        $query = "SELECT EMBALADO.ID_Grupo FROM EMBALADO WHERE EMBALADO.serie='$ncelda' AND EMBALADO.abierto=0";
 
-	if (isset($lote_pro)){
-	//$query = "SELECT Lotes.Modelo, Lotes.Msg, Lotes.OCMecanizado, Lotes.Mrb, LEFT(Lotes.FechaPeg,11) FROM Lotes WHERE Lotes.Lote=$lote_pro";
+        $lote_emba = $mdb2->queryOne($query);
+        
+        $query = "SELECT Lotes.Modelo, Lotes.Msg, Lotes.OCMecanizado, Lotes.Mrb, LEFT(Lotes.FechaPeg,11), Operaciones.Operacion
+                  FROM Operaciones INNER JOIN Lotes ON Operaciones.IdOperacion = Lotes.Area
+                  WHERE (((Lotes.Lote)=$lote_pro))";
 
-$query = "SELECT Lotes.Modelo, Lotes.Msg, Lotes.OCMecanizado, Lotes.Mrb, LEFT(Lotes.FechaPeg,11), Operaciones.Operacion
-	  FROM Operaciones INNER JOIN Lotes ON Operaciones.IdOperacion = Lotes.Area
-	  WHERE (((Lotes.Lote)=$lote_pro))";
+        $res =& $mdb2->query($query);
 
-	   
-	   if(!($result = odbc_do($connectstring, $query))){
-		   echo 'Fallo query tabla: Lotes';
-		   exit();
-	   }
-	   $modelo = odbc_result($result,1);
-	   $msg = odbc_result($result,2);
-	   $ocmecanizado = odbc_result($result, 3);
-	   $mrb = odbc_result($result, 4);
-	   $fpegado = odbc_result($result, 5);
-	   $area = odbc_result($result, 6);
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
 
-	  }
+        $row = $res->fetchrow();
+           
+        $modelo = $row['0'];
+        $msg = $row['1'];
+        $ocmecanizado = $row['2'];
+        $mrb = $row['3'];
+        $fpegado = $row['4'];
+        $area = $row['5'];
+        //Calculo de la sensibilidad
 
-	/************** IMPRIMIR **********************/
-	//formato : Header, grupo1, grupo2, grupo3
+    	$query = "SELECT Modelos.Sensibilidad, Modelos.CapNominal, Modelos.TolSens FROM Modelos WHERE Modelos.Modelo='$modelo'";
+    
+        $res =& $mdb2->query($query);
 
-	if (isset($lote_pro)){
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
 
-	echo '<center><b>Especificaciones - Celda de Carga :' . $ncelda . '</b><br /><br />';
+        $row = $res->fetchrow();
+    	$sensibilidad = $row['0'];
+	    $capnom = $row['1'];
+    	$tolsens = $row['2'];
+	//    $sensi_real = ($capnom*$sensibilidad)/(($sensibilidad/$espec)*$rfinal[$ien-1]);
+    	$desv_est_porce = (($rfinal[$ien-1]/$capnom) -1 )*100;
 
-	//Se imprime el header !! Hay una tabla ahi adentro  
+        /* Impresion
+         * archivo template: fabrica.html
+         * */
 
-	//echo "<a href='pagina2.php?nombrevariable=$variable1' > segunda pagina </a>";
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('fabrica.html', true, true); //seleccionamos la plantilla
 
-	//comienzo tabla global y tabla de Horno
-	echo '<center><table border=0 cellspacing=0 cellpadding=1><tr><td valign=top><tr><td> <b>Ensayos - HORNO</b><br><table border=1 cellspacing=0 cellpadding=1 width=350><tr align=center><td><b> Cero Horno</b></td><td><b> Pendiente </b></td><td><b> R2 </b></td><td><b> H </b></td><td><b> Hor </b></td><td><b> FechaHor </b></td></tr>';
+        foreach($res_ensayos as $name) {
+            // Assign data to the inner block
+            foreach($name as $cell) {
+                $it->setCurrentBlock("ENSAYO");
+                $it->setVariable("DATO", $cell);
+                $it->parseCurrentBlock("ENSAYO");
+            }
+            $it->parse("row");
+        }
+
+        $it->show();
+
+
+
+
+	/*echo '<table class="fabrica" border=0 cellspacing=0 cellpadding=1><tr><td valign=top><tr><td> <b>Ensayos - HORNO</b><br><table border=1 cellspacing=0 cellpadding=1 width=350><tr align=center><td><b> Cero Horno</b></td><td><b> Pendiente </b></td><td><b> R2 </b></td><td><b> H </b></td><td><b> Hor </b></td><td><b> FechaHor </b></td></tr>';
 
 	for($cont=0; $cont<$idh; $cont++){
 		print "<tr align=center><td><b>" . $cero[$cont] . "</b></td><td><b>" . round($pendiente[$cont],4) . "</b></td><td><b>" . round($r2[$cont],3) . "</b></td><td><b>" . round($h[$cont],3). "<b></td><td><b>" . $horno[$cont]. "<b></td><td><b>" . $fechah[$cont]. "<b></td></tr>";
@@ -192,19 +179,6 @@ echo '<BR>';
 	echo '<tr><td align=right><b>Impedancia RB : </td><td align=left><b>' . $imprb . '</td></tr>';
 	echo '<tr><td align=right><b>Impedancia SG : </td><td align=left><b>' . $impsg . '</td></tr>';
 	echo '<tr><td align=right><b>Impedancia RS : </td><td align=left><b>' . $imprs . '</tr>';
-//Calculo de la sensibilidad
-
-	$query = "SELECT Modelos.Sensibilidad, Modelos.CapNominal, Modelos.TolSens FROM Modelos WHERE Modelos.Modelo='$modelo'";
-
-	if(!($result = odbc_do($connectstring, $query))){
-			echo 'Fallo conexion odbc_do: Modelos';
-			exit ();
-			}
-	$sensibilidad = odbc_result($result,1);
-	$capnom = odbc_result($result, 2);
-	$tolsens = odbc_result($result, 3);
-	$sensi_real = ($capnom*$sensibilidad)/(($sensibilidad/$espec)*$rfinal[$ien-1]);
-	$desv_est_porce = (($rfinal[$ien-1]/$capnom) -1 )*100;
 	
 	echo '<tr><td align=right><b>Sensibilidad Real : </td><td align=left><b>'.round($sensi_real,3).'</tr>';
 	echo '<tr><td align=right><b>Desviacion estandar porcentual : </td><td align=left><b>'.round($desv_est_porce,3).'</tr>';
@@ -221,30 +195,9 @@ echo '<BR>';
 		 echo '<br><a href="login.html">Pagina Login</a>';
 	
 	*/
-	echo '<div style="position: absolute; left:40; top:15;">';
-		print("<center><form method=POST action=ordentrabajo_ncelda.php>");
-		print("<input type=hidden name=lotepro value=$lote_pro>");
-		print("<input type=hidden name=ncelda value=$ncelda>");
-		print("<input type=submit name=Submit value='Num. de OT por lote'>");
-		print "</form>";
-	echo '</div>';
-	//}
-
-
-	//echo '</td><td>")';
-	echo '<div style="position: absolute; left:580; top:15;">';
-		print "<form method=POST action=proba_ncelda.php>";
-		print "<input type=hidden name=lotepro value=$lote_pro>";
-		print "<input type=hidden name=ncelda value=$ncelda>";
-		print "<input type=submit name=Submit value='Tabla Probatuti'>";
-		print "</form>";
-	echo '</div>';
-	//echo '</td></tr></table>';
-	} //fin if (isset($lote_pro))
-	else echo '<b>Lote de produccion NO existe, Numero de serie NO existe</b>';
 
 }else
-	echo '<center><b>DATO de tipo NO VALIDO</b></center>';
+	echo 'DATO de tipo NO VALIDO';
 
 }
 function buscar_lote_embalado($q){

@@ -185,8 +185,7 @@ function modificacion(){
          die($mdb2->getMessage());
     }
 
-//    $query = "SELECT Modelo FROM Modelos where Inactivo='0' order by Modelo";
-    $query = "SELECT Modelo FROM Modelos order by Modelo";
+    $query = "SELECT Modelo FROM Modelos where Inactivo='0' order by Modelo";
 
     $res = $mdb2->queryCol($query);
     if (PEAR::isError($res)) {

@@ -10,17 +10,17 @@ body {
 a {
         text-decoration: none;
         font-weight: bold;
-        color:  #ccc;
+        color:  #000;
         outline: none;
         }
 a:visited {
-        color:  #ccc;
+        color:  #000;
         }
 a:active {
-        color:  #ccc;
+        color:  #000;
         }
 a:hover {
-        color: #ccc;
+        color: #000;
         text-decoration: underline;
         }
         
@@ -99,12 +99,13 @@ img {
         margin-bottom: 5px; 
         }
 #content {
+        color: #000;
         padding: 10px;
         margin-top: 10px;
         margin-bottom: 20px;
         margin-right: auto;
         margin-left: auto;  /* opera does not like 'margin:20px auto' */
-        background: #666;
+        background: #ffd;
 /*        border: 5px solid #ccc;*/
         text-align:left; /* part 2 of 2 centering hack */
         width: 570px; /* ie5win fudge begins */
@@ -147,9 +148,7 @@ html>body #content {
         }
 pre {
         font-size: 12px;
-        line-height: 22px;
-        margin-top: 20px;
-        margin-bottom: 10px; 
+        line-height:6px;
         }
 
 input { 
@@ -185,36 +184,32 @@ td{
 }
 
 table.fabrica{ 
-    width: 580px;
     background-color: #fafafa;
     border: 1px #000000 solid;
-    border-collapse: collapse;
     border-spacing: 0px; 
 }
 
 
 td.fabricaTitulo{ 
     background-color: #99CCCC;
-    border: 1px #000000 solid;
+    border: 3px #000000 solid;
     font-family: Verdana;
     font-weight: bold;
     font-size: 12px;
-    color: #404040; 
+    color: #000; 
 }
 
 
 td.fabricatd{ 
-    border-bottom: 1px #6699CC dotted;
-    text-align: left;
-    font-family: Verdana, sans-serif, Arial;
-    font-weight: normal;
-    font-size: .7em;
-    color: #404040;
+    text-align: center;
+    font-family: Arial;
+    font-weight: bold;
+    color: #000;
     background-color: #fafafa;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 8px;
-    padding-right: 0px; 
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 2px;
+    padding-right: 5px; 
 }
 
 /* barra de navegaacion */
