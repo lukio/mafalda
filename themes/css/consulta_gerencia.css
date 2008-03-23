@@ -119,18 +119,18 @@ html>body #content {
 #header {
         padding-left: 10px;
         padding-right: 10px;
-        margin-top: 10px;
+        margin-top: 20px;
         margin-bottom: 10px;
         margin-right: auto;
         margin-left: auto;  /* opera does not like 'margin:20px auto' */
         background: #366;
 /*        border: 5px green solid; */
         text-align:center; /* part 2 of 2 centering hack */
-        height:210px;
-        width: 510px; /* ie5win fudge begins */
+        height:220px;
+        width: 540px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
-        width: 510px;
+        width: 540px;
         }
 #footer {
         padding: 0px;
@@ -181,7 +181,7 @@ select {
 }
 table.header {
         border: 1px #000000 solid;
-        border-spacing: 4px;
+        border-spacing: 5px;
 }
 td{
     padding-right: 5px;
