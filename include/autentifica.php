@@ -34,6 +34,7 @@ function formulario_login(){
 
 function autentifica(){
     require_once('../dbinfo.php');
+    require_once('MDB2.php');
     // start the session
     session_start();
 //    header("Cache-control: private"); //IE 6 Fix
@@ -41,18 +42,30 @@ function autentifica(){
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $query ="SELECT ID_user FROM Usuarios WHERE login='$username' AND password='$password'";
+    $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+            die($mdb2->getMessage());
+        }
 
+    $query = "SELECT id_user FROM Usuarios WHERE login=? AND password=?";
+    $type = array ('text', 'text');
+    $statement= $mdb2->prepare($query, $type, MDB2_PREPARE_RESULT);
+    $data = array($username, $password);
+    $result = $statement->execute($data);
+
+    if(PEAR::isError($result)) {
+             die($mdb2->getMessage());
+     }
+    $statement->Free();
     //Hago el query. Si el resultado es OK, entonces usuario autentificado. Sino, pues no :)
-//    if ( odbc_result($result,1) )
-        $_SESSION['user_autenticado'] = 1;
+    $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
 
     unset($_POST['username']);
     unset($username);
     unset($_POST['password']);
     unset($password);
 
-    if (!isset($_SESSION['user_autenticado'])){
+    if (!isset($row['id_user'])){
         echo "<html><head><script language='Javascript'>
                 function cargarindex(){
                     setTimeout(\"location.replace('../index.php')\",2000);
@@ -65,6 +78,7 @@ function autentifica(){
                 </div>
             </body></html>";
     }else{
+        $_SESSION['user_autenticado'] = 1;
         header("Location: ../index.php");
     }
 

@@ -20,9 +20,12 @@ function buscar_nserie($ncelda){
      *
      **/
 
-    if ( is_numeric($ncelda) ){
+    if ( !is_numeric($ncelda) ){
+	        print "DATO de tipo NO VALIDO";
 
-        $modelo="";
+    }else{
+
+            $modelo="";
 
         // Conecto a DB Flexar
         $mdb2 =& MDB2::singleton($dsn, $options);
@@ -159,9 +162,7 @@ function buscar_nserie($ncelda){
         
 
         $it->show();
-
-}else
-	print "DATO de tipo NO VALIDO";
+    }
 
 }
 

@@ -1,0 +1,42 @@
+<div align=right><h5><a href="#" onclick="ajax_index('', '')" id=>[Tabla Probatuti]</a> <a href="#" onclick="ajax_index('', '')" id=>[Numero OT por Lote]</a> </h5></div>
+<html> 
+ <table class="fabrica"> 
+<tr><td class="fabricatd">Maquina de Ensayos</td></tr>
+    <tr><td class="fabricaTitulo">rango fin</td><td class="fabricaTitulo">fecha</td><td class="fabricaTitulo">cero inicial</td><td class="fabricaTitulo">cero final</td><td class="fabricaTitulo">golpe</td><td class="fabricaTitulo">espec</td></tr>
+<!-- BEGIN row --> 
+  <tr>
+<!-- BEGIN ENSAYO -->  
+   <td class="fabricatd">
+    {DATO}
+   </td>
+<!-- END ENSAYO -->  
+  </tr>
+<!-- END row --> 
+ </table> 
+<br />
+ <table class="fabrica"> 
+<tr><td class="fabricatd">Maquina HORNO</td></tr>
+    <tr><td class="fabricaTitulo">cero horno</td><td class="fabricaTitulo">pendiente</td><td class="fabricaTitulo">r2</td><td class="fabricaTitulo">H</td><td class="fabricaTitulo">Hor</td><td class="fabricaTitulo">fecha horno</td></tr>
+<!-- BEGIN row_horno --> 
+
+<!-- BEGIN HORNO -->  
+   <td class="fabricatd">
+    {DATO}
+   </td>
+<!-- END HORNO -->  
+  </tr>
+<!-- END row_horno --> 
+ </table> 
+<br />
+ <table class="fabrica"> 
+<tr><td class="fabricatd">Datos generales</td></tr>
+    <tr><td class="fabricaTitulo">Modelo</td><td class="fabricaTitulo">Lote prod.</td><td class="fabricaTitulo">Lote emb.</td><td class="fabricaTitulo">area</td><td class="fabricaTitulo">orden meca</td><td class="fabricaTitulo">orden meca-mp</td> <td class="fabricaTitulo">fecha pegado</td></tr>
+<!-- BEGIN row_celda --> 
+  <tr>
+<!-- BEGIN CELDA -->  
+   <td class="fabricatd">{MODELO}</td><td class="fabricatd"><a href="#">{LOTE_PRODUCCION}</a></td><td class="fabricatd"><a href="#">{LOTE_EMBALADO}</a></td><td class="fabricatd">{AREA}</td><td class="fabricatd"><a href="#">{OM}</a></td><td class="fabricatd"><a href="kkkkkx">{OMMP}</a></td><td class="fabricatd">{FECHA_PEGADO}</td> 
+<!-- END CELDA -->  
+  </tr>
+<!-- END row_celda --> 
+ </table> 
+</html>
