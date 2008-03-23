@@ -214,7 +214,7 @@ function buscar_lote_produccion($lote_produccion){
         // devuelve varias filas
         $query = "SELECT Impedancias.Serie AS NroSerie, round(Impedancias.ImpSG,3), ROUND(Impedancias.ImpRB,3), round(Impedancias.ImpRs,3) 
                   FROM Impedancias
-                  WHERE Impedancias.Lote=?";
+                  WHERE Impedancias.Lote=? order by impedancias.serie";
 
         // sanitizamos el select
         $type = array ('integer');
@@ -257,10 +257,9 @@ function buscar_lote_produccion($lote_produccion){
 
 }
 
-
 function buscar_lote_embalado($lote_embalado){
 
-    print "LOTE EMBALADO: ".$lote_embalado;
+    print "LOTE EMBALADO: ".$lote_embalado."<br />";
 
     if (!is_numeric($lote_embalado)){
             print "Dato de tipo NO VALIDO";
@@ -278,7 +277,7 @@ function buscar_lote_embalado($lote_embalado){
         $query = "SELECT embalado.serie, (SELECT Lote FROM Impedancias WHERE embalado.serie=impedancias.serie) as lotepro,
                   LEFT(embalado.fecha,20) as fecha
                   FROM embalado
-                  WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')."";
+                  WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')." order by embalado.serie";
 
         $res =& $mdb2->query($query);
 
@@ -303,8 +302,31 @@ function buscar_lote_embalado($lote_embalado){
     }
 }
 
-function buscar_tabla_probatuti($ncelda, $lote_produccion){
-    print "BUSCAR TABLA PROBATUTI";
+function buscar_tabla_probatuti($ncelda){
+    print "TABLA PROBATUTI DE CELDA: ".$ncelda;
+
+    if (!is_numeric($ncelda)){
+            print "Dato de tipo NO VALIDO";
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+       $query = "SELECT opera.Operacion AS Area, op.Nombre, op.Apellido, prob.MedTerminada AS MedTer, 
+                 prob.impsalida AS ImpSa, prob.impentrada AS ImpEn, prob.tenssalida AS TensSa,
+                 prob.dircarga AS DirCarga, prob.aiscuerpo AS AislaCuore, LEFT(prob.fecha, 11) AS Fecha 
+
+                 FROM Probatuti prob, Operaciones opera, Operarios op 
+
+                 WHERE prob.Area=opera.IdOperacion AND prob.operador=op.OperProba AND prob.serie=$ncelda 
+
+                 ORDER BY prob.fecha, prob.Area";
+
+        }
 
 }
             

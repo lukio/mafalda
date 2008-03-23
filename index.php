@@ -86,6 +86,10 @@ if(!isset($_SESSION['user_autenticado'])){
                 buscar_lote_produccion($_GET['q']);
                 exit();
             }
+            elseif ($action == "tabla_probatuti"){
+                buscar_tabla_probatuti($_GET['q']);
+                exit();
+            }
             elseif ($action == "login"){
                 formulario_login();
                 exit();
