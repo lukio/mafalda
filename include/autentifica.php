@@ -59,6 +59,7 @@ function autentifica(){
     $statement->Free();
     //Hago el query. Si el resultado es OK, entonces usuario autentificado. Sino, pues no :)
     $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
+    $mdb2->disconnect();
 
     unset($_POST['username']);
     unset($username);

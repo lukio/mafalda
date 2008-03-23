@@ -398,7 +398,7 @@ function carga_modelo(){
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?,?)');
+            ?,?)', true, MDB2_PREPARE_MANIP);
 
      $data = array(
        $_GET['1'], $_GET['2'], $_GET['3'], $_GET['4'], $_GET['5'], $_GET['6'], $_GET['7'], $_GET['8'], $_GET['9'],$_GET['10'], 
@@ -409,7 +409,6 @@ function carga_modelo(){
               
         // Hacemos el insert
        $res->execute($data);
-       $res->free();
 
         if (PEAR::isError($res)) {
             die($res->getMessage());

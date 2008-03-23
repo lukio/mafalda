@@ -34,9 +34,50 @@
 <!-- BEGIN row_celda --> 
   <tr>
 <!-- BEGIN CELDA -->  
-   <td class="fabricatd">{MODELO}</td><td class="fabricatd"><a href="#">{LOTE_PRODUCCION}</a></td><td class="fabricatd"><a href="#">{LOTE_EMBALADO}</a></td><td class="fabricatd">{AREA}</td><td class="fabricatd"><a href="#">{OM}</a></td><td class="fabricatd"><a href="kkkkkx">{OMMP}</a></td><td class="fabricatd">{FECHA_PEGADO}</td> 
+   <td class="fabricatd">{MODELO}</td>
+   <td class="fabricatd"><a href="{LOTE_PRODUCCION}">{LOTE_PRODUCCION}</a></td>
+   <td class="fabricatd"><a href="{LOTE_EMBALADO}">{LOTE_EMBALADO}</a></td>
+   <td class="fabricatd">{AREA}</td>
+   <td class="fabricatd"><a href="#">{OM}</a></td>
+   <td class="fabricatd"><a href="kkkkkx">{OMMP}</a></td>
+   <td class="fabricatd">{FECHA_PEGADO}</td> 
 <!-- END CELDA -->  
   </tr>
 <!-- END row_celda --> 
  </table> 
+
+<table class="fabrica"> 
+<tr><td class="fabricatd">Datos msg, etc...</td></tr>
+    <tr><td class="fabricaTitulo">MSG</td>
+    <td class="fabricaTitulo">MRB</td>
+    <td class="fabricaTitulo">Impe RB</td>
+    <td class="fabricaTitulo">Impe SG</td>
+    <td class="fabricaTitulo">Impe RS</td>
+  <tr>
+<!-- BEGIN IMPE -->  
+   <td class="fabricatd">{MSG}</td>
+   <td class="fabricatd">{MRB}</td>
+   <td class="fabricatd">{IMPE_RB}</td>
+   <td class="fabricatd">{IMPE_SG}</td>
+   <td class="fabricatd">{IMPE_RS}</td>
+<!-- END IMPE -->  
+  </tr>
+ </table> 
+
+<table class="fabrica"> 
+<tr><td class="fabricatd">Datos estadisticas</td></tr>
+    <tr><td class="fabricaTitulo">sensibilidad real</td>
+    <td class="fabricaTitulo">desviacion estandar porcentual</td>
+    <td class="fabricaTitulo">tolerancia sens.</td>
+    <td class="fabricaTitulo">cap. nominal</td>
+  <tr>
+<!-- BEGIN ESTADISTICA -->  
+   <td class="fabricatd">{SR}</td>
+   <td class="fabricatd">{DEP}</td>
+   <td class="fabricatd">{TS}</td>
+   <td class="fabricatd">{CN}</td>
+<!-- END ESTADISTICA -->  
+  </tr>
+ </table> 
+
 </html>
