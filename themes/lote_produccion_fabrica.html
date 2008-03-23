@@ -1,0 +1,24 @@
+<div align=right><h5><a href="#" onclick="ajax_index('', '')" id=>[Tabla Probatuti]</a> <a href="#" onclick="ajax_index('', '')" id=>[Numero OT por Lote]</a> </h5></div>
+ <table class="fabrica"> 
+<tr><td class="fabricatd">Datos varios del Lote y Modelo</td></tr>
+    <tr><td class="fabricaTitulo">modelo</td><td class="fabricaTitulo">merma</td><td class="fabricaTitulo">fecha</td><td class="fabricaTitulo">tol. sens</td><td class="fabricaTitulo">tol. cero</td><td class="fabricaTitulo">imp-salida</td><td class="fabricaTitulo">imp-entrada</td></tr>
+<!-- BEGIN LOTES -->  
+   <td class="fabricatd">
+    {DATO}
+   </td>
+<!-- END LOTES -->  
+ </table> 
+<br />
+ <table class="fabrica"> 
+<tr><td class="fabricatd">Numeros de serie en lote produccion</td></tr>
+    <tr><td class="fabricaTitulo">numero serie</td><td class="fabricaTitulo">imp-sg</td><td class="fabricaTitulo">imp-rb</td><td class="fabricaTitulo">imp-rs</td></tr>
+<!-- BEGIN row_imp --> 
+<tr>
+<!-- BEGIN IMPE -->  
+   <td class="fabricatd">
+    {DATO}
+   </td>
+<!-- END IMPE -->  
+</tr>
+<!-- END row_imp --> 
+ </table> 

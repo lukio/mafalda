@@ -10,12 +10,10 @@
 
 function buscar_nserie($ncelda){
 
-    require_once('include/validaciones.php');
     require_once('dbinfo.php');
     require_once ('MDB2.php');
 
     /* variables
-     * $modelo
      * $ncelda
      *
      **/
@@ -24,8 +22,6 @@ function buscar_nserie($ncelda){
 	        print "DATO de tipo NO VALIDO";
 
     }else{
-
-            $modelo="";
 
         // Conecto a DB Flexar
         $mdb2 =& MDB2::singleton($dsn, $options);
@@ -98,7 +94,7 @@ function buscar_nserie($ncelda){
                     die($res_estadistica->getMessage());
         }
 
-        //hago uso de esta variable a lo ultimo
+        //Haciendo calculos de las estadisticas
         $num_col = count($res_ensayos);
         $rfinal = $res_ensayos[$num_col-1]['0'];
         $espec = $res_ensayos[$num_col-1]['5'];
@@ -180,8 +176,92 @@ function buscar_lote_embalado($q){
 }
 
 
-function buscar_lote_produccion($q){
-    print "BUSCAR POR LOTE PRODUCCION";
+function buscar_lote_produccion($lote_produccion){
+    print "LOTE PRODUCCION: ".$lote_produccion;
+
+    if (!is_numeric($lote_produccion)){
+            print "Dato de tipo NO VALIDO";
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        /**
+         * Se va a agregar dos querys. Uno para el header y el otro para el resto !
+         * header : + merma + modelo + fecha
+         */
+
+        //Conecto a DB Flexar
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        
+        //devuelve una fila
+        $query = "SELECT l.modelo, l.merma,  LEFT(l.fecha, 11), m.tolsens,ROUND(m.tolcero,3), m.tolimpsal, m.[tol impent]
+                  FROM Modelos m, Lotes l
+                  WHERE l.lote=? and l.modelo=m.modelo";
+
+        // sanitizamos la el select
+        $type = array ('integer');
+        $statement= $mdb2->prepare($query, $type, MDB2_PREPARE_RESULT);
+        $data = array($lote_produccion);
+        $result_header = $statement->execute($data);
+        if(PEAR::isError($result_header)) {
+             die($mdb2->getMessage());
+         }
+        $statement->Free();
+        $row_header = $result_header->fetchrow();
+        
+        // devuelve varias filas
+        $query = "SELECT Impedancias.Serie AS NroSerie, round(Impedancias.ImpSG,3), ROUND(Impedancias.ImpRB,3), round(Impedancias.ImpRs,3) 
+                  FROM Impedancias
+                  WHERE Impedancias.Lote=?";
+
+        // sanitizamos el select
+        $type = array ('integer');
+        $statement= $mdb2->prepare($query, $type, MDB2_PREPARE_RESULT);
+        $data = array($lote_produccion);
+        $result_impedancias = $statement->execute($data);
+        if(PEAR::isError($result_impedancias)) {
+             die($mdb2->getMessage());
+         }
+        $statement->Free();
+        $row_impedancias = $result_impedancias->fetchAll();
+
+        $mdb2->disconnect();       
+        
+        // impresion!!       
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('lote_produccion_fabrica.html', true, true); //seleccionamos la plantilla
+        
+        // Datos varios del Lote
+        foreach($row_header as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("LOTES");
+                $it->setVariable("DATO", $name);
+                $it->parseCurrentBlock("LOTES");
+        }
+        // Datos de los numero de serie de ese Lote
+        foreach($row_impedancias as $name) {
+            // Assign data to the inner block
+            foreach($name as $cell) {
+                $it->setCurrentBlock("IMPE");
+                $it->setVariable("DATO", $cell);
+                $it->parseCurrentBlock("IMPE");
+            }
+            $it->parse("row_imp");
+        }
+            $it->show();
+    }
+
+
+}
+
+function buscar_tabla_probatuti($ncelda, $lote_produccion){
+    print "BUSCAR TABLA PROBATUTI";
+
 }
             
 
