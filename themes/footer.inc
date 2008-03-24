@@ -1,1 +1,1 @@
-<div align="center"><h6>Desarrollado por <a href="http://www.luchorossi.com.ar">Lucho Rossi</a> - Licencia <a href="http://sam.zoy.org/wtfpl/">WTFPL</a></h6><a href="http://validator.w3.org/check?uri=referer"><img src="w3c-xhtml.gif" alt="w3c-xhtml"/></a></div>
+<div align="center"><h6>Desarrollado por <a href="http://www.luchorossi.com.ar">Lucho Rossi</a> - Licencia <a href="http://sam.zoy.org/wtfpl/">WTFPL</a></h6></div>
