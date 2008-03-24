@@ -90,6 +90,10 @@ if(!isset($_SESSION['user_autenticado'])){
                 buscar_tabla_probatuti($_GET['q']);
                 exit();
             }
+            elseif ($action == "ot_por_lote"){
+                buscar_ot_por_lote($_GET['q']);
+                exit();
+            }
             elseif ($action == "login"){
                 formulario_login();
                 exit();

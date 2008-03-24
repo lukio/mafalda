@@ -29,7 +29,7 @@ function buscar_nserie($ncelda){
                  die($mdb2->getMessage());
         }
 
-        $query = "select lote, ROUND(imprb,3), ROUND(impsg,3), ROUND(imprs,3)
+        $query = "select lote, left(imprb,6), left(impsg,6), left(imprs,6)
                   FROM impedancias 
                   where serie=".$mdb2->quote($ncelda,'integer')."";
 
@@ -45,7 +45,7 @@ function buscar_nserie($ncelda){
             exit();
         }
 
-        $query = "SELECT ROUND(ENSAYOS.RANGO_FIN,3), LEFT(ENSAYOS.FECHA,11), ENSAYOS.VSC_INI, ENSAYOS.VSC_FIN, ENSAYOS.GOLPES, ENSAYOS.ESPEC 
+        $query = "SELECT round(ENSAYOS.RANGO_FIN,4), LEFT(ENSAYOS.FECHA,11), ENSAYOS.VSC_INI, ENSAYOS.VSC_FIN, ENSAYOS.GOLPES, ENSAYOS.ESPEC 
                   FROM ENSAYOS 
                   WHERE NRO_SERIE=".$mdb2->quote($ncelda,'integer')."";
 
@@ -57,7 +57,7 @@ function buscar_nserie($ncelda){
         }
 
        
-        $query = "SELECT DataHorno.Cero, ROUND(DataHorno.Pendiente,2), ROUND(DataHorno.R2,2), ROUND(DataHorno.H,2), DataHorno.Horno, LEFT(HornoResumen.Fecha, 11)
+        $query = "SELECT DataHorno.Cero, left(DataHorno.Pendiente,6), left(DataHorno.R2,6), left(DataHorno.H,6), DataHorno.Horno, LEFT(HornoResumen.Fecha, 11)
                   FROM DataHorno INNER JOIN HornoResumen ON DataHorno.Horneada = HornoResumen.Horneada
                   WHERE (((DataHorno.Serie)=".$mdb2->quote($ncelda,'integer').")) AND DataHorno.Horno=HornoResumen.Horno";
 
@@ -112,6 +112,14 @@ function buscar_nserie($ncelda){
         require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('fabrica.html', true, true); //seleccionamos la plantilla
+
+        print "NUMERO DE SERIE: ".$ncelda."<br />";
+
+        // Enlaces Tabla Probatuti y num ot por lote
+        $it->setCurrentBlock("LINKS");
+        $it->setVariable("N_SERIE", $ncelda);
+        $it->setVariable("LOTEPRO", $res_impedancias['0']);
+        $it->parseCurrentBlock("LINKS");
         
         // Tabla de Ensayos
         foreach($res_ensayos as $name) {
@@ -158,8 +166,8 @@ function buscar_nserie($ncelda){
 
         // Tabla Datos estadistica
         $it->setCurrentBlock("ESTADISTICA");
-        $it->setVariable("SR", round($sensi_real,3));
-        $it->setVariable("DEP", round($desv_est_porce,3));
+        $it->setVariable("SR", round($sensi_real,4));
+        $it->setVariable("DEP", round($desv_est_porce,4));
         $it->setVariable("TS", $tolsens);
         $it->setVariable("CN", $capnom);
         $it->parseCurrentBlock("ESTADISTICA");
@@ -303,22 +311,22 @@ function buscar_lote_embalado($lote_embalado){
 }
 
 function buscar_tabla_probatuti($ncelda){
-    print "TABLA PROBATUTI DE CELDA: ".$ncelda;
 
     if (!is_numeric($ncelda)){
             print "Dato de tipo NO VALIDO";
     }else{
         require_once('dbinfo.php');
         require_once('MDB2.php');
+        print "TABLA PROBATUTI DE CELDA: ".$ncelda."<br />";
 
         // Conecto a DB Flexar
         $mdb2 =& MDB2::singleton($dsn, $options);
         if (PEAR::isError($mdb2)) {
                  die($mdb2->getMessage());
         }
-       $query = "SELECT opera.Operacion AS Area, op.Nombre, op.Apellido, prob.MedTerminada AS MedTer, 
-                 prob.impsalida AS ImpSa, prob.impentrada AS ImpEn, prob.tenssalida AS TensSa,
-                 prob.dircarga AS DirCarga, prob.aiscuerpo AS AislaCuore, LEFT(prob.fecha, 11) AS Fecha 
+       $query = "SELECT opera.Operacion, op.Nombre, op.Apellido, prob.MedTerminada, 
+                 prob.impsalida, prob.impentrada, prob.tenssalida,
+                 prob.dircarga, prob.aiscuerpo, LEFT(prob.fecha, 11) AS Fecha 
 
                  FROM Probatuti prob, Operaciones opera, Operarios op 
 
@@ -326,9 +334,91 @@ function buscar_tabla_probatuti($ncelda){
 
                  ORDER BY prob.fecha, prob.Area";
 
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll();
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('tabla_probatuti_fabrica.html', true, true); //seleccionamos la plantilla
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+            foreach($name as $cell) {
+                $it->setCurrentBlock("TABLA_PROBA");
+                $it->setVariable("DATO", $cell);
+                $it->parseCurrentBlock("TABLA_PROBA");
+            }
+            $it->parse("row_proba");
+        }
+       $it->show(); 
+
+
         }
 
 }
+
+function buscar_ot_por_lote($lote_produccion){ 
+
+
+    if (!is_numeric($lote_produccion)){
+            print "Dato de tipo NO VALIDO";
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        print "LOTE PRODUCCION BUSCADO: ".$lote_produccion."<br />";
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+
+        $query = "select do.nroord, do.cantidad, 
+        (select operaciones.operacion from operaciones
+        where operaciones.idoperacion=ot.operacion) as area,
+        (select operarios.nombre from operarios 
+        where operarios.idoperario=ot.operario) as nombre,
+        (select operarios.apellido from operarios 
+        where operarios.idoperario=ot.operario) as apellido,
+        left(ot.fechainicio,11) as fechainicio, left(do.fechadeterminacion,11) as fechadeterminacion, ot.comentarios, ot.observaciones
+        from datosorden do, ordenesdetrabajo ot
+        where do.lote='$lote_produccion' and do.nroord=ot.nroorden and ot.terminada='1'
+        and ot.anulada='0' order by ot.nroorden";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('ot_por_lote_fabrica.html', true, true); //seleccionamos la plantilla
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("OTL");
+                $it->setVariable("NROORDEN", $name['nroord']);
+                $it->setVariable("CANTIDAD", $name['cantidad']);
+                $it->setVariable("AREA", $name['area']);
+                $it->setVariable("NOMBRE", $name['nombre']);
+                $it->setVariable("APELLIDO", $name['apellido']);
+                $it->setVariable("FECHA_INI", $name['fechainicio']);
+                $it->setVariable("FECHA_FIN", $name['fechadeterminacion']);
+                $it->setVariable("COME", $name['comentarios']);
+                $it->setVariable("OBS", $name['observaciones']);
+                $it->parseCurrentBlock("OTL");
+            $it->parse("row_ot");
+        }
+       $it->show(); 
+    }
+}
+       
+       
             
 
 ?>
