@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 <head><title>Mafalda - Consulta Flexar</title>
 <link rel="stylesheet" type="text/css" media="all" href="themes/css/consulta_gerencia.css" />
 <link rel="stylesheet" type="text/css" href="themes/css/ui.datepicker.css">
 
-<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="MSSmartTagsPreventParsing" content="TRUE" />
 <meta http-equiv="expires" content="-1" />
 <meta http-equiv= "pragma" content="no-cache" />
@@ -23,7 +23,7 @@ $('#exampleRange').datepicker({rangeSelect: true, firstDay: 1});
   });
 </script>
 <script type="text/javascript">
-  
+<!--
 
 function clear_textbox()
 {
@@ -88,8 +88,8 @@ catch (e)
  }
 return xmlHttp;
 }
+//-->
 </script>
-
 </head><body>
 
 
@@ -101,11 +101,11 @@ return xmlHttp;
  <tbody>
      <tr>
     <!-- BEGIN input_der -->
-         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}"></td>
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" /></td>
     <!-- END input_der -->
     </tr><tr>
     <!-- BEGIN input_cen -->
-         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}"></td>
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" /></td>
     <!-- END input_cen -->
    </tr>
 </tbody>
@@ -115,7 +115,7 @@ return xmlHttp;
 <tbody>
     <tr>
     <!-- BEGIN FECHAS -->
-    <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="Click calendario"></td>
+    <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="Click calendario" /></td>
     <!-- END FECHAS -->
     </tr>
 </tbody>
@@ -135,7 +135,7 @@ return xmlHttp;
 </tbody>
 </table>
      <div align="right">
-        <input type="submit" name="Submit" value="Buscar">
+        <input type="submit" name="Submit" value="Buscar" />
      </div>
 </form>
 </div>
