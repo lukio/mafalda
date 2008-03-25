@@ -112,6 +112,7 @@ img {
         voice-family: "\"}\"";
         voice-family:inherit;
         width: 660px;
+        font-size: 11px;
         }
 html>body #content {
         width: 660px; /* ie5win fudge ends */
@@ -186,6 +187,7 @@ td{
 table.fabrica{ 
     background-color: #fafafa;
     border: 1px #000000 solid;
+    margin-top: 10px;
     margin-bottom: 10px;
     border-spacing: 0px; 
 }
@@ -208,7 +210,8 @@ td.fabricaTitulo{
 td.fabricatd{ 
     text-align: center;
     font-family: Arial;
-    font-weight: bold;
+/*    font-weight: bold; */
+    font-size: 12px;
     color: #000;
     background-color: #fafafa;
     padding-top: 5px;

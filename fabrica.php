@@ -241,6 +241,11 @@ function buscar_lote_produccion($lote_produccion){
         require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('lote_produccion_fabrica.html', true, true); //seleccionamos la plantilla
+
+        // Enlaces Tabla Probatuti y num ot por lote
+        $it->setCurrentBlock("LINKS");
+        $it->setVariable("LOTEPRO", $lote_produccion);
+        $it->parseCurrentBlock("LINKS");
         
         // Datos varios del Lote
         foreach($row_header as $name) {
@@ -399,6 +404,7 @@ function buscar_ot_por_lote($lote_produccion){
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('ot_por_lote_fabrica.html', true, true); //seleccionamos la plantilla
 
+
         foreach($rows as $name) {
             // Assign data to the inner block
                 $it->setCurrentBlock("OTL");
@@ -418,7 +424,82 @@ function buscar_ot_por_lote($lote_produccion){
     }
 }
        
-       
+function buscar_p_orden($nroorden){ 
+
+    if (!is_numeric($nroorden)){
+            print "Dato de tipo NO VALIDO";
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        print "NRO ORDEN BUSCADO: ".$nroorden."<br />";
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+
+        $query = "select distinct ot.terminada, ot.anulada,
+                (select operaciones.operacion from operaciones
+                where operaciones.idoperacion=ot.operacion) as area,
+                (select operarios.nombre from operarios 
+                where operarios.idoperario=ot.operario) as nombre,
+                (select operarios.apellido from operarios 
+                where operarios.idoperario=ot.operario) as apellido,
+                left(ot.fechainicio,11) as fechainicio, left(do.fechadeterminacion,11) as fechadeterminacion
+                from ordenesdetrabajo ot, datosorden do
+                where ot.nroorden='$nroorden' and do.nroord='$nroorden'
+                and ot.anulada<>'1'";
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+
+        $query = "select do.lote, do.cantidad, lo.modelo
+                 from ordenesdetrabajo ot, datosorden do, lotes lo
+                 where ot.nroorden='$nroorden' and do.nroord='$nroorden'
+                 and ot.anulada<>'1' and do.lote=lo.lote order by do.lote";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows_1 = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('p_orden_fabrica.html', true, true); //seleccionamos la plantilla
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("OTL");
+                $it->setVariable("NOMBRE", $name['nombre']);
+                $it->setVariable("APELLIDO", $name['apellido']);
+                $it->setVariable("AREA", $name['area']);
+                $it->setVariable("TERMINO", $name['terminada']);
+                $it->setVariable("FECHA_INI", $name['fechainicio']);
+                $it->setVariable("FECHA_FIN", $name['fechadeterminacion']);
+                $it->parseCurrentBlock("OTL");
+            $it->parse("row_ot");
+        }
+
+        foreach($rows_1 as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("OT_L");
+                $it->setVariable("LOTE", $name['lote']);
+                $it->setVariable("MODELO", $name['modelo']);
+                $it->setVariable("CANTIDAD", $name['cantidad']);
+                $it->parseCurrentBlock("OT_L");
+            $it->parse("row_ot_l");
+//                $it->setVariable("CANTIDAD", $name['cantidad']);
+        }
+       $it->show(); 
+    }
+}
             
 
 ?>

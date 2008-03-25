@@ -94,6 +94,10 @@ if(!isset($_SESSION['user_autenticado'])){
                 buscar_ot_por_lote($_GET['q']);
                 exit();
             }
+            elseif ($action == "p_orden"){
+                buscar_p_orden($_GET['q']);
+                exit();
+            }
             elseif ($action == "login"){
                 formulario_login();
                 exit();
