@@ -95,7 +95,11 @@ if(!isset($_SESSION['user_autenticado'])){
                 exit();
             }
             elseif ($action == "p_orden"){
-                buscar_p_orden($_GET['q']);
+                buscar_p_orden_trabajo($_GET['q']);
+                exit();
+            }
+            elseif ($action == "orden_mecanizado"){
+                buscar_orden_mecanizado($_GET['q']);
                 exit();
             }
             elseif ($action == "login"){

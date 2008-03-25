@@ -424,7 +424,7 @@ function buscar_ot_por_lote($lote_produccion){
     }
 }
        
-function buscar_p_orden($nroorden){ 
+function buscar_p_orden_trabajo($nroorden){ 
 
     if (!is_numeric($nroorden)){
             print "Dato de tipo NO VALIDO";
@@ -501,5 +501,55 @@ function buscar_p_orden($nroorden){
     }
 }
             
+function buscar_orden_mecanizado($nro_ordenmecanizado){ 
+
+
+    if (!is_numeric($nro_ordenmecanizado)){
+            print "Dato de tipo NO VALIDO";
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        print "NRO ORDEN MECANIZADO: ".$nro_ordenmecanizado."<br />";
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        
+        $query = "SELECT lo.lote, lo.modelo, lo.cantidad, LEFT(lo.Fecha,11) as fecha
+                  FROM Lotes lo WHERE OCMecanizado=$nro_ordenmecanizado
+                  ORDER BY lo.Fecha";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+  //      die (print_r($rows));
+
+        require_once ('include/pear/Sigma.php'); //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('om_fabrica.html', true, true); //seleccionamos la plantilla
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("OTL_");
+                $it->setVariable("LOTE", $name['lote']);
+                $it->setVariable("MODELO", $name['modelo']);
+                $it->setVariable("CANTIDAD", $name['cantidad']);
+                $it->setVariable("FECHA", $name['fecha']);
+                
+                $it->parseCurrentBlock("OTL_");
+                $it->parse("row_ot_");
+                
+                
+        }
+       $it->show(); 
+    }
+
+}
 
 ?>
