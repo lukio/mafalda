@@ -1,0 +1,16 @@
+campos consulta gerencia:
+fecha inicial
+fecha final
+operario
+sector
+
+tipo de busqueda:
+- embalado por fecha
+- probatuti por operario y fecha
+- probatuti por sector y fecha
+- Ensayos por operarario y fecha
+- cableado (los lotes que estan en el sector sin OTasignada.)
+- lima  (los lotes que estan en el sector sin OTasignada.)
+- numero ot por rango fecha
+- ot por operario
+

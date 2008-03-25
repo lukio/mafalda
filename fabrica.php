@@ -180,26 +180,21 @@ function buscar_nserie($ncelda){
 }
 
 function buscar_lote_produccion($lote_produccion){
-    print "LOTE PRODUCCION: ".$lote_produccion."<br />";
+    require_once('dbinfo.php');
+    require_once('MDB2.php');
 
     if (!is_numeric($lote_produccion)){
             print "Dato de tipo NO VALIDO";
     }else{
-        require_once('dbinfo.php');
-        require_once('MDB2.php');
+        print "LOTE PRODUCCION: ".$lote_produccion."<br />";
 
-        /**
-         * Se va a agregar dos querys. Uno para el header y el otro para el resto !
-         * header : + merma + modelo + fecha
-         */
 
-        //Conecto a DB Flexar
         // Conecto a DB Flexar
         $mdb2 =& MDB2::singleton($dsn, $options);
+
         if (PEAR::isError($mdb2)) {
                  die($mdb2->getMessage());
         }
-        
         //devuelve una fila
         $query = "SELECT l.modelo, l.merma,  LEFT(l.fecha, 11), m.tolsens,ROUND(m.tolcero,3), m.tolimpsal, m.[tol impent]
                   FROM Modelos m, Lotes l
@@ -210,6 +205,7 @@ function buscar_lote_produccion($lote_produccion){
         $statement= $mdb2->prepare($query, $type, MDB2_PREPARE_RESULT);
         $data = array($lote_produccion);
         $result_header = $statement->execute($data);
+
         if(PEAR::isError($result_header)) {
              die($mdb2->getMessage());
          }
@@ -267,12 +263,10 @@ function buscar_lote_produccion($lote_produccion){
             $it->show();
     }
 
-
 }
 
 function buscar_lote_embalado($lote_embalado){
 
-    print "LOTE EMBALADO: ".$lote_embalado."<br />";
 
     if (!is_numeric($lote_embalado)){
             print "Dato de tipo NO VALIDO";
@@ -285,8 +279,9 @@ function buscar_lote_embalado($lote_embalado){
         if (PEAR::isError($mdb2)) {
                  die($mdb2->getMessage());
         }
+        print "LOTE EMBALADO: ".$lote_embalado."<br />";
 
-    //consulta a dbms  . Selecciona nroserie, dia embalado segun el nro lote embalado
+        //consulta a dbms  . Selecciona nroserie, dia embalado segun el nro lote embalado
         $query = "SELECT embalado.serie, (SELECT Lote FROM Impedancias WHERE embalado.serie=impedancias.serie) as lotepro,
                   LEFT(embalado.fecha,20) as fecha
                   FROM embalado

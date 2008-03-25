@@ -32,6 +32,27 @@ function clear_textbox()
     document.getElementById('lote_produccion_id').value = ""
 }
 
+function ajax_oper(action, id_campo){
+
+dato_evaluo = document.getElementById(id_campo).value
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?q="+dato_evaluo
+//evaluar si esta definido action. 
+url=url+"&action="+action
+//
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
+
 function ajax_index(){
 
 if ( dato_evaluo = document.getElementById('celda_id').value)
@@ -96,7 +117,7 @@ return xmlHttp;
 <div id="header">
 <div align="right"><h6><a href="index.php">[Volver al Panel]</a> <a href="index.php?action=logout">[logout]</a></h6></div>
 <div align="left">
- <form action="javascript:ajax_index();" name="form_gerencia" id="form_gerencia_id">
+ <form action="javascript:ajax_index();" id="form_gerencia_id">
  <table class="header">
  <tbody>
      <tr>
@@ -105,7 +126,7 @@ return xmlHttp;
     <!-- END input_der -->
     </tr><tr>
     <!-- BEGIN input_cen -->
-         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" /></td>
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" onfocus="ajax_oper({DATO_AJAX}, {ID_DATO});" /></td>
     <!-- END input_cen -->
    </tr>
 </tbody>

@@ -22,6 +22,8 @@ function mostrar_inputs($data,$bloque, $it){
         $it->setVariable('NAME_DATO',$data[$i++]);
         $it->setVariable('SIZE_DATO',$data[$i++]);
         $it->setVariable('ID_DATO',$data[$i++]);
+        if ($bloque == "input_cen")
+        $it->setVariable('DATO_AJAX',$data[$i++]);
 
         $it->parseCurrentBlock($bloque); //generamos la parte del bloque analizado
     }
@@ -47,8 +49,8 @@ function pagina_consulta_gerencia ($action){
                     );
 
     $data_cen = array (
-                       "Nombre Operario: ", "text", "nombre_operario", "10", "nombre_operario_id",
-                       "Sector: ", "text", "sector", "10", "sector_id"
+                       "Nombre Operario: ", "text", "nombre_operario", "10", "nombre_operario_id", "busco_operario",
+                       "Sector: ", "text", "sector", "10", "sector_id", "bussco_sector"
                     );
     $data_fecha = array (
                    "Fecha Inicio: ", "text", "fecha_inicio", "12", "fecha_inicio_id",

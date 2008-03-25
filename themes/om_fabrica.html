@@ -1,20 +1,15 @@
 
 <table class="fabrica"> 
-<tr><td class="fabricatd">OT's</td></tr>
-    <tr><td class="fabricaTitulo">nro. orden</td><td class="fabricaTitulo">cantidad</td><td class="fabricaTitulo">area</td><td class="fabricaTitulo">nombre</td><td class="fabricaTitulo">apellido</td><td class="fabricaTitulo">fecha inicio</td><td class="fabricaTitulo">fecha term</td><td class="fabricaTitulo">coments</td><td class="fabricaTitulo">obs</td></tr>
-<!-- BEGIN row_ot --> 
+<tr><td class="fabricatd">Datos Orden Mecanizado</td></tr>
+    <tr><td class="fabricaTitulo">lotes</td><td class="fabricaTitulo">modelo</td><td class="fabricaTitulo">cantidad</td><td class="fabricaTitulo">fecha</td></tr>
+<!-- BEGIN row_ot_ --> 
 <tr>
-<!-- BEGIN OTL -->  
-   <td class="fabricatd"><a href="#" onclick="ajax_ot('p_orden',{NROORDEN});">{NROORDEN}</a></td>
+<!-- BEGIN OTL_ -->  
+   <td class="fabricatd">{LOTE}</td>
+    <td class="fabricatd">{MODELO}</td>
     <td class="fabricatd">{CANTIDAD}</td>
-    <td class="fabricatd">{AREA}</td>
-    <td class="fabricatd">{NOMBRE}</td>
-    <td class="fabricatd">{APELLIDO}</td>
-    <td class="fabricatd">{FECHA_INI}</td>
-    <td class="fabricatd">{FECHA_FIN}</td>
-    <td class="fabricatd">{COME}</td>
-    <td class="fabricatd">{OBS}</td>
-<!-- END OTL -->  
+    <td class="fabricatd">{FECHA}</td>
+<!-- END OTL_ -->  
 </tr>
-<!-- END row_ot --> 
+<!-- END row_ot_ --> 
  </table> 
