@@ -1,0 +1,5 @@
+apache 2 + php5
+http://www.expertsrt.com/tutorials/Matt/install-apache.html
+
+pear
+http://pear.php.net/manual/en/installation.getting.php
