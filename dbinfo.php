@@ -8,7 +8,6 @@ $dsn = array(
         );
 $options = array(
             'debug'       => 2,
-            'portability' => MDB2_PORTABILITY_ALL,
         );
 
 ?>
