@@ -71,11 +71,16 @@ if(!isset($_SESSION['user_autenticado'])){
              * Evaluo el $_GET['action']
              **/
             require_once('fabrica.php');
+            require_once('exportar.php');
             require_once('include/autentifica.php');
             $action = $_GET['action'];
 
             if ($action == "serie"){
                 buscar_nserie($_GET['q']);
+                exit();
+            }
+            if ($action == "exportar_serie"){
+                buscar_nserie_csv($_GET['q']);
                 exit();
             }
             elseif ($action == "lote_embalado"){
