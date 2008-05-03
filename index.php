@@ -23,7 +23,7 @@ if(!isset($_SESSION['user_autenticado'])){
     if(!$_GET['action']){
     /**
     * El action no esta definido.
-    * Primera vez que carga la páge
+    * Primera vez que carga la page
     **/
         require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
