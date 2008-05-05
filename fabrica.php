@@ -255,7 +255,7 @@ function buscar_lote_produccion($lote_produccion){
             // Assign data to the inner block
             foreach($name as $cell) {
                 $it->setCurrentBlock("IMPE");
-                $it->setVariable("DATO", $cell);
+                $it->setVariable("DATO", utf8_encode($cell));
                 $it->parseCurrentBlock("IMPE");
             }
             $it->parse("row_imp");
@@ -296,6 +296,11 @@ function buscar_lote_embalado($lote_embalado){
         require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('lote_embalado_fabrica.html', true, true); //seleccionamos la plantilla
+
+        // Enlaces Tabla Probatuti y num ot por lote
+        $it->setCurrentBlock("LINKS");
+        $it->setVariable("LOTE_EMBA", $lote_embalado);
+        $it->parseCurrentBlock("LINKS");
 
         foreach($rows as $name) {
             // Assign data to the inner block
@@ -343,6 +348,11 @@ function buscar_tabla_probatuti($ncelda){
         require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('tabla_probatuti_fabrica.html', true, true); //seleccionamos la plantilla
+
+        // Enlaces Tabla Probatuti y num ot por lote
+        $it->setCurrentBlock("LINKS");
+        $it->setVariable("N_SERIE", $ncelda);
+        $it->parseCurrentBlock("LINKS");
 
         foreach($rows as $name) {
             // Assign data to the inner block
@@ -399,6 +409,11 @@ function buscar_ot_por_lote($lote_produccion){
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('ot_por_lote_fabrica.html', true, true); //seleccionamos la plantilla
 
+        // Enlaces Tabla Probatuti y num ot por lote
+        $it->setCurrentBlock("LINKS");
+        $it->setVariable("LOTEPRO", $lote_produccion);
+        $it->parseCurrentBlock("LINKS");
+
 
         foreach($rows as $name) {
             // Assign data to the inner block
@@ -406,12 +421,12 @@ function buscar_ot_por_lote($lote_produccion){
                 $it->setVariable("NROORDEN", $name['nroord']);
                 $it->setVariable("CANTIDAD", $name['cantidad']);
                 $it->setVariable("AREA", $name['area']);
-                $it->setVariable("NOMBRE", $name['nombre']);
-                $it->setVariable("APELLIDO", $name['apellido']);
+                $it->setVariable("NOMBRE", utf8_encode($name['nombre']));
+                $it->setVariable("APELLIDO", utf8_encode($name['apellido']));
                 $it->setVariable("FECHA_INI", $name['fechainicio']);
                 $it->setVariable("FECHA_FIN", $name['fechadeterminacion']);
-                $it->setVariable("COME", $name['comentarios']);
-                $it->setVariable("OBS", $name['observaciones']);
+                $it->setVariable("COME", utf8_encode($name['comentarios']));
+                $it->setVariable("OBS", utf8_encode($name['observaciones']));
                 $it->parseCurrentBlock("OTL");
             $it->parse("row_ot");
         }
