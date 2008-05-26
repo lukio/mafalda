@@ -172,8 +172,6 @@ function buscar_nserie($ncelda){
         $it->setVariable("CN", $capnom);
         $it->parseCurrentBlock("ESTADISTICA");
         
-
-
         $it->show();
     }
 

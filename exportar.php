@@ -16,6 +16,7 @@ switch ($funcion){
     case 'buscar_tabla_probatuti_csv':buscar_tabla_probatuti_csv($dato); break;
     case 'buscar_ot_por_lote_csv':buscar_ot_por_lote_csv($dato); break;
     case 'buscar_lote_embalado_csv':buscar_lote_embalado_csv($dato); break;
+    case 'buscar_lote_produccion_csv':buscar_lote_produccion_csv($dato); break;
 }
 
 
@@ -57,7 +58,7 @@ function buscar_nserie_csv($ncelda){
             exit();
         }
 
-        $query = "SELECT round(ENSAYOS.RANGO_FIN,4), LEFT(ENSAYOS.FECHA,11), ENSAYOS.VSC_INI, ENSAYOS.VSC_FIN, ENSAYOS.GOLPES, ENSAYOS.ESPEC 
+        $query = "SELECT round(ENSAYOS.RANGO_FIN,2), LEFT(ENSAYOS.FECHA,11), ENSAYOS.VSC_INI, ENSAYOS.VSC_FIN, ENSAYOS.GOLPES, ENSAYOS.ESPEC 
                   FROM ENSAYOS 
                   WHERE NRO_SERIE=".$mdb2->quote($ncelda,'integer')."";
 
@@ -69,7 +70,7 @@ function buscar_nserie_csv($ncelda){
         }
 
        
-        $query = "SELECT DataHorno.Cero, left(DataHorno.Pendiente,6), left(DataHorno.R2,6), left(DataHorno.H,6), DataHorno.Horno, LEFT(HornoResumen.Fecha, 11)
+        $query = "SELECT DataHorno.Cero, ROUND(DataHorno.Pendiente,3), ROUND(DataHorno.R2,3), ROUND(DataHorno.H,3), DataHorno.Horno, LEFT(HornoResumen.Fecha, 11)
                   FROM DataHorno INNER JOIN HornoResumen ON DataHorno.Horneada = HornoResumen.Horneada
                   WHERE (((DataHorno.Serie)=".$mdb2->quote($ncelda,'integer').")) AND DataHorno.Horno=HornoResumen.Horno";
 
@@ -117,18 +118,19 @@ function buscar_nserie_csv($ncelda){
 
 	    $sensi_real = ($capnom*$sensibilidad)/(($sensibilidad/$espec)*$rfinal);
     	$desv_est_porce = (($rfinal/$capnom) -1 )*100;
-
-        
-
+        $sensi_real = round($sensi_real,4);
+        $desv_est_porce= round($desv_est_porce,4);
 
         /* Impresion
          * archivo template: fabrica.html
         */ 
-
-/*        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        /*
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('fabrica.html', true, true); //seleccionamos la plantilla
-*/
+        */
+        $separador = ";";
+        $separador_texto =""; 
         $csv_file = "NUMERO DE SERIE: ".$ncelda."\n";
 
         // Tabla de Ensayos
@@ -138,7 +140,7 @@ function buscar_nserie_csv($ncelda){
         foreach($res_ensayos as $name) {
             // Assign data to the inner block
             foreach($name as $cell) {
-                $csv_file .="\"$cell\"".";";
+                $csv_file .="\"$cell\"".$separador;
             }
             $csv_file .="\n";
         }
@@ -150,7 +152,7 @@ function buscar_nserie_csv($ncelda){
         foreach($res_horno as $name) {
             // Assign data to the inner block
             foreach($name as $cell) {
-                $csv_file .="\"$cell\"".";";
+                $csv_file .="\"$cell\"".$separador;
             }
             $csv_file .="\n";
         }
@@ -158,40 +160,43 @@ function buscar_nserie_csv($ncelda){
         $csv_file .="\nDatos generales\n";
         $csv_file .="Modelo;Lote produccion;Lote embalado;Area;Orden meca;Orden meca-mp;Fecha pegado\n";
         // Tabla Datos generales
-        $csv_file .="\"$res_lotes[0]\"".";";
+        $csv_file .="\"$res_lotes[0]\"".$separador;
 
-        $csv_file .="\"$res_impedancias[0]\"".";";
-        $csv_file .="\"$lote_emba\"".";";
-        $csv_file .="\"$res_lotes[4]\"".";";
-        $csv_file .="\"$res_lotes[3]\"".";";
+        $csv_file .="\"$res_impedancias[0]\"".$separador;
+        $csv_file .="\"$lote_emba\"".$separador;
+        $csv_file .="\"$res_lotes[4]\"".$separador;
+        $csv_file .="\"$res_lotes[3]\"".$separador;
         $csv_file .="link tango;";
-        $csv_file .="\"$res_lotes[5]\"".";";
+        $csv_file .="\"$res_lotes[5]\"".$separador;
         $csv_file .="\n"; 
         // Tabla Datos generales
 
         $csv_file .="\n\"Datos msg etc...\"\n";
         $csv_file .="MSG;MRB;Impe RB;Impe SG;Impe RS\n";
 
-        $csv_file .="\"$res_lotes[1]\"".";";
-        $csv_file .="\"$res_lotes[2]\"".";";
-        $csv_file .="\"$res_impedancias[1]\"".";";
-        $csv_file .="\"$res_impedancias[2]\"".";";
-        $csv_file .="\"$res_impedancias[3]\"".";";
+        $csv_file .="\"$res_lotes[1]\"".$separador;
+        $csv_file .="\"$res_lotes[2]\"".$separador;
+        $csv_file .="\"$res_impedancias[1]\"".$separador;
+        $csv_file .="\"$res_impedancias[2]\"".$separador;
+        $csv_file .="\"$res_impedancias[3]\"".$separador;
         $csv_file .="\n";
 
         $csv_file .="\n\"Tabla Datos estadistica\"\n";
-        $csv_file .="sensibilidad real;desviacion estandar porcentual;tolerancia sens.;cap. nominal\n";
-        $csv_file .="\"$sensi_real\"".";";
-        $csv_file .="\"$desv_est_porce\"".";";
-        $csv_file .="\"$tolsens\"".";";
-        $csv_file .="\"$capnom\"".";";
+        $csv_file .="sensibilidad real;desviacion estandar porcentual;tolerancia_sens;cap_nominal\n";
+        $csv_file .="\"$sensi_real\"".$separador;
+        $csv_file .="\"$desv_est_porce\"".$separador;
+        $csv_file .="\"$tolsens\"".$separador;
+        $csv_file .="\"$capnom\"".$separador;
         $csv_file .="\n"; 
 
         Header("Content-Description: File Transfer");
         header("Content-Type: application/force-download");
         header("Content-Disposition: attachment; filename=exportar_serie_".$ncelda.".csv");
+        $csv_file = str_replace(".",",",$csv_file);
         echo $csv_file;
+            
     }
+    
 
 }
 
@@ -210,7 +215,7 @@ function buscar_tabla_probatuti_csv($ncelda){
                  die($mdb2->getMessage());
         }
        $query = "SELECT opera.Operacion, op.Nombre, op.Apellido, prob.MedTerminada, 
-                 prob.impsalida, prob.impentrada, prob.tenssalida,
+                 round(prob.impsalida,3), round(prob.impentrada,3), round(prob.tenssalida,3),
                  prob.dircarga, prob.aiscuerpo, LEFT(prob.fecha, 11) AS Fecha 
 
                  FROM Probatuti prob, Operaciones opera, Operarios op 
@@ -225,14 +230,16 @@ function buscar_tabla_probatuti_csv($ncelda){
                     die($res->getMessage());
         }
         $rows = $res->fetchAll();
+        $separador = ";";
+        $separador_texto =""; 
 
         $csv_file = "\"TABLA PROBATUTI DE CELDA:\"".$ncelda."\n";
-        $csv_file .= "\narea; nombre;apellido;med.ter;imp-sal;imp-ent;ten sal;dircarga;A-cuerpo;fecha\n";
+        $csv_file .= "\narea; nombre;apellido;medter;imp-sal;imp-ent;tensal;dircarga;A-cuerpo;fecha\n";
 
         foreach($rows as $name) {
             // Assign data to the inner block
             foreach($name as $cell) {
-                $csv_file .="\"$cell\"".";";
+                $csv_file .="\"$cell\"".$separador;
             }
             $csv_file .="\n";
         }
@@ -240,6 +247,7 @@ function buscar_tabla_probatuti_csv($ncelda){
         Header("Content-Description: File Transfer");
         header("Content-Type: application/force-download");
         header("Content-Disposition: attachment; filename=exportar_tabla_proba_".$ncelda.".csv");
+        $csv_file = str_replace(".",",",$csv_file);
         echo $csv_file;
 
         }
@@ -280,6 +288,9 @@ function buscar_ot_por_lote_csv($lote_produccion){
         }
         $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 
+        $separador = ";";
+        $separador_texto =""; 
+
         // Enlaces Tabla Probatuti y num ot por lote
         $csv_file = "OT POR LOTE DE PRO:".$lote_produccion;
         $csv_file .="\nnro. orden;cantidad;area;nombre;apellido;fecha inicio;fecha term;coments;obs\n";
@@ -289,15 +300,15 @@ function buscar_ot_por_lote_csv($lote_produccion){
                 $nombre_utf8 = utf8_encode($name['nombre']);
                 $apellido_utf8 = utf8_encode($name['apellido']);
             // Assign data to the inner block
-                $csv_file .="\"$name[nroord]\"".";";
-                $csv_file .="\"$name[cantidad]\"".";";
-                $csv_file .="\"$name[area]\"".";";
-                $csv_file .="\"$nombre_utf8\"".";";
-                $csv_file .="\"$apellido_utf8\"".";";
-                $csv_file .="\"$name[fechainicio]\"".";";
-                $csv_file .="\"$name[fechadeterminacion]\"".";";
-                $csv_file .="\"$name[comentarios]\"".";";
-                $csv_file .="\"$name[observaciones]\"".";";
+                $csv_file .="\"$name[nroord]\"".$separador;
+                $csv_file .="\"$name[cantidad]\"".$separador;
+                $csv_file .="\"$name[area]\"".$separador;
+                $csv_file .="\"$nombre_utf8\"".$separador;
+                $csv_file .="\"$apellido_utf8\"".$separador;
+                $csv_file .="\"$name[fechainicio]\"".$separador;
+                $csv_file .="\"$name[fechadeterminacion]\"".$separador;
+                $csv_file .="\"$name[comentarios]\"".$separador;
+                $csv_file .="\"$name[observaciones]\"".$separador;
             $csv_file .="\n";
         }
        
@@ -325,7 +336,7 @@ function buscar_lote_embalado_csv($lote_embalado){
 
         //consulta a dbms  . Selecciona nroserie, dia embalado segun el nro lote embalado
         $query = "SELECT embalado.serie, (SELECT Lote FROM Impedancias WHERE embalado.serie=impedancias.serie) as lotepro,
-                  LEFT(embalado.fecha,20) as fecha
+                  LEFT(embalado.fecha,11) as fecha
                   FROM embalado
                   WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')." order by embalado.serie";
 
@@ -337,14 +348,16 @@ function buscar_lote_embalado_csv($lote_embalado){
         $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 
         // Enlaces Tabla Probatuti y num ot por lote
+        $separador = ";";
+        $separador_texto =""; 
         $csv_file = "LOTE EMBALADO: ".$lote_embalado."\n";
         $csv_file .="\nnumero serie;lote producción;fecha embalado\n";
                 
         foreach($rows as $name) {
             // Assign data to the inner block
-                $csv_file .="\"$name[serie]\"".";";
-                $csv_file .="\"$name[lotepro]\"".";";
-                $csv_file .="\"$name[fecha]\"".";";
+                $csv_file .="\"$name[serie]\"".$separador;
+                $csv_file .="\"$name[lotepro]\"".$separador;
+                $csv_file .="\"$name[fecha]\"".$separador;
             $csv_file .="\n";
         }
 
@@ -354,6 +367,96 @@ function buscar_lote_embalado_csv($lote_embalado){
         echo $csv_file;
 
     }
+}
+
+function buscar_lote_produccion_csv($lote_produccion){
+    require_once('dbinfo.php');
+    require_once('MDB2.php');
+
+    if (!is_numeric($lote_produccion)){
+            print "Dato de tipo NO VALIDO";
+    }else{
+
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        //devuelve una fila
+        $query = "SELECT l.modelo, l.merma,  LEFT(l.fecha, 11), m.tolsens,ROUND(m.tolcero,3), m.tolimpsal, m.[tol impent]
+                  FROM Modelos m, Lotes l
+                  WHERE l.lote=? and l.modelo=m.modelo";
+
+        // sanitizamos la el select
+        $type = array ('integer');
+        $statement= $mdb2->prepare($query, $type, MDB2_PREPARE_RESULT);
+        $data = array($lote_produccion);
+        $result_header = $statement->execute($data);
+
+        if(PEAR::isError($result_header)) {
+             die($mdb2->getMessage());
+         }
+        $statement->Free();
+        $row_header = $result_header->fetchrow();
+        if (!isset($row_header['0'])){
+            print "<br>No existe número de producción";
+            exit();
+        }
+        // devuelve varias filas
+        $query = "SELECT Impedancias.Serie AS NroSerie, round(Impedancias.ImpSG,3), ROUND(Impedancias.ImpRB,3), round(Impedancias.ImpRs,3) 
+                  FROM Impedancias
+                  WHERE Impedancias.Lote=? order by impedancias.serie";
+
+        // sanitizamos el select
+        $type = array ('integer');
+        $statement= $mdb2->prepare($query, $type, MDB2_PREPARE_RESULT);
+        $data = array($lote_produccion);
+        $result_impedancias = $statement->execute($data);
+        if(PEAR::isError($result_impedancias)) {
+             die($mdb2->getMessage());
+         }
+        $statement->Free();
+        $row_impedancias = $result_impedancias->fetchAll();
+
+        $mdb2->disconnect();       
+        
+        // impresion!!
+        /*
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('lote_produccion_fabrica.html', true, true); //seleccionamos la plantilla
+        */
+        // Enlaces Tabla Probatuti y num ot por lote
+        $separador = ";";
+        $separador_texto =""; 
+        $csv = "LOTE PRODUCCION: ".$lote_produccion."\n";
+        $csv_file .="\nmodelo".$separador."merma".$separador."fecha".$separador."tol sensibilidad".$separador."tol cero".$separador."imp salida".$separador."imp entrada\n";
+
+        // Datos varios del Lote
+        foreach($row_header as $name) {
+                $csv_file .="\"$name\"".$separador;
+        }
+        $csv_file .="\n";
+        // Datos de los numero de serie de ese Lote
+        $csv_file .="\nnumero serie".$separador."imp sg".$separador."imp rb".$separador."imp rs\n";
+        foreach($row_impedancias as $name) {
+            // Assign data to the inner block
+            foreach($name as $cell) {
+                $cell = utf8_encode($cell);
+                $csv_file .="\"$cell\"".$separador;
+            }
+            $csv_file .="\n";
+        }
+        Header("Content-Description: File Transfer");
+        header("Content-Type: application/force-download");
+        header("Content-Disposition: attachment; filename=exportar_lote_produccion_".$lote_produccion.".csv");
+        $csv_file = str_replace(".",",",$csv_file);
+        echo $csv_file;
+
+    }
+
 }
 
 ?>

@@ -35,6 +35,7 @@ function formulario_login(){
 function autentifica(){
     require_once('../dbinfo.php');
     require_once('MDB2.php');
+    define(IP_CLIENTE,$_SERVER['REMOTE_ADDR']); //de esta forma siempre veremos la IP del cliente
     // start the session
     session_start();
 //    header("Cache-control: private"); //IE 6 Fix
@@ -80,13 +81,16 @@ function autentifica(){
             </body></html>";
     }else{
         $_SESSION['user_autenticado'] = 1;
+        $_SESSION['IP']=IP_CLIENTE;
         header("Location: ../index.php");
     }
 
 }
 
 function logout(){
+    unset($_SESSION['IP']);
     unset($_SESSION['user_autenticado']);
+    session_destroy();
     header("Location:index.php");
 }
 

@@ -8,11 +8,11 @@
  */
 
 //creamos el codigo puente
-
+define(IP_CLIENTE,$_SERVER['REMOTE_ADDR']);
 session_start();
 header("Cache-control: private"); //IE 6 Fix
-
-if(!isset($_SESSION['user_autenticado'])){
+//Agregar si viene desde la IP que esta seteada
+if(!isset($_SESSION['user_autenticado']) and $_SESSION['IP']!=IP_CLIENTE){
    /**
     * Usuario anónimo
     * Esta seteado el $_POST['action'?

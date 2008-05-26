@@ -1,4 +1,7 @@
 <?php
+if (!isset($_SESSION['user_autenticado'])) {
+    die("Usuario no autenticado");
+}
 
 function cual_action ($action){
     /* Depende de que action nos llega hacemos:

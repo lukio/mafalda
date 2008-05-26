@@ -1,4 +1,8 @@
 <?php
+if (!isset($_SESSION['user_autenticado'])) {
+    die("Usuario no autenticado");
+}
+
 
 function mostrar_select($data,$bloque, $it){
 
