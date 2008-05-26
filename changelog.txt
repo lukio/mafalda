@@ -1,0 +1,11 @@
+Mafalda Changelog
+
+2008/05/26: Version 0.9.1
+============================
+- Exportar a csv en cada consulta
+- Agrego la parte de clonar modelos en el ABM modelos
+
+2008/03/31: Version 0.9
+============================
+- Pasado las conexiones a pear
+- Se usan los templates ITX

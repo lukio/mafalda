@@ -1,7 +1,5 @@
 <div align=right><h6><a href="#" onclick="ajax_index('abm_modelos', 'alta')" id=>[alta]</a> <a href="#" onclick="ajax_index('abm_modelos', 'baja')" id=>[baja]</a> <a href="#" onclick="ajax_index('abm_modelos', 'modificacion')" id=>[modificacion]</a> <a href="#" onclick="ajax_index('abm_modelos', 'clonar')" id=>[clonar]</a></h6></div>
-<form action="#" name="form_fabrica" id="form_fabrica_id" method=POST>
-<input type="hidden" action="abm_modelos" name="modulo">
-<input type="hidden" action="baja" name="action">
+<form action="#" name="form_fabrica" id="form_fabrica_id">
 <div align="center">
 <table>
     <tbody><tr><td>
@@ -11,6 +9,6 @@
                 <!-- END MODELOS -->
             </select>
             </td>
-            <td><a href="#" onclick="javascript:ajax_abm('abm_modelos','borrarmodelo:'+document.getElementById('bajamodelo_id').value)">[Borrar Modelo]</a> </td>
+            <td><a href="#" onclick="javascript:ajax_abm('abm_modelos','clonarmodelo:'+document.getElementById('bajamodelo_id').value)">[Clonar Modelo]</a> </td>
 </div>
 </form>

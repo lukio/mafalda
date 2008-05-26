@@ -14,9 +14,11 @@ function cual_action ($action){
         case "alta": alta(); break;
         case "baja": baja(); break;
         case "modificacion": modificacion(); break;
+        case "clonar": clonar(); break;
         case "procesa": procesa($action[1]); break;
         case "borrarmodelo": borra_modelo($action[1]); break;
         case "modificamodelo":modifica_modelo($action[1]); break;
+        case "clonarmodelo":clonar_modelo($action[1]); break;
         default: print "No existe tal acción"; 
     }
 }
@@ -34,6 +36,25 @@ function imprimirfila_alta($data, $nombre_bloque, $it){
         $it->setVariable('NAME_DATO',$data[$i++]);
         $it->setVariable('SIZE_DATO',$data[$i++]);
         $it->setVariable('ID_DATO',$data[$i++]);
+        $it->parseCurrentBlock("'$nombre_bloque");
+    }
+}
+
+function imprimirfila_clonar($data, $nombre_bloque, $it){
+/*
+ * Imprime una fila de 3 campos para armar la tabla de altas
+ * La diferencia con imprimirfila_alta es que le agrego el value
+*/
+
+    for($i=0 ; $i < count($data);) {
+
+        $it->setCurrentBlock($nombre_bloque);
+        $it->setVariable('DATO', $data[$i++]);
+        $it->setVariable('TYPE_DATO', $data[$i++]);
+        $it->setVariable('NAME_DATO',$data[$i++]);
+        $it->setVariable('SIZE_DATO',$data[$i++]);
+        $it->setVariable('ID_DATO',$data[$i++]);
+        $it->setVariable('VALUE',$data[$i++]);
         $it->parseCurrentBlock("'$nombre_bloque");
     }
 }
@@ -204,12 +225,42 @@ function modificacion(){
     $mdb2->disconnect();
 }
 
+function clonar(){
+    require_once 'include/pear/Sigma.php'; //insertamos la libreria
+    $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+    $it->loadTemplatefile('abm_clonar.html'); //seleccionamos la plantilla
+    
+    require_once ('MDB2.php');
+    require_once('dbinfo.php');
+    $mdb2 =& MDB2::singleton($dsn, $options);
+
+    if (PEAR::isError($mdb2)) {
+         die($mdb2->getMessage());
+    }
+
+    $query = "SELECT Modelo FROM Modelos where Inactivo='0' order by Modelo";
+
+    $res = $mdb2->queryCol($query);
+    if (PEAR::isError($res)) {
+         die($mdb2->getMessage());
+    }
+
+    for($i=0 ; $i < count($res); ) {
+    $it->setCurrentBlock("MODELOS");
+    $it->setVariable('MODELO',$res[$i++]);
+    $it->parseCurrentBlock("MODELOS");
+    }
+    $it->show();
+    $mdb2->disconnect();
+}
+
 function procesa($action){
     $paso_validacion = 1;
 
     switch($action){
         case "alta": $paso_validacion = validar_datos($action); break;
         case "modificacion": modificacion(); break;
+        case "clonar": clonar(); break;
         default: print "No existe tal acción"; 
     }
 
@@ -432,6 +483,145 @@ function modifica_modelo($modelo){
     //$query = "select * from modelos where modelo='.$modelo.'";
     //$resultado = $id_db_flexar -> query($query);
     print "modifico el modelo".$modelo;
+
+}
+
+function clonar_modelo($modelo){
+    /* Clonar modelo
+     * Carga todos los datos del modelo en un formulario para ser editable.
+    */
+    //$resultado = $id_db_flexar -> query($query);
+
+    require_once('dbinfo.php');
+    require_once ('MDB2.php');
+
+    // Conecto a DB Flexar
+    $mdb2 =& MDB2::singleton($dsn, $options);
+    if (PEAR::isError($mdb2)) {
+             die($mdb2->getMessage());
+    }
+
+/*    $query = "SELECT
+            Sensibilidad, Impedancia, GrupoCorrHorno, ImpEnt, ImpSal, [Tol ImpEnt], TolImpSal, Cero, TolCero, TolSens, 
+            CapNominal, Ruta, Alin, Hister, Rep, Creep, CorCeroTemp, CorSpanTemp, VMaxAlim, RangTemp, 
+            Sobrecarga, LimRot, Cable, TolR2, TolPendHorno, TolH, CantPorLote, pSg, CantSg, pRb,
+            CantRb, pPrensa, pCable, pArnes, DeltaRb, Etiqueta, Apareo, CarLat, Certificado, Chequeo, 
+            Modelo, Inactivo 
+            FROM Modelos
+            WHERE Modelos.Modelo=".$mdb2->quote($modelo,'text')."";
+*/
+    $query = "SELECT * FROM Modelos WHERE Modelos.Modelo=".$mdb2->quote($modelo,'text')."";
+
+    $mdb2->setFetchMode(MDB2_FETCHMODE_ASSOC);
+    $res = $mdb2->queryRow($query);
+
+    if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+
+    require_once 'include/pear/Sigma.php'; //insertamos la libreria
+    $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+    $it->loadTemplatefile('abm_clonar_modelo.html'); //seleccionamos la plantilla
+
+    $data_1 = array (
+            "Sensibilidad: ", "text", "1", "10", "sensibilidad_id",$res['sensibilidad'],
+            "Impedancia: ", "text", "2", "10", "impedancia_id",$res['impedancia'],
+            "Grupo Corr Horno: ", "text", "3", "10", "grupocorrhorno_id",$res['grupocorrhorno'],
+        );
+    $data_2 = array (
+            "Imp. Entrada: ", "text", "4", "10", "sensibilidad_id",$res['impent'],
+            "Imp. Salida: ", "text", "5", "10", "impedancia_id",$res['impsal'],
+            "Tol. Imp. Entrada: ", "text", "6", "10", "grupocorrhorno_id",$res['tol impent'],
+        );
+
+    $data_3 = array (
+            "Tol. Imp. Salida: ", "text", "7", "10", "sensibilidad_id",$res['tolimpsal'],
+            "Cero: ", "text", "8", "10", "impedancia_id",$res['cero'],
+            "Tol. Cero: ", "text", "9", "10", "grupocorrhorno_id",$res['tolcero'],
+        );
+    $data_4 = array (
+            "Tol. Sensibilidad: ", "text", "10", "10", "sensibilidad_id",$res['tolsens'],
+            "Capacidad Nominal: ", "text", "11", "10", "impedancia_id",$res['capnominal'],
+            "Ruta: ", "text", "12", "10", "grupocorrhorno_id",$res['ruta'],
+        );
+    $data_5 = array (
+            "Alineacion: ", "text", "13", "10", "sensibilidad_id",$res['alin'],
+            "Histeresis: ", "text", "14", "10", "impedancia_id",$res['hister'],
+            "Rep: ", "text", "15", "10", "grupocorrhorno_id",$res['rep'],
+        );
+    $data_6 = array (
+            "Creep: ", "text", "16", "10", "sensibilidad_id",$res['creep'],
+            "Correccion Cero Temp.: ", "text", "17", "10", "impedancia_id",$res['corcerotemp'],
+            "Correccion Span Temp.: ", "text", "18", "10", "grupocorrhorno_id",$res['corspantemp'],
+        );
+    $data_7 = array (
+            "V Max. Alim: ", "text", "19", "10", "sensibilidad_id",$res['vmaxalim'],
+            "Rango Temp.: ", "text", "20", "10", "impedancia_id",$res['rangtemp'],
+            "Sobrecarga: ", "text", "21", "10", "grupocorrhorno_id",$res['sobrecarga'],
+        );
+    $data_8 = array (
+            "Limite Rot: ", "text", "22", "10", "sensibilidad_id",$res['limrot'],
+            "Cable: ", "text", "23", "10", "impedancia_id",$res['cable'],
+            "Tol. R2: ", "text", "24", "10", "grupocorrhorno_id",$res['tolr2'],
+        );
+    $data_9 = array (
+            "Tol. Pendiente Horno: ", "text", "25", "10", "sensibilidad_id",$res['tolpendhorno'],
+            "Tol. H: ", "text", "26", "10", "impedancia_id",$res['tolh'],
+            "Cantidad Por Lote: ", "text", "27", "10", "grupocorrhorno_id",$res['cantporlote'],
+        );
+    $data_10 = array (
+            "pSg: ", "text", "28", "10", "sensibilidad_id",$res['psg'],
+            "Cantidad Sg: ", "text", "29", "10", "impedancia_id",$res['cantsg'],
+            "pRb: ", "text", "30", "10", "grupocorrhorno_id",$res['prb'],
+        );
+    $data_11 = array (
+            "Cant Rb: ", "text", "31", "10", "sensibilidad_id",$res['cantrb'],
+            "pPrensa: ", "text", "32", "10", "impedancia_id",$res['pprensa'],
+            "pCable: ", "text", "33", "10", "grupocorrhorno_id",$res['pcable'],
+        );
+    $data_12 = array (
+            "pArnes: ", "text", "34", "10", "sensibilidad_id",$res['parnes'],
+            "DeltaRb: ", "text", "35", "10", "impedancia_id",$res['deltarb'],
+            "Etiqueta: ", "text", "36", "10", "grupocorrhorno_id",$res['etiqueta'],
+        );
+    $data_13 = array (
+            "Apareo: ", "checkbox", "37", "10", "sensibilidad_id",$res['apareo'],
+            "Car Lat: ", "checkbox", "38", "10", "impedancia_id","",
+            "Certificado: ", "checkbox", "39", "10", "grupocorrhorno_id","",
+        );
+    $data_14 = array (
+            "Chequeo: ", "checkbox", "40", "10", "sensibilidad_id","checked",
+            "Modelo nuevo: ", "text", "modelo_nuevo", "10", "impedancia_id",$res['modelo'],
+        );
+
+/** Nose porque. Pero no funciona si escribo el form con el template
+        $it->setCurrentBlock("FORM");
+        $it->setVariable('MODULO', 'abm_modelos');
+        $it->setVariable('ACTION', 'alta');
+        $it->parseCurrentBlock("FORM");
+*/
+        imprimirfila_clonar($data_1, "1", $it);
+        imprimirfila_clonar($data_2, "2", $it);
+        imprimirfila_clonar($data_3, "3", $it);
+        imprimirfila_clonar($data_4, "4", $it);
+        imprimirfila_clonar($data_5, "5", $it);
+        imprimirfila_clonar($data_6, "6", $it);
+        imprimirfila_clonar($data_7, "7", $it);
+        imprimirfila_clonar($data_8, "8", $it);
+        imprimirfila_clonar($data_9, "9", $it);
+        imprimirfila_clonar($data_10, "10", $it);
+        imprimirfila_clonar($data_11, "11", $it);
+        imprimirfila_clonar($data_12, "12", $it);
+        imprimirfila_clonar($data_13, "13", $it);
+        imprimirfila_clonar($data_14, "14", $it);
+
+        $it->setCurrentBlock("FIN_FORM");
+        $it->setVariable('TIPO',"submit");
+        $it->setVariable('NOMBRE',"Submit");
+        $it->setVariable('VALUE',"Cargar Modelo");
+        $it->parseCurrentBlock("FIN_FORM");
+    
+    $it->show();
 
 }
 
