@@ -47,28 +47,11 @@ function pagina_consulta_planos ($action){
     $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
     $it->loadTemplatefile('consulta_planos.html'); //seleccionamos la plantilla
 
-    $data_der = array (
-                      "Numero serie:  ", "text", "celda", "10", "celda_id",
-                      "Numero OT: ", "text", "numero_ot", "10", "numero_ot_id"
-                    );
-
     $data_cen = array (
-                       "Nombre Operario: ", "text", "nombre_operario", "10", "nombre_operario_id", "busco_operario",
-                       "Sector: ", "text", "sector", "10", "sector_id", "bussco_sector"
+                       "Plano Buscado: ", "text", "plano_buscado", "10", "plano_buscado_id", "plano_buscado",
                     );
-    $data_fecha = array (
-                   "Fecha Inicio: ", "text", "fecha_inicio", "12", "fecha_inicio_id",
-                   "Fecha Final: ", "text", "fecha_final", "12", "fecha_final_id"
-            );
-    $data_busqueda = array (
-                   "Embalado por fecha", "Probatuti por operario y fecha", "Probatuti por sector y fecha", 
-                   "Ensayos por operario y fecha", "Cableado (OT Asignada)", "Lima (OT Asignada)", 
-                   "Num OT por fecha", "OT por operario"
-            );
 
-    mostrar_inputs($data_der,"input_der", $it);
     mostrar_inputs($data_cen,"input_cen", $it);
-    mostrar_inputs($data_fecha,"FECHAS", $it);
     mostrar_select($data_busqueda,"BUSQUEDA", $it);
     
     $it->show(); //mostramos el resultado

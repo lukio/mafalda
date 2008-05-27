@@ -4,6 +4,7 @@ Mafalda Changelog
 ============================
 - Exportar a csv en cada consulta
 - Agrego la parte de clonar modelos en el ABM modelos
+- Alta funciona con chequeo de valores y agrega un * al dato erroneo
 
 2008/03/31: Version 0.9
 ============================

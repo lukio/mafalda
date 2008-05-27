@@ -34,8 +34,8 @@ function clear_textbox()
 
 function ajax_oper(action, id_campo){
 
+//dato_evaluo = document.getElementById('plano_buscado_id').value
 dato_evaluo = document.getElementById(id_campo).value
-
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
  {
@@ -120,41 +120,15 @@ return xmlHttp;
  <form action="javascript:ajax_index();" id="form_gerencia_id">
  <table class="header">
  <tbody>
-     <tr>
-    <!-- BEGIN input_der -->
-         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" /></td>
-    <!-- END input_der -->
-    </tr><tr>
+    <tr>
     <!-- BEGIN input_cen -->
-         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" onfocus="ajax_oper({DATO_AJAX}, {ID_DATO});" /></td>
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" onkeypress="ajax_oper('{DATO_AJAX}', '{ID_DATO}');" /></td>
     <!-- END input_cen -->
    </tr>
 </tbody>
 </table>
 <br />
-<table class="header">
-<tbody>
-    <tr>
-    <!-- BEGIN FECHAS -->
-    <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="Click calendario" /></td>
-    <!-- END FECHAS -->
-    </tr>
-</tbody>
-</table>
 <br />
-<table class="header">
-<tbody>
-    <tr>
-    <td><h6>Tipo de Busqueda: </h6></td>
-    <td><select name="tipo_busqueda">
-    <!-- BEGIN BUSQUEDA -->
-    <h6>{DATO}</h6><option>{NAME_DATO}</option>
-    <!-- END BUSQUEDA -->
-    </select>
-    </td>
-    </tr>
-</tbody>
-</table>
      <div align="right">
         <input type="submit" name="Submit" value="Buscar" />
      </div>
@@ -164,7 +138,6 @@ return xmlHttp;
 
 <div id="content">
 <pre>
-
 <span id="resultado_div"></span>
 </pre>
 
