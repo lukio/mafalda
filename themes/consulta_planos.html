@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head><title>Mafalda - Consulta Flexar</title>
+<link rel="stylesheet" type="text/css" media="all" href="themes/css/consulta_gerencia.css" />
+<link rel="stylesheet" type="text/css" href="themes/css/ui.datepicker.css">
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="MSSmartTagsPreventParsing" content="TRUE" />
+<meta http-equiv="expires" content="-1" />
+<meta http-equiv= "pragma" content="no-cache" />
+<meta name="robots" content="all" />
+<meta name="author" content="Lucho Rossi" />
+<meta name="description" content="Consultar Flexar" />
+<script src="include/jquery-1.2.3.js"></script>
+<script  src="include/ui.datepicker.js"></script>
+
+<script>
+
+  $(document).ready(function(){
+    $('#fecha_inicio_id').datepicker();
+    $('#fecha_final_id').datepicker();
+$('#exampleRange').datepicker({rangeSelect: true, firstDay: 1});
+  });
+</script>
+<script type="text/javascript">
+<!--
+
+function clear_textbox()
+{
+    document.getElementById('celda_id').value = ""
+    document.getElementById('lote_embalado_id').value = ""
+    document.getElementById('lote_produccion_id').value = ""
+}
+
+function ajax_oper(action, id_campo){
+
+dato_evaluo = document.getElementById(id_campo).value
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?q="+dato_evaluo
+//evaluar si esta definido action. 
+url=url+"&action="+action
+//
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
+
+function ajax_index(){
+
+if ( dato_evaluo = document.getElementById('celda_id').value)
+    action = "serie"
+else if( dato_evaluo = document.getElementById('lote_embalado_id').value)
+    action = "lote_embalado"
+else if (dato_evaluo = document.getElementById('lote_produccion_id').value)
+    action = "lote_produccion"
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?q="+dato_evaluo
+//evaluar si esta definido action. 
+url=url+"&action="+action
+//
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
+
+function stateChanged()
+{
+if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+ {
+ document.getElementById("resultado_div").innerHTML=xmlHttp.responseText
+ }
+}
+
+function GetXmlHttpObject()
+{
+var xmlHttp=null;
+try
+ {
+ // Firefox, Opera 8.0+, Safari
+ xmlHttp=new XMLHttpRequest();
+ }
+catch (e)
+ {
+ //Internet Explorer
+ try
+  {
+  xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+  }
+ catch (e)
+  {
+  xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+ }
+return xmlHttp;
+}
+//-->
+</script>
+</head><body>
+
+
+<div id="header">
+<div align="right"><h6><a href="index.php">[Volver al Panel]</a> <a href="index.php?action=logout">[logout]</a></h6></div>
+<div align="left">
+ <form action="javascript:ajax_index();" id="form_gerencia_id">
+ <table class="header">
+ <tbody>
+     <tr>
+    <!-- BEGIN input_der -->
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" /></td>
+    <!-- END input_der -->
+    </tr><tr>
+    <!-- BEGIN input_cen -->
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" onfocus="ajax_oper({DATO_AJAX}, {ID_DATO});" /></td>
+    <!-- END input_cen -->
+   </tr>
+</tbody>
+</table>
+<br />
+<table class="header">
+<tbody>
+    <tr>
+    <!-- BEGIN FECHAS -->
+    <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="Click calendario" /></td>
+    <!-- END FECHAS -->
+    </tr>
+</tbody>
+</table>
+<br />
+<table class="header">
+<tbody>
+    <tr>
+    <td><h6>Tipo de Busqueda: </h6></td>
+    <td><select name="tipo_busqueda">
+    <!-- BEGIN BUSQUEDA -->
+    <h6>{DATO}</h6><option>{NAME_DATO}</option>
+    <!-- END BUSQUEDA -->
+    </select>
+    </td>
+    </tr>
+</tbody>
+</table>
+     <div align="right">
+        <input type="submit" name="Submit" value="Buscar" />
+     </div>
+</form>
+</div>
+</div>
+
+<div id="content">
+<pre>
+
+<span id="resultado_div"></span>
+</pre>
+
+</div>
+
+<div id="footer">
+        <!-- INCLUDE footer.inc -->
+</div>
+
+</body>
+</html>

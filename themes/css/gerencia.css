@@ -108,13 +108,13 @@ img {
         background: #ffd;
 /*        border: 5px solid #ccc;*/
         text-align:left; /* part 2 of 2 centering hack */
-        width: 795px; /* ie5win fudge begins */
+        width: 800px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
-        width: 795px;
+        width: 820px;
         }
 html>body #content {
-        width: 795px; /* ie5win fudge ends */
+        width: 820px; /* ie5win fudge ends */
         }
 #header {
         padding: 10px;
