@@ -35,7 +35,7 @@ function mostrar_inputs($data,$bloque, $it){
 }
 
 
-function pagina_consulta_planos ($action){
+function pagina_consulta_planos (){
     /* Depende de que action nos llega hacemos:
     * alta, baja, modificacion, procesa. 
     *
@@ -55,24 +55,33 @@ function pagina_consulta_planos ($action){
     mostrar_select($data_busqueda,"BUSQUEDA", $it);
     
     $it->show(); //mostramos el resultado
+
 }
 
-function cual_action($action){
+function cual_action($action, $q){
 
-    $action = explode (':', $action); // tomo la accion de procesa
+    //$action = explode (':', $action); // tomo la accion de procesa
 
-    switch($action[0]){
-        case "alta": alta(); break;
-        case "baja": baja(); break;
-        case "modificacion": modificacion(); break;
-        case "procesa": procesa($action[1]); break;
-        case "borrarmodelo": borra_modelo($action[1]); break;
-        case "modificamodelo":modifica_modelo($action[1]); break;
-        default: print "No existe tal acción"; 
+    switch($action){
+        case "plano_buscado": plano_buscado($q); break;
+        default: break; 
     }
 
 }
-
-
+function plano_buscado($q){
+    $listado_archivos = scandir("/usr/share");
+    rsort($listado_archivos);
+    foreach ($listado_archivos as $file)
+        //echo "<p>".strpbrk($file,$q)."<p />";
+        //echo "<p>".similar_text($file,$q)."<p />";
+        //echo "<p>".stristr($file,$q);
+        /*
+        Valores retornados
+        Devuelve una cadena que empieza desde el caracter encontrado, o FALSE si no se encuentra.
+        usar condicional "?" 
+        no va a fucionar :P
+        */
+        print "<p>".strpbrk($file,$q)."<a href=file:\\home/lukio/tmp/flexar/$file>\t$file</a>";
+}
 
 ?>

@@ -142,7 +142,15 @@ if(!isset($_SESSION['user_autenticado']) and $_SESSION['IP']!=IP_CLIENTE){
              switch($modulo){
                  case "consulta_gerencia": require_once('gerencia/consulta_gerencia.php'); pagina_consulta_gerencia($action); break;
                  case "abm_modelos":require_once('gerencia/abm_modelo.php'); cual_action($action); break;
-                 case "consulta_planos": require_once('gerencia/consulta_planos.php'); pagina_consulta_planos($action); break;
+                 case "consulta_planos": require_once('gerencia/consulta_planos.php'); 
+                                        $q=$_GET['q']; 
+                                        unset($_GET['q']); 
+                                        if (isset($action)){
+                                            cual_action($action, $q);
+                                            break;
+                                        }
+                                        pagina_consulta_planos(); 
+                                        break;
              }
          }
             
