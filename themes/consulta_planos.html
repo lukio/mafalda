@@ -68,9 +68,13 @@ catch (e)
  }
 return xmlHttp;
 }
+function setFocus()
+  {
+  document.getElementById('plano_buscado_id').focus()
+  }
 //-->
 </script>
-</head><body>
+</head><body onload="setFocus();">
 
 
 <div id="header">
