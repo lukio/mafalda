@@ -50,6 +50,14 @@ function pagina_consulta_planos (){
     $data_cen = array (
                        "Plano Buscado: ", "text", "plano_buscado", "10", "plano_buscado_id", "plano_buscado",
                     );
+    $data_busqueda = array();
+    $directorio = "/home/lukio/tmp/";
+    //$directorio = "\\\\mailserver\\Planos\\";
+    $listado_archivos = scandir($directorio);
+    foreach ($listado_archivos as $folder){
+        if (is_dir($directorio.$folder) and ($folder != "." and $folder != ".."))
+                $data_busqueda[] = $folder;
+        }
 
     mostrar_inputs($data_cen,"input_cen", $it);
     mostrar_select($data_busqueda,"BUSQUEDA", $it);
@@ -69,7 +77,9 @@ function cual_action($action, $q){
 
 }
 function plano_buscado($q){
-    $directorio = "/home/lukio/tmp/flexar/";
+    $string_y_subfolder = explode(":",$q);
+    $directorio = "/home/lukio/tmp/".$string_y_subfolder[1]."/";
+    //$directorio = "\\\\mailserver\\Planos\\".$string_y_subfolder[1]."\\";
     $listado_archivos = scandir($directorio);
     foreach ($listado_archivos as $file)
         //echo "<p>".similar_text($file,$q)."<p />";
@@ -81,7 +91,7 @@ function plano_buscado($q){
         Si el caracter no es una cadena, se convierte a entero y se usa como código de un carácter ASCII. 
         */
         //print "<p>".strpbrk($file,$q)."<a href=file:\\home/lukio/tmp/flexar/$file>\t$file</a>";
-        if(stristr($file,$q))
+        if(stristr($file,$string_y_subfolder[0]))
             {   
                 utf8_encode($file);
                 echo "<p><a href='gerencia/abro_planos.php?q=$directorio:$file'>$file</a></p>";

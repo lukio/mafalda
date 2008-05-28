@@ -10,16 +10,6 @@
 <meta name="robots" content="all" />
 <meta name="author" content="Lucho Rossi" />
 <meta name="description" content="Consultar Flexar" />
-<script src="include/jquery-1.2.3.js"></script>
-
-<script>
-
-  $(document).ready(function(){
-    $('#fecha_inicio_id').datepicker();
-    $('#fecha_final_id').datepicker();
-$('#exampleRange').datepicker({rangeSelect: true, firstDay: 1});
-  });
-</script>
 <script type="text/javascript">
 <!--
 
@@ -28,6 +18,7 @@ function ajax_oper(action, id_campo){
 
 //dato_evaluo = document.getElementById('plano_buscado_id').value
 dato_campo = document.getElementById(id_campo).value
+dato_folder = document.getElementById('folder_id').value
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -36,7 +27,7 @@ if (xmlHttp==null)
  return
  }
 var url="index.php"
-url=url+"?q="+dato_campo
+url=url+"?q="+dato_campo+":"+dato_folder
 //evaluar si esta definido action. 
 url=url+"&modulo=consulta_planos"
 url=url+"&action=plano_buscado"
@@ -85,14 +76,20 @@ return xmlHttp;
 <div id="header">
 <div align="right"><h6><a href="index.php">[Volver al Panel]</a> <a href="index.php?action=logout">[logout]</a></h6></div>
 <div align="left">
- <form action="javascript:ajax_index();" id="form_gerencia_id">
+ <form action="#" id="form_gerencia_id">
  <table class="header">
  <tbody>
     <tr>
     <!-- BEGIN input_cen -->
          <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" onkeyup="ajax_oper('{DATO_AJAX}', '{ID_DATO}');" /></td>
     <!-- END input_cen -->
-   </tr>
+    <td><h6>Subfolder:
+    <select name="tipo_busqueda" id="folder_id">
+    <!-- BEGIN BUSQUEDA -->
+    <h6>{DATO}</h6><option>{NAME_DATO}</option>
+    <!-- END BUSQUEDA -->
+    </h6></select></td>
+   </tr> 
 </tbody>
 </table>
 <br />

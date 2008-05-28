@@ -11,9 +11,16 @@
 <meta name="author" content="Lucho Rossi" />
 <meta name="description" content="Consultas Flexar - Login" />
 
+<script type="text/javascript">
+function setFocus()
+  {
+  document.getElementById('username_id').focus()
+  }
+</script>
+
 </head>
 
-<body>
+<body onload="setFocus();">
 <div id="content">
 <form action="include/autentifica.php" id="form_login_id" method="post">
 <input type="hidden" name="action" value="postlogin" />

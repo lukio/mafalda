@@ -140,7 +140,7 @@ function buscar_nserie_csv($ncelda, $separador){
         foreach($res_ensayos as $name) {
             // Assign data to the inner block
             foreach($name as $cell) {
-                $csv_file .="\"$cell\"".$separador;
+                $csv_file .=$cell.$separador;
             }
             $csv_file .="\n";
         }
@@ -152,7 +152,7 @@ function buscar_nserie_csv($ncelda, $separador){
         foreach($res_horno as $name) {
             // Assign data to the inner block
             foreach($name as $cell) {
-                $csv_file .="\"$cell\"".$separador;
+                $csv_file .=$cell.$separador;
             }
             $csv_file .="\n";
         }
@@ -160,39 +160,41 @@ function buscar_nserie_csv($ncelda, $separador){
         $csv_file .="\nDatos generales\n";
         $csv_file .="Modelo".$separador."Lote produccion".$separador."Lote embalado".$separador."Area".$separador."Orden meca".$separador."Orden meca-mp".$separador."Fecha pegado\n";
         // Tabla Datos generales
-        $csv_file .="\"$res_lotes[0]\"".$separador;
+        $csv_file .=$res_lotes[0].$separador;
 
-        $csv_file .="\"$res_impedancias[0]\"".$separador;
-        $csv_file .="\"$lote_emba\"".$separador;
-        $csv_file .="\"$res_lotes[4]\"".$separador;
-        $csv_file .="\"$res_lotes[3]\"".$separador;
-        $csv_file .="link tango;";
-        $csv_file .="\"$res_lotes[5]\"".$separador;
+        $csv_file .=$res_impedancias[0].$separador;
+        $csv_file .=$lote_emba.$separador;
+        $csv_file .=$res_lotes[4].$separador;
+        $csv_file .=$res_lotes[3].$separador;
+        $csv_file .="link tango";
+        $csv_file .=$res_lotes[5].$separador;
         $csv_file .="\n"; 
         // Tabla Datos generales
 
-        $csv_file .="\n\"Datos msg etc...\"\n";
-        $csv_file .="MSG".$separador."MRB".$separador."Impe RB".$separador."Impe SG".$separador."Impe RS\n";
+        $csv_file .="\nDatos MSG MRB etc\n";
+        $csv_file .="MSG".$separador."MRB".$separador."ImpeRB".$separador."ImpeSG".$separador."ImpeRS\n";
 
-        $csv_file .="\"$res_lotes[1]\"".$separador;
-        $csv_file .="\"$res_lotes[2]\"".$separador;
-        $csv_file .="\"$res_impedancias[1]\"".$separador;
-        $csv_file .="\"$res_impedancias[2]\"".$separador;
-        $csv_file .="\"$res_impedancias[3]\"".$separador;
+        $csv_file .=$res_lotes[1].$separador;
+        $csv_file .=$res_lotes[2].$separador;
+        $csv_file .=$res_impedancias[1].$separador;
+        $csv_file .=$res_impedancias[2].$separador;
+        $csv_file .=$res_impedancias[3].$separador;
         $csv_file .="\n";
 
-        $csv_file .="\n\"Tabla Datos estadistica\"\n";
+        $csv_file .="\nTabla Datos estadistica\n";
         $csv_file .="sensibilidad real".$separador."desviacion estandar porcentual".$separador."tolerancia_sens".$separador."cap_nominal\n";
-        $csv_file .="\"$sensi_real\"".$separador;
-        $csv_file .="\"$desv_est_porce\"".$separador;
-        $csv_file .="\"$tolsens\"".$separador;
-        $csv_file .="\"$capnom\"".$separador;
+        $csv_file .=$sensi_real.$separador;
+        $csv_file .=$desv_est_porce.$separador;
+        $csv_file .=$tolsens.$separador;
+        $csv_file .=$capnom.$separador;
         $csv_file .="\n"; 
 
         Header("Content-Description: File Transfer");
         header("Content-Type: application/force-download");
         header("Content-Disposition: attachment; filename=exportar_serie_".$ncelda.".csv");
+        /* Por el tema de los decimales, psar el "." decimal a "," decimal. 
         $csv_file = str_replace(".",",",$csv_file);
+        */
         echo $csv_file;
             
     }
@@ -232,13 +234,13 @@ function buscar_tabla_probatuti_csv($ncelda, $separador){
         $rows = $res->fetchAll();
         $separador_texto =""; 
 
-        $csv_file = "\"TABLA PROBATUTI DE CELDA:\"".$ncelda."\n";
+        $csv_file = "TABLA PROBATUTI DE CELDA:".$ncelda."\n";
         $csv_file .= "\narea".$separador."nombre".$separador."apellido".$separador."medter".$separador."imp-sal".$separador."imp-ent".$separador."tensal".$separador."dircarga".$separador."A-cuerpo".$separador."fecha\n";
 
         foreach($rows as $name) {
             // Assign data to the inner block
             foreach($name as $cell) {
-                $csv_file .="\"$cell\"".$separador;
+                $csv_file .=$cell.$separador;
             }
             $csv_file .="\n";
         }
@@ -246,7 +248,7 @@ function buscar_tabla_probatuti_csv($ncelda, $separador){
         Header("Content-Description: File Transfer");
         header("Content-Type: application/force-download");
         header("Content-Disposition: attachment; filename=exportar_tabla_proba_".$ncelda.".csv");
-        $csv_file = str_replace(".",",",$csv_file);
+        //$csv_file = str_replace(".",",",$csv_file);
         echo $csv_file;
 
         }
@@ -298,15 +300,15 @@ function buscar_ot_por_lote_csv($lote_produccion, $separador){
                 $nombre_utf8 = utf8_encode($name['nombre']);
                 $apellido_utf8 = utf8_encode($name['apellido']);
             // Assign data to the inner block
-                $csv_file .="\"$name[nroord]\"".$separador;
-                $csv_file .="\"$name[cantidad]\"".$separador;
-                $csv_file .="\"$name[area]\"".$separador;
-                $csv_file .="\"$nombre_utf8\"".$separador;
-                $csv_file .="\"$apellido_utf8\"".$separador;
-                $csv_file .="\"$name[fechainicio]\"".$separador;
-                $csv_file .="\"$name[fechadeterminacion]\"".$separador;
-                $csv_file .="\"$name[comentarios]\"".$separador;
-                $csv_file .="\"$name[observaciones]\"".$separador;
+                $csv_file .=$name['nroord'].$separador;
+                $csv_file .=$name['cantidad'].$separador;
+                $csv_file .=$name['area'].$separador;
+                $csv_file .=$nombre_utf8.$separador;
+                $csv_file .=$apellido_utf8.$separador;
+                $csv_file .=$name['fechainicio'].$separador;
+                $csv_file .=$name['fechadeterminacion'].$separador;
+                $csv_file .=$name['comentarios'].$separador;
+                $csv_file .=$name['observaciones'].$separador;
             $csv_file .="\n";
         }
        
@@ -352,9 +354,9 @@ function buscar_lote_embalado_csv($lote_embalado, $separador){
                 
         foreach($rows as $name) {
             // Assign data to the inner block
-                $csv_file .="\"$name[serie]\"".$separador;
-                $csv_file .="\"$name[lotepro]\"".$separador;
-                $csv_file .="\"$name[fecha]\"".$separador;
+                $csv_file .=$name['serie'].$separador;
+                $csv_file .=$name['lotepro'].$separador;
+                $csv_file .=$name['fecha'].$separador;
             $csv_file .="\n";
         }
 
@@ -432,7 +434,7 @@ function buscar_lote_produccion_csv($lote_produccion, $separador){
 
         // Datos varios del Lote
         foreach($row_header as $name) {
-                $csv_file .="\"$name\"".$separador;
+                $csv_file .=$name.$separador;
         }
         $csv_file .="\n";
         // Datos de los numero de serie de ese Lote
@@ -441,14 +443,14 @@ function buscar_lote_produccion_csv($lote_produccion, $separador){
             // Assign data to the inner block
             foreach($name as $cell) {
                 $cell = utf8_encode($cell);
-                $csv_file .="\"$cell\"".$separador;
+                $csv_file .=$cell.$separador;
             }
             $csv_file .="\n";
         }
         Header("Content-Description: File Transfer");
         header("Content-Type: application/force-download");
         header("Content-Disposition: attachment; filename=exportar_lote_produccion_".$lote_produccion.".csv");
-        $csv_file = str_replace(".",",",$csv_file);
+        //$csv_file = str_replace(".",",",$csv_file);
         echo $csv_file;
 
     }
