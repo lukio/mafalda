@@ -69,19 +69,26 @@ function cual_action($action, $q){
 
 }
 function plano_buscado($q){
-    $listado_archivos = scandir("/usr/share");
+    $directorio = "/home/lukio/tmp/flexar/";
+    $listado_archivos = scandir($directorio);
     rsort($listado_archivos);
     foreach ($listado_archivos as $file)
-        //echo "<p>".strpbrk($file,$q)."<p />";
         //echo "<p>".similar_text($file,$q)."<p />";
-        //echo "<p>".stristr($file,$q);
         /*
         Valores retornados
-        Devuelve una cadena que empieza desde el caracter encontrado, o FALSE si no se encuentra.
-        usar condicional "?" 
-        no va a fucionar :P
+        stristr:
+        Devuelve toda la cadena  desde la primera aparición del caracter . Tanto la cadena  como el caracter  se examinan sin tener en cuenta mayúsculas o minúsculas.
+        Si no se encuentra el caracter , devuelve FALSE.
+        Si el caracter no es una cadena, se convierte a entero y se usa como código de un carácter ASCII. 
         */
-        print "<p>".strpbrk($file,$q)."<a href=file:\\home/lukio/tmp/flexar/$file>\t$file</a>";
+        //print "<p>".strpbrk($file,$q)."<a href=file:\\home/lukio/tmp/flexar/$file>\t$file</a>";
+        if(stristr($file,$q))
+             echo "<p><a href='gerencia/abro_planos.php?q=$directorio:$file'>$file</a></p>";
+        /*
+        Header("Content-Description: File Transfer");
+        header("Content-Type: application/force-download");
+        header("Content-Disposition: attachment; filename=prueba_download.pdf");
+        */
 }
 
 ?>
