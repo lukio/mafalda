@@ -44,6 +44,32 @@ define(certificado,'39');
 define(chequeo,'40');
 define(modelo,'41');
 
+function pagina_abm ($action){
+    /* Depende de que action nos llega hacemos:
+    * alta, baja, modificacion, procesa. 
+    *
+    * Pagina de ABM de Modelos
+    *
+    * */
+
+    require_once 'include/pear/Sigma.php'; //insertamos la libreria
+    $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+
+    $it->loadTemplatefile('abm_clonar.html'); //seleccionamos la plantilla
+
+/*    $data_cen = array (
+                       "Plano Buscado: ", "text", "plano_buscado", "10", "plano_buscado_id", "plano_buscado",
+                    );
+
+    mostrar_inputs($data_cen,"input_cen", $it);
+    mostrar_select($data_busqueda,"BUSQUEDA", $it);
+*/
+    $it->show(); //mostramos el resultado
+
+}
+
+
+
 function cual_action ($action){
     /* Depende de que action nos llega hacemos:
     * alta, baja, modificacion, procesa. 

@@ -71,7 +71,6 @@ function cual_action($action, $q){
 function plano_buscado($q){
     $directorio = "/home/lukio/tmp/flexar/";
     $listado_archivos = scandir($directorio);
-    rsort($listado_archivos);
     foreach ($listado_archivos as $file)
         //echo "<p>".similar_text($file,$q)."<p />";
         /*
@@ -83,12 +82,10 @@ function plano_buscado($q){
         */
         //print "<p>".strpbrk($file,$q)."<a href=file:\\home/lukio/tmp/flexar/$file>\t$file</a>";
         if(stristr($file,$q))
-             echo "<p><a href='gerencia/abro_planos.php?q=$directorio:$file'>$file</a></p>";
-        /*
-        Header("Content-Description: File Transfer");
-        header("Content-Type: application/force-download");
-        header("Content-Disposition: attachment; filename=prueba_download.pdf");
-        */
+            {   
+                utf8_encode($file);
+                echo "<p><a href='gerencia/abro_planos.php?q=$directorio:$file'>$file</a></p>";
+            }
 }
 
 ?>

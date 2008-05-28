@@ -10,18 +10,19 @@
  * */
 $funcion = $_GET['f'];
 $dato = $_GET['q'];
+$separador = ",";
 
 switch ($funcion){
-    case 'buscar_nserie_csv':buscar_nserie_csv($dato); break;
-    case 'buscar_tabla_probatuti_csv':buscar_tabla_probatuti_csv($dato); break;
-    case 'buscar_ot_por_lote_csv':buscar_ot_por_lote_csv($dato); break;
-    case 'buscar_lote_embalado_csv':buscar_lote_embalado_csv($dato); break;
-    case 'buscar_lote_produccion_csv':buscar_lote_produccion_csv($dato); break;
+    case 'buscar_nserie_csv':buscar_nserie_csv($dato, $separador); break;
+    case 'buscar_tabla_probatuti_csv':buscar_tabla_probatuti_csv($dato, $separador); break;
+    case 'buscar_ot_por_lote_csv':buscar_ot_por_lote_csv($dato, $separador); break;
+    case 'buscar_lote_embalado_csv':buscar_lote_embalado_csv($dato, $separador); break;
+    case 'buscar_lote_produccion_csv':buscar_lote_produccion_csv($dato, $separador); break;
 }
 
 
 
-function buscar_nserie_csv($ncelda){
+function buscar_nserie_csv($ncelda, $separador){
 
     require_once('dbinfo.php');
     require_once ('MDB2.php');
@@ -129,13 +130,12 @@ function buscar_nserie_csv($ncelda){
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('fabrica.html', true, true); //seleccionamos la plantilla
         */
-        $separador = ";";
         $separador_texto =""; 
         $csv_file = "NUMERO DE SERIE: ".$ncelda."\n";
 
         // Tabla de Ensayos
         $csv_file .="\nMaquina de Ensayos\n";
-        $csv_file .="rango fin;fecha ensayo;cero inicial;cero final;golpe;espec\n";
+        $csv_file .="rango fin".$separador."fecha ensayo".$separador."cero inicial".$separador."cero final".$separador."golpe".$separador."espec\n";
 
         foreach($res_ensayos as $name) {
             // Assign data to the inner block
@@ -147,7 +147,7 @@ function buscar_nserie_csv($ncelda){
         $csv_file.="\nMaquina HORNO\n";
         
 
-        $csv_file .="cero horno;pendiente;r2;H;Hor;fecha horno\n";
+        $csv_file .="cero horno".$separador."pendiente".$separador."r2".$separador."H".$separador."Hor".$separador."fecha horno\n";
         // Tabla de Maquina Horno
         foreach($res_horno as $name) {
             // Assign data to the inner block
@@ -158,7 +158,7 @@ function buscar_nserie_csv($ncelda){
         }
 
         $csv_file .="\nDatos generales\n";
-        $csv_file .="Modelo;Lote produccion;Lote embalado;Area;Orden meca;Orden meca-mp;Fecha pegado\n";
+        $csv_file .="Modelo".$separador."Lote produccion".$separador."Lote embalado".$separador."Area".$separador."Orden meca".$separador."Orden meca-mp".$separador."Fecha pegado\n";
         // Tabla Datos generales
         $csv_file .="\"$res_lotes[0]\"".$separador;
 
@@ -172,7 +172,7 @@ function buscar_nserie_csv($ncelda){
         // Tabla Datos generales
 
         $csv_file .="\n\"Datos msg etc...\"\n";
-        $csv_file .="MSG;MRB;Impe RB;Impe SG;Impe RS\n";
+        $csv_file .="MSG".$separador."MRB".$separador."Impe RB".$separador."Impe SG".$separador."Impe RS\n";
 
         $csv_file .="\"$res_lotes[1]\"".$separador;
         $csv_file .="\"$res_lotes[2]\"".$separador;
@@ -182,7 +182,7 @@ function buscar_nserie_csv($ncelda){
         $csv_file .="\n";
 
         $csv_file .="\n\"Tabla Datos estadistica\"\n";
-        $csv_file .="sensibilidad real;desviacion estandar porcentual;tolerancia_sens;cap_nominal\n";
+        $csv_file .="sensibilidad real".$separador."desviacion estandar porcentual".$separador."tolerancia_sens".$separador."cap_nominal\n";
         $csv_file .="\"$sensi_real\"".$separador;
         $csv_file .="\"$desv_est_porce\"".$separador;
         $csv_file .="\"$tolsens\"".$separador;
@@ -200,7 +200,7 @@ function buscar_nserie_csv($ncelda){
 
 }
 
-function buscar_tabla_probatuti_csv($ncelda){
+function buscar_tabla_probatuti_csv($ncelda, $separador){
 
     if (!is_numeric($ncelda)){
             print "Dato de tipo NO VALIDO";
@@ -230,11 +230,10 @@ function buscar_tabla_probatuti_csv($ncelda){
                     die($res->getMessage());
         }
         $rows = $res->fetchAll();
-        $separador = ";";
         $separador_texto =""; 
 
         $csv_file = "\"TABLA PROBATUTI DE CELDA:\"".$ncelda."\n";
-        $csv_file .= "\narea; nombre;apellido;medter;imp-sal;imp-ent;tensal;dircarga;A-cuerpo;fecha\n";
+        $csv_file .= "\narea".$separador."nombre".$separador."apellido".$separador."medter".$separador."imp-sal".$separador."imp-ent".$separador."tensal".$separador."dircarga".$separador."A-cuerpo".$separador."fecha\n";
 
         foreach($rows as $name) {
             // Assign data to the inner block
@@ -254,7 +253,7 @@ function buscar_tabla_probatuti_csv($ncelda){
 
 }
 
-function buscar_ot_por_lote_csv($lote_produccion){ 
+function buscar_ot_por_lote_csv($lote_produccion, $separador){ 
 
 
     if (!is_numeric($lote_produccion)){
@@ -288,12 +287,11 @@ function buscar_ot_por_lote_csv($lote_produccion){
         }
         $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 
-        $separador = ";";
         $separador_texto =""; 
 
         // Enlaces Tabla Probatuti y num ot por lote
         $csv_file = "OT POR LOTE DE PRO:".$lote_produccion;
-        $csv_file .="\nnro. orden;cantidad;area;nombre;apellido;fecha inicio;fecha term;coments;obs\n";
+        $csv_file .="\nnro. orden".$separador."cantidad".$separador."area".$separador."nombre".$separador."apellido".$separador."fecha inicio".$separador."fecha term".$separador."coments".$separador."obs\n";
 
 
         foreach($rows as $name) {
@@ -319,7 +317,7 @@ function buscar_ot_por_lote_csv($lote_produccion){
     }
 }
 
-function buscar_lote_embalado_csv($lote_embalado){
+function buscar_lote_embalado_csv($lote_embalado, $separador){
 
 
     if (!is_numeric($lote_embalado)){
@@ -348,10 +346,9 @@ function buscar_lote_embalado_csv($lote_embalado){
         $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 
         // Enlaces Tabla Probatuti y num ot por lote
-        $separador = ";";
         $separador_texto =""; 
         $csv_file = "LOTE EMBALADO: ".$lote_embalado."\n";
-        $csv_file .="\nnumero serie;lote producción;fecha embalado\n";
+        $csv_file .="\nnumero serie".$separador."lote produccion".$separador."fecha embalado\n";
                 
         foreach($rows as $name) {
             // Assign data to the inner block
@@ -369,7 +366,7 @@ function buscar_lote_embalado_csv($lote_embalado){
     }
 }
 
-function buscar_lote_produccion_csv($lote_produccion){
+function buscar_lote_produccion_csv($lote_produccion, $separador){
     require_once('dbinfo.php');
     require_once('MDB2.php');
 
@@ -429,7 +426,6 @@ function buscar_lote_produccion_csv($lote_produccion){
         $it->loadTemplatefile('lote_produccion_fabrica.html', true, true); //seleccionamos la plantilla
         */
         // Enlaces Tabla Probatuti y num ot por lote
-        $separador = ";";
         $separador_texto =""; 
         $csv = "LOTE PRODUCCION: ".$lote_produccion."\n";
         $csv_file .="\nmodelo".$separador."merma".$separador."fecha".$separador."tol sensibilidad".$separador."tol cero".$separador."imp salida".$separador."imp entrada\n";

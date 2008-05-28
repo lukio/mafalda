@@ -485,8 +485,8 @@ function buscar_p_orden_trabajo($nroorden){
         foreach($rows as $name) {
             // Assign data to the inner block
                 $it->setCurrentBlock("OTL");
-                $it->setVariable("NOMBRE", $name['nombre']);
-                $it->setVariable("APELLIDO", $name['apellido']);
+                $it->setVariable("NOMBRE", utf8_encode($name['nombre']));
+                $it->setVariable("APELLIDO", utf8_encode($name['apellido']));
                 $it->setVariable("AREA", $name['area']);
                 $it->setVariable("TERMINO", $name['terminada']);
                 $it->setVariable("FECHA_INI", $name['fechainicio']);
