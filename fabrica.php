@@ -356,7 +356,7 @@ function buscar_tabla_probatuti($ncelda){
             // Assign data to the inner block
             foreach($name as $cell) {
                 $it->setCurrentBlock("TABLA_PROBA");
-                $it->setVariable("DATO", $cell);
+                $it->setVariable("DATO", utf8_encode($cell));
                 $it->parseCurrentBlock("TABLA_PROBA");
             }
             $it->parse("row_proba");

@@ -1,5 +1,12 @@
 Mafalda Changelog
 
+2008/05/26: Version 0.9.2
+============================
+- Exportar a csv en cada consulta (configurado el csv con separado por "," sin comilla doble y con decimal "."
+- ABM modelos lo comence a sacar del ajax
+- Alta funciona con chequeo de valores y agrega un * al dato erroneo
+- Busqueda de planos agregado buscar en subcarpeta. Imprime bien los nombres de archivos con acentos y ñ. 
+
 2008/05/26: Version 0.9.1
 ============================
 - Exportar a csv en cada consulta
