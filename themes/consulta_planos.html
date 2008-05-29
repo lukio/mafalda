@@ -78,7 +78,7 @@ function setFocus()
 
 
 <div id="header">
-<div align="right"><h6><a href="index.php">[Volver al Panel]</a> <a href="index.php?action=logout">[logout]</a></h6></div>
+<div align="right"><h6><a href="index.php">[Volver al Panel]</a> <a href="index.php?action=logout">[logout]</a></h6><br /></div>
 <div align="left">
  <form action="#" id="form_gerencia_id">
  <table class="header">
@@ -88,7 +88,7 @@ function setFocus()
          <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" onkeyup="ajax_oper('{DATO_AJAX}', '{ID_DATO}');" /></td>
     <!-- END input_cen -->
     <td><h6>Subfolder:
-    <select name="tipo_busqueda" id="folder_id">
+    <select name="tipo_busqueda" id="folder_id" onchange="setFocus();">
     <!-- BEGIN BUSQUEDA -->
     <h6>{DATO}</h6><option>{NAME_DATO}</option>
     <!-- END BUSQUEDA -->
