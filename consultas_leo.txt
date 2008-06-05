@@ -1,0 +1,99 @@
+Probatuti por operario y fecha2:
+SELECT Operarios.Nombre, Probatuti.Fecha, Probatuti.hora AS Expr1, Operaciones.Operacion, Lotes.Modelo, Probatuti.serie
+FROM (((Probatuti LEFT JOIN Operaciones ON Probatuti.Area = Operaciones.IdOperacion) LEFT JOIN Impedancias ON Probatuti.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote) RIGHT JOIN Operarios ON Probatuti.operador = Operarios.OperProba
+GROUP BY Operarios.Nombre, Probatuti.Fecha, Probatuti.hora, Operaciones.Operacion, Lotes.Modelo, Probatuti.serie
+HAVING (((Operarios.Nombre)=[Name]) AND ((Probatuti.Fecha)>=[FechaIni] And (Probatuti.Fecha)<=[FechaFin]))
+WITH OWNERACCESS OPTION;
+
+
+Probatuti por Operario y Fecha:
+SELECT Operarios.Nombre, Probatuti.Fecha, Operaciones.Operacion, Lotes.Modelo, Probatuti.serie
+FROM (((Probatuti LEFT JOIN Operaciones ON Probatuti.Area = Operaciones.IdOperacion) LEFT JOIN Impedancias ON Probatuti.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote) RIGHT JOIN Operarios ON Probatuti.operador = Operarios.OperProba
+GROUP BY Operarios.Nombre, Probatuti.Fecha, Operaciones.Operacion, Lotes.Modelo, Probatuti.serie
+HAVING (((Operarios.Nombre)=[Name]) AND ((Probatuti.Fecha)>=[FechaIni] And (Probatuti.Fecha)<=[FechaFin]))
+WITH OWNERACCESS OPTION;
+
+
+Probatuti por sector y fecha:
+SELECT Operaciones.Operacion, Probatuti.Fecha, Probatuti.hora AS Expr1, Operarios.Nombre, Lotes.Modelo, Probatuti.serie
+FROM (((Probatuti LEFT JOIN Operaciones ON Probatuti.Area = Operaciones.IdOperacion) LEFT JOIN Impedancias ON Probatuti.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote) INNER JOIN Operarios ON Probatuti.operador = Operarios.OperProba
+GROUP BY Operaciones.Operacion, Probatuti.Fecha, Probatuti.hora, Operarios.Nombre, Lotes.Modelo, Probatuti.serie
+HAVING (((Operaciones.Operacion)=[name]) AND ((Probatuti.Fecha)>=[FechaIni] And (Probatuti.Fecha)<=[FechaFin]))
+WITH OWNERACCESS OPTION;
+
+
+Probatuti por Area=Apareo por fecha, ordenado por Modelo
+
+SELECT Probatuti.Fecha, Operarios.Nombre, Lotes.Modelo, Probatuti.serie
+FROM (((Probatuti LEFT JOIN Operaciones ON Probatuti.Area = Operaciones.IdOperacion) LEFT JOIN Impedancias ON Probatuti.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote) INNER JOIN Operarios ON Probatuti.operador = Operarios.OperProba
+GROUP BY Probatuti.Fecha, Operarios.Nombre, Lotes.Modelo, Probatuti.serie, Operaciones.Operacion
+HAVING (((Probatuti.Fecha)>=[FechaIni] And (Probatuti.Fecha)<=[FechaFin]) AND ((Operaciones.Operacion)="Apareo"))
+ORDER BY Lotes.Modelo
+WITH OWNERACCESS OPTION;
+
+Probatuti por Area=Correcion de 0 y fecha, ordenado por Modelo
+
+SELECT Probatuti.Fecha, Probatuti.hora AS Expr1, Operarios.Nombre, Lotes.Modelo, Probatuti.serie
+FROM (((Probatuti LEFT JOIN Operaciones ON Probatuti.Area = Operaciones.IdOperacion) LEFT JOIN Impedancias ON Probatuti.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote) INNER JOIN Operarios ON Probatuti.operador = Operarios.OperProba
+GROUP BY Probatuti.Fecha, Probatuti.hora, Operarios.Nombre, Lotes.Modelo, Probatuti.serie, Operaciones.Operacion
+HAVING (((Probatuti.Fecha)>=[FechaIni] And (Probatuti.Fecha)<=[FechaFin]) AND ((Operaciones.Operacion)="Corrección de 0"))
+ORDER BY Lotes.Modelo
+WITH OWNERACCESS OPTION;
+
+
+Cantidad embaldas por Modelo, ordenado por Modelo
+
+SELECT Modelos.Modelo, Marcas.Marca, ModeloMarcaEmb.CantEmb
+FROM Modelos INNER JOIN (ModeloMarcaEmb INNER JOIN Marcas ON ModeloMarcaEmb.ID_Marca = Marcas.Id) ON Modelos.Id = ModeloMarcaEmb.ID_Modelo
+ORDER BY Modelos.Modelo;
+
+
+Embaladas por modelo y fecha, order por dia y modelo:
+SELECT EMBALADO.dia AS Expr1, EMBALADO.serie, Lotes.Modelo
+FROM (EMBALADO LEFT JOIN Impedancias ON EMBALADO.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote
+GROUP BY EMBALADO.dia, EMBALADO.serie, Lotes.Modelo
+HAVING ((([EMBALADO].[dia])>=[FechaIni] And ([EMBALADO].[dia])<=[Fechafin]))
+ORDER BY EMBALADO.dia, Lotes.Modelo;
+
+Embalado por fecha y serie:
+SELECT Impedancias.Serie, EMBALADO.ID_Grupo, EMBALADO.Fecha
+FROM Impedancias INNER JOIN EMBALADO ON Impedancias.Serie = EMBALADO.serie
+WHERE (((EMBALADO.Fecha)>=[Fecha_Ini] And (EMBALADO.Fecha)<=[Fecha_Fin]));
+
+Ensayos por modelo y fecha:
+SELECT ENSAYOS.MODELO, ENSAYOS.FECHA, ENSAYOS.NRO_SERIE, ENSAYOS.RANG_NOM, ENSAYOS.RANGO_INI
+FROM ENSAYOS
+WHERE (((ENSAYOS.FECHA)>=[FechaIni] And (ENSAYOS.FECHA)<=[FechaFin]))
+ORDER BY ENSAYOS.MODELO;
+
+OT por operario y fecha:
+SELECT Operarios.Nombre, OrdenesDeTrabajo.FechaInicio, OrdenesDeTrabajo.NroOrden, DatosOrden.Lote, Lotes.Modelo, Lotes.Cantidad
+FROM ((Operarios INNER JOIN OrdenesDeTrabajo ON Operarios.IdOperario = OrdenesDeTrabajo.Operario) INNER JOIN DatosOrden ON OrdenesDeTrabajo.NroOrden = DatosOrden.NroOrd) INNER JOIN Lotes ON DatosOrden.Lote = Lotes.Lote
+WHERE (((Operarios.Nombre)=[name]) AND ((OrdenesDeTrabajo.FechaInicio)>=[FechaIni] And (OrdenesDeTrabajo.FechaInicio)<=[FechaFin]))
+WITH OWNERACCESS OPTION;
+
+OT por sector y fecha
+SELECT Operaciones.Operacion, OrdenesDeTrabajo.FechaInicio, Lotes.Modelo, DatosOrden.Cantidad, DatosOrden.Lote
+FROM Operaciones INNER JOIN ((OrdenesDeTrabajo INNER JOIN DatosOrden ON OrdenesDeTrabajo.NroOrden = DatosOrden.NroOrd) INNER JOIN Lotes ON DatosOrden.Lote = Lotes.Lote) ON Operaciones.IdOperacion = OrdenesDeTrabajo.Operacion
+WHERE (((Operaciones.Operacion)=[name]) AND ((OrdenesDeTrabajo.FechaInicio)>=[FechaIni] And (OrdenesDeTrabajo.FechaInicio)<=[FechaFin]))
+WITH OWNERACCESS OPTION;
+
+OT por sector, fecha, modelo
+SELECT Operaciones.Operacion, OrdenesDeTrabajo.FechaInicio, Lotes.Modelo, DatosOrden.Cantidad, DatosOrden.Lote, Impedancias.Serie
+FROM Impedancias INNER JOIN (Operaciones INNER JOIN ((OrdenesDeTrabajo INNER JOIN DatosOrden ON OrdenesDeTrabajo.NroOrden = DatosOrden.NroOrd) INNER JOIN Lotes ON DatosOrden.Lote = Lotes.Lote) ON Operaciones.IdOperacion = OrdenesDeTrabajo.Operacion) ON Impedancias.Lote = Lotes.Lote
+WHERE (((Operaciones.Operacion)=[name]) AND ((OrdenesDeTrabajo.FechaInicio)>=[FechaIni] And (OrdenesDeTrabajo.FechaInicio)<=[FechaFin]) AND ((Lotes.Modelo)=[Mod]))
+WITH OWNERACCESS OPTION;
+
+Pendientes cableado por modelo:
+SELECT Lotes.Modelo, Lotes.Lote, Lotes.Cantidad
+FROM Lotes
+WHERE (((Lotes.Area)=1) AND ((Lotes.OTAsignada)=0) AND ((Lotes.Terminado)=False))
+ORDER BY Lotes.Modelo, Lotes.Lote;
+
+
+Reparaciones por modelo y fecha:
+SELECT Lotes.Modelo, Lotes.Fecha, ReparacionesInternas.Serie, Impedancias.Lote, ReparacionesInternas.Fecha, Operaciones.Operacion, [Lista de Diagnosticos].Descripcion
+FROM (((Lotes INNER JOIN (ReparacionesInternas INNER JOIN [Lista de Diagnosticos] ON ReparacionesInternas.Diagnostico = [Lista de Diagnosticos].Id) ON Lotes.Lote = ReparacionesInternas.Lote) INNER JOIN Operaciones ON ReparacionesInternas.AreaDeOrigen = Operaciones.IdOperacion) LEFT JOIN SubLotes ON ReparacionesInternas.Lote = SubLotes.SubLote) INNER JOIN Impedancias ON ReparacionesInternas.Serie = Impedancias.Serie
+GROUP BY Lotes.Modelo, Lotes.Fecha, ReparacionesInternas.Serie, Impedancias.Lote, ReparacionesInternas.Fecha, Operaciones.Operacion, [Lista de Diagnosticos].Descripcion
+HAVING (((Lotes.Modelo)=[´Modelo]) AND ((Lotes.Fecha)>=[Fecha de Inicio] And (Lotes.Fecha)<=[Fecha Fin]));
+
