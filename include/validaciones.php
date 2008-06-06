@@ -4,12 +4,11 @@
 //   exit();
 //}
 
-# funciones de validacion mediante expresiones regulares y deribadas
+# funciones de validacion mediante expresiones regulares y derivadas
 
 function is_mail($string){
     return ereg("^([a-z0-9_]|\-|\.)+[a-z0-9]+@(([a-z0-9_]|\-)+\.)+[a-z]{2,4}$",trim($string));
 }
-
 
 function is_name($string) {
     return ereg("[[:space:][:alpha:]\']+",trim($string));
@@ -24,12 +23,16 @@ function is_text($string) {
     return ereg("[[:space:][:alpha:]\?\>\<\.\,\'\"\;\:\[\{\}\/\|\!\@\#\$\%\^\&\*\(\)\-\_\=\+\~\`]+",trim($string));
 }
 
+function is_text2($string) {
+    return ereg("[[:alpha:]]+",trim($string));
+}
+
 function is_number($string) {
     return (ereg("[[:digit:]]+", trim($string)));
 }
 
 function is_login($string) {
-    return ereg("[a-z]+", trim($string));
+    return ereg("[a-z]", trim($string));
 }
 
 function is_password($string) {

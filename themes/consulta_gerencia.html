@@ -32,35 +32,17 @@ function clear_textbox()
     document.getElementById('lote_produccion_id').value = ""
 }
 
-function ajax_oper(action, id_campo){
-
-dato_evaluo = document.getElementById(id_campo).value
-
-xmlHttp=GetXmlHttpObject()
-if (xmlHttp==null)
- {
- alert ("Browser no soporta HTTP Request")
- return
- }
-var url="index.php"
-url=url+"?q="+dato_evaluo
-//evaluar si esta definido action. 
-url=url+"&action="+action
-//
-url=url+"&sid="+Math.random()
-xmlHttp.onreadystatechange=stateChanged
-xmlHttp.open("GET",url,true)
-xmlHttp.send(null)
-}
-
 function ajax_index(){
 
-if ( dato_evaluo = document.getElementById('celda_id').value)
-    action = "serie"
-else if( dato_evaluo = document.getElementById('lote_embalado_id').value)
-    action = "lote_embalado"
-else if (dato_evaluo = document.getElementById('lote_produccion_id').value)
-    action = "lote_produccion"
+action = document.getElementById('tipo_busqueda_id').value
+modulo = 'consulta_gerencia'
+
+q = document.getElementById('celda_id').value
+q +=","+document.getElementById('numero_ot_id').value
+q +=","+document.getElementById('nombre_operario_id').value
+q +=","+document.getElementById('sector_id').value
+q +=","+document.getElementById('fecha_inicio_id').value
+q +=","+document.getElementById('fecha_final_id').value
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -69,8 +51,9 @@ if (xmlHttp==null)
  return
  }
 var url="index.php"
-url=url+"?q="+dato_evaluo
+url=url+"?q="+q
 //evaluar si esta definido action. 
+url=url+"&modulo="+modulo
 url=url+"&action="+action
 //
 url=url+"&sid="+Math.random()
@@ -126,7 +109,7 @@ return xmlHttp;
     <!-- END input_der -->
     </tr><tr>
     <!-- BEGIN input_cen -->
-         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" onfocus="ajax_oper({DATO_AJAX}, {ID_DATO});" /></td>
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" /></td>
     <!-- END input_cen -->
    </tr>
 </tbody>
@@ -146,9 +129,9 @@ return xmlHttp;
 <tbody>
     <tr>
     <td><h6>Tipo de Busqueda: </h6></td>
-    <td><select name="tipo_busqueda">
+    <td><select name="tipo_busqueda" id="tipo_busqueda_id">
     <!-- BEGIN BUSQUEDA -->
-    <h6>{DATO}</h6><option>{NAME_DATO}</option>
+    <h6>{DATO}</h6><option value="{NAME_DATO}">{NAME_DATO}</option>
     <!-- END BUSQUEDA -->
     </select>
     </td>

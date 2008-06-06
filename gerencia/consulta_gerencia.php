@@ -65,6 +65,8 @@ function pagina_consulta_gerencia ($action){
                    "Ensayos por operario y fecha", "Cableado (OT Asignada)", "Lima (OT Asignada)", 
                    "Num OT por fecha", "OT por operario"
             );
+    
+    sort($data_busqueda); // ordenamos el listado de busquedas
 
     mostrar_inputs($data_der,"input_der", $it);
     mostrar_inputs($data_cen,"input_cen", $it);
@@ -74,12 +76,17 @@ function pagina_consulta_gerencia ($action){
     $it->show(); //mostramos el resultado
 }
 
-function cual_action($action){
+function cual_action($action, $q){
+/*
+    En $action viene el tipo de busqueda
+    En $q viene todas las variables en orden:
+    $q = serie, ot, nom_operario, sector, fecha_inicio, fecha_final
+*/
 
-    $action = explode (':', $action); // tomo la accion de procesa
+    $q = explode (',', $q); 
 
-    switch($action[0]){
-        case "alta": alta(); break;
+    switch($action){
+        case "Probatuti por operario y fecha": proba_oper_fecha($q); break;
         case "baja": baja(); break;
         case "modificacion": modificacion(); break;
         case "procesa": procesa($action[1]); break;
@@ -90,6 +97,62 @@ function cual_action($action){
 
 }
 
+function proba_oper_fecha($q){
+/*
+    En $q viene todas las variables en orden:
+    $q = serie, ot, nom_operario, sector, fecha_inicio, fecha_final
+*/
+$nom_operario = $q['2'];
+$fecha_inicio = $q['4'];
+$fecha_inicio = $q['5'];
+//require_once('validaciones.php');
+    /* Chequear si nom_operario es alpha, si las fechas son validas y no se superponen. */
+    if (!ctype_alpha($nom_operario)){
+            print "Dato de tipo NO VALIDO";
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        print "LOTE EMBALADO: ".$lote_embalado."<br />";
+
+        //consulta a dbms  . Selecciona nroserie, dia embalado segun el nro lote embalado
+        $query = "SELECT embalado.serie, (SELECT Lote FROM Impedancias WHERE embalado.serie=impedancias.serie) as lotepro,
+                  LEFT(embalado.fecha,20) as fecha
+                  FROM embalado
+                  WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')." order by embalado.serie";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('lote_embalado_fabrica.html', true, true); //seleccionamos la plantilla
+
+        // Enlaces Tabla Probatuti y num ot por lote
+        $it->setCurrentBlock("LINKS");
+        $it->setVariable("LOTE_EMBA", $lote_embalado);
+        $it->parseCurrentBlock("LINKS");
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("LOTEEM");
+                $it->setVariable("N_SERIE", $name['serie']);
+                $it->setVariable("LOTE_PRODUCCION", $name['lotepro']);
+                $it->setVariable("FECHA", $name['fecha']);
+                $it->parseCurrentBlock("LOTEEM");
+            $it->parse("row_lemba");
+        }
+       $it->show(); 
+    }
+}
 
 
 ?>

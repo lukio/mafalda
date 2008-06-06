@@ -11,6 +11,9 @@
 define(IP_CLIENTE,$_SERVER['REMOTE_ADDR']);
 session_start();
 header("Cache-control: private"); //IE 6 Fix
+$ruta = 'include';
+set_include_path(get_include_path() . PATH_SEPARATOR . $ruta);
+
 //Agregar si viene desde la IP que esta seteada
 if(!isset($_SESSION['user_autenticado']) and $_SESSION['IP']!=IP_CLIENTE){
    /**
@@ -140,7 +143,15 @@ if(!isset($_SESSION['user_autenticado']) and $_SESSION['IP']!=IP_CLIENTE){
              exit();
          }else{
              switch($modulo){
-                 case "consulta_gerencia": require_once('gerencia/consulta_gerencia.php'); pagina_consulta_gerencia($action); break;
+                 case "consulta_gerencia":  require_once('gerencia/consulta_gerencia.php');
+                                            $q=$_GET['q'];
+                                            unset($_GET['q']);
+                                            if (isset($action)){
+                                               cual_action($action, $q);
+                                                break;
+                                            }
+                                            pagina_consulta_gerencia($action); 
+                                            break;
                  case "abm_modelos":require_once('gerencia/abm_modelo.php'); pagina_abm($action); break;
                  case "consulta_planos": require_once('gerencia/consulta_planos.php'); 
                                         $q=$_GET['q']; 
