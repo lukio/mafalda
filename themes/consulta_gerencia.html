@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 <head><title>Mafalda - Consulta Flexar</title>
 <link rel="stylesheet" type="text/css" media="all" href="themes/css/consulta_gerencia.css" />
-<link rel="stylesheet" type="text/css" href="themes/css/ui.datepicker.css">
+<!-- <link rel="stylesheet" type="text/css" href="themes/css/ui.datepicker.css"> -->
+<style type="text/css">@import url(themes/css/ui.datepicker.css);</style> 
 
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="MSSmartTagsPreventParsing" content="TRUE" />
@@ -11,19 +12,32 @@
 <meta name="robots" content="all" />
 <meta name="author" content="Lucho Rossi" />
 <meta name="description" content="Consultar Flexar" />
-<script src="include/jquery-1.2.3.js"></script>
+<script src="include/jquery-1.2.6.js"></script>
 <script  src="include/ui.datepicker.js"></script>
+<!-- <link rel="stylesheet" href="http://dev.jquery.com/view/trunk/plugins/autocomplete/demo/main.css" type="text/css" /> -->
+<link rel="stylesheet" href="include/jquery-autocomplete/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="include/jquery-autocomplete/lib/jquery.bgiframe.min.js"></script>
+<script type="text/javascript" src="include/jquery-autocomplete/lib/jquery.dimensions.js"></script>
+<script type="text/javascript" src="include/jquery-autocomplete/jquery.autocomplete.js"></script>
 
-<script>
-
-  $(document).ready(function(){
-    $('#fecha_inicio_id').datepicker();
-    $('#fecha_final_id').datepicker();
-$('#exampleRange').datepicker({rangeSelect: true, firstDay: 1});
-  });
-</script>
 <script type="text/javascript">
 <!--
+  $(document).ready(function(){
+//$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true, 
+  //  buttonImage: 'calendar.gif', buttonText: 'Calendar'});
+    $('#fecha_inicio_id').datepicker({dateFormat: 'dd/mm/yy'}); 
+    $('#fecha_final_id').datepicker({dateFormat: 'dd/mm/yy'});
+
+//   var data = "Core Selectors CCC Capo Capotio Clue Attributes Traversing Manipula$tion CSS Events Effects Ajax Utilities".split(" ");
+    $('#nombre_operario_id').focus(function() {
+        valor_sector = $("#sector_id").val();
+       $("#nombre_operario_id").autocomplete('gerencia/search.php?id=operario&sector='+valor_sector);
+      });
+
+  // $("#nombre_operario_id").autocomplete('gerencia/search.php?id=operario');
+   $("#sector_id").autocomplete('gerencia/search.php?id=sector');
+//$('#fecha_inicio_id').datepicker({rangeSelect: true, firstDay: 1});
+  });
 
 function clear_textbox()
 {
@@ -38,11 +52,11 @@ action = document.getElementById('tipo_busqueda_id').value
 modulo = 'consulta_gerencia'
 
 q = document.getElementById('celda_id').value
-q +=","+document.getElementById('numero_ot_id').value
-q +=","+document.getElementById('nombre_operario_id').value
-q +=","+document.getElementById('sector_id').value
-q +=","+document.getElementById('fecha_inicio_id').value
-q +=","+document.getElementById('fecha_final_id').value
+q +=":"+document.getElementById('numero_ot_id').value
+q +=":"+document.getElementById('nombre_operario_id').value
+q +=":"+document.getElementById('sector_id').value
+q +=":"+document.getElementById('fecha_inicio_id').value
+q +=":"+document.getElementById('fecha_final_id').value
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -146,10 +160,10 @@ return xmlHttp;
 </div>
 
 <div id="content">
-<pre>
+<p>
 
 <span id="resultado_div"></span>
-</pre>
+</p>
 
 </div>
 
