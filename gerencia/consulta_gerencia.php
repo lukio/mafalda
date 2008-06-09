@@ -112,6 +112,7 @@ function proba_oper_fecha($q){
 */
 
 $nom_operario = $q[3];
+$sector = $q[2];
 $nomyapellido = explode (",",$nom_operario);
 
 $fechai = explode("/", $q[4]);
@@ -156,13 +157,12 @@ else
         $fecha_final = $fechaf[1]."/".$fechaf[0]."/".$fechaf[2];
         $a = trim($nomyapellido[1]);
 
-        $query = "SELECT Operarios.Nombre as operador, Probatuti.Fecha as fecha, Operaciones.Operacion as sector, 
-                         Lotes.Modelo as modelo, Probatuti.serie as serie
+        $query = "SELECT Probatuti.Fecha as fecha, Lotes.Modelo as modelo, Probatuti.serie as serie
                  FROM (((Probatuti LEFT JOIN Operaciones ON Probatuti.Area = Operaciones.IdOperacion) 
                       LEFT JOIN Impedancias ON Probatuti.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote)
                       RIGHT JOIN Operarios ON Probatuti.operador = Operarios.OperProba
                 WHERE Operarios.Nombre=".$mdb2->quote($a,'text')." AND Probatuti.Fecha>=".$mdb2->quote($fecha_inicio,'date')." And Probatuti.Fecha<=".$mdb2->quote($fecha_final,'date')." 
-                order by probatuti.fecha";
+                order by probatuti.fecha, Probatuti.serie";
 
 //                  WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')." order by embalado.serie";
 
@@ -183,8 +183,8 @@ else
         foreach($rows as $name) {
             // Assign data to the inner block
                 $it->setCurrentBlock("PROBA_GERENCIA");
-                $it->setVariable("OPERADOR", $name['operador']);
-                $it->setVariable("SECTOR", $name['sector']);
+                $it->setVariable("OPERADOR",$nom_operario);
+                $it->setVariable("SECTOR", $sector);
                 $it->setVariable("MODELO", $name['modelo']);
                 $it->setVariable("N_SERIE", $name['serie']);
                 $it->setVariable("FECHA", $name['fecha']);
