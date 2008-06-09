@@ -155,20 +155,16 @@ else
         $fecha_inicio = $fechai[1]."/".$fechai[0]."/".$fechai[2];
         $fecha_final = $fechaf[1]."/".$fechaf[0]."/".$fechaf[2];
         $a = trim($nomyapellido[1]);
-        print $fecha_inicio." ".$fecha_final;
 
-        $query = "SELECT Operarios.Nombre, Probatuti.Fecha, Probatuti.hora AS hora, Operaciones.Operacion, 
-                         Lotes.Modelo, Probatuti.serie
+        $query = "SELECT Operarios.Nombre as operador, Probatuti.Fecha as fecha, Operaciones.Operacion as sector, 
+                         Lotes.Modelo as modelo, Probatuti.serie as serie
                  FROM (((Probatuti LEFT JOIN Operaciones ON Probatuti.Area = Operaciones.IdOperacion) 
                       LEFT JOIN Impedancias ON Probatuti.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote)
                       RIGHT JOIN Operarios ON Probatuti.operador = Operarios.OperProba
-                WHERE Operarios.Nombre='$a' AND Probatuti.Fecha>='$fecha_inicio' And Probatuti.Fecha<='$fecha_final'";
+                WHERE Operarios.Nombre=".$mdb2->quote($a,'text')." AND Probatuti.Fecha>=".$mdb2->quote($fecha_inicio,'date')." And Probatuti.Fecha<=".$mdb2->quote($fecha_final,'date')." 
+                order by probatuti.fecha";
 
-/*        $query = "SELECT embalado.serie, (SELECT Lote FROM Impedancias WHERE embalado.serie=impedancias.serie) as lotepro,
-                  LEFT(embalado.fecha,20) as fecha
-                  FROM embalado
-                  WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')." order by embalado.serie";
-*/
+//                  WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')." order by embalado.serie";
 
         $res =& $mdb2->query($query);
 
@@ -178,25 +174,22 @@ else
         $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
         require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
-        $it->loadTemplatefile('lote_embalado_fabrica.html', true, true); //seleccionamos la plantilla
+        $it->loadTemplatefile('probatuti_oper_fecha_gerencia.html', true, true); //seleccionamos la plantilla
 
         // Enlaces Tabla Probatuti y num ot por lote
         $it->setCurrentBlock("LINKS");
-        $it->setVariable("LOTE_EMBA", $lote_embalado);
         $it->parseCurrentBlock("LINKS");
 
         foreach($rows as $name) {
-            foreach ($name as $cell){
-
             // Assign data to the inner block
-/*                $it->setCurrentBlock("LOTEEM");
+                $it->setCurrentBlock("PROBA_GERENCIA");
+                $it->setVariable("OPERADOR", $name['operador']);
+                $it->setVariable("SECTOR", $name['sector']);
+                $it->setVariable("MODELO", $name['modelo']);
                 $it->setVariable("N_SERIE", $name['serie']);
-                $it->setVariable("LOTE_PRODUCCION", $name['lotepro']);
                 $it->setVariable("FECHA", $name['fecha']);
-                $it->parseCurrentBlock("LOTEEM");
-*/              print $cell."<br />";
+                $it->parseCurrentBlock("PROBA_GERENCIA");
             $it->parse("row_lemba");
-            }
         }
        $it->show(); 
     }
