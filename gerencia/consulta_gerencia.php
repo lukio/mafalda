@@ -42,20 +42,29 @@ function pagina_consulta_gerencia ($action){
     * Pagina de Consulta para la gerencia 
     *
     * */
+    require_once('dbinfo.php');
+    require_once('MDB2.php');
 
+    // Conecto a DB Flexar
+    $mdb2 =& MDB2::singleton($dsn, $options);
+    if (PEAR::isError($mdb2)) {
+             die($mdb2->getMessage());
+    }
+    $query = "SELECT operaciones.operacion from operaciones"; 
+    $operaciones =& $mdb2->queryCol($query);
+
+    if (PEAR::isError($res)) {
+                die($res->getMessage());
+    }
     require_once 'include/pear/Sigma.php'; //insertamos la libreria
     $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
     $it->loadTemplatefile('consulta_gerencia.html'); //seleccionamos la plantilla
 
     $data_der = array (
-                      "Numero serie:  ", "text", "celda", "18", "celda_id",
-                      "Numero OT: ", "text", "numero_ot", "18", "numero_ot_id"
+                      "Numero serie:  ", "text", "celda", "12", "celda_id",
+                      "Numero OT: ", "text", "numero_ot", "12", "numero_ot_id"
                     );
-
-    $data_cen = array (
-                       "Nombre Operario: ", "text", "nombre_operario", "18", "nombre_operario_id", "busco_operario",
-                       "Sector: ", "text", "sector", "18", "sector_id", "bussco_sector"
-                    );
+    
     $data_fecha = array (
                    "Fecha Inicio: ", "text", "fecha_inicio", "12", "fecha_inicio_id",
                    "Fecha Final: ", "text", "fecha_final", "12", "fecha_final_id"
@@ -65,11 +74,10 @@ function pagina_consulta_gerencia ($action){
                    "Ensayos por operario y fecha", "Cableado (OT Asignada)", "Lima (OT Asignada)", 
                    "Num OT por fecha", "OT por operario"
             );
-    
     sort($data_busqueda); // ordenamos el listado de busquedas
-
+    sort($operaciones);
     mostrar_inputs($data_der,"input_der", $it);
-    mostrar_inputs($data_cen,"input_cen", $it);
+    mostrar_select($operaciones, "select_sector", $it);
     mostrar_inputs($data_fecha,"FECHAS", $it);
     mostrar_select($data_busqueda,"BUSQUEDA", $it);
     
@@ -80,7 +88,7 @@ function cual_action($action, $q){
 /*
     En $action viene el tipo de busqueda
     En $q viene todas las variables en orden:
-    $q = serie, ot, nom_operario, sector, fecha_inicio, fecha_final
+    $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final
 */
 
     $q = explode (':', $q); 
@@ -100,10 +108,10 @@ function cual_action($action, $q){
 function proba_oper_fecha($q){
 /*
     En $q viene todas las variables en orden:
-    $q = serie, ot, nom_operario, sector, fecha_inicio, fecha_final
+    $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final
 */
 
-$nom_operario = $q[2];
+$nom_operario = $q[3];
 $nomyapellido = explode (",",$nom_operario);
 
 $fechai = explode("/", $q[4]);
@@ -111,8 +119,10 @@ $fechaf  = explode ("/", $q[5]);
 /* Chequear si nom_operario es alpha, si las fechas son validas y no se superponen. */
 
 $chequeo = array();
-$chequeo['nom_operario'] = ctype_alpha(trim($nomyapellido[0])) ? true: false;
-$chequeo['apellido_operario'] = ctype_alpha(trim($nomyapellido[1])) ? true: false;
+//$chequeo['nom_operario'] = ctype_alpha(trim($nomyapellido[0])) ? true: false;
+//$chequeo['apellido_operario'] = ctype_alpha(trim($nomyapellido[1])) ? true: false;
+$chequeo['nom_operario'] = true;
+$chequeo['apellido_operario'] = true;
 /* 
  funcionamiento: bool checkdate  ( int $month  , int $day  , int $year  ) 
 */
@@ -146,7 +156,6 @@ else
         $fecha_final = $fechaf[1]."/".$fechaf[0]."/".$fechaf[2];
         $a = trim($nomyapellido[1]);
         print $fecha_inicio." ".$fecha_final;
-
 
         $query = "SELECT Operarios.Nombre, Probatuti.Fecha, Probatuti.hora AS hora, Operaciones.Operacion, 
                          Lotes.Modelo, Probatuti.serie

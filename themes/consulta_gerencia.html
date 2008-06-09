@@ -14,11 +14,6 @@
 <meta name="description" content="Consultar Flexar" />
 <script src="include/jquery-1.2.6.js"></script>
 <script  src="include/ui.datepicker.js"></script>
-<!-- <link rel="stylesheet" href="http://dev.jquery.com/view/trunk/plugins/autocomplete/demo/main.css" type="text/css" /> -->
-<link rel="stylesheet" href="include/jquery-autocomplete/jquery.autocomplete.css" type="text/css" />
-<script type="text/javascript" src="include/jquery-autocomplete/lib/jquery.bgiframe.min.js"></script>
-<script type="text/javascript" src="include/jquery-autocomplete/lib/jquery.dimensions.js"></script>
-<script type="text/javascript" src="include/jquery-autocomplete/jquery.autocomplete.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -28,16 +23,13 @@
     $('#fecha_inicio_id').datepicker({dateFormat: 'dd/mm/yy'}); 
     $('#fecha_final_id').datepicker({dateFormat: 'dd/mm/yy'});
 
-//   var data = "Core Selectors CCC Capo Capotio Clue Attributes Traversing Manipula$tion CSS Events Effects Ajax Utilities".split(" ");
-    $('#nombre_operario_id').focus(function() {
+   $('#sector_id').change(function() {
         valor_sector = $("#sector_id").val();
-       $("#nombre_operario_id").autocomplete('gerencia/search.php?id=operario&sector='+valor_sector);
+        $.get("gerencia/search.php", { sector: valor_sector }, function(data){ $("#option_operario").html(data);});
       });
 
-  // $("#nombre_operario_id").autocomplete('gerencia/search.php?id=operario');
-   $("#sector_id").autocomplete('gerencia/search.php?id=sector');
-//$('#fecha_inicio_id').datepicker({rangeSelect: true, firstDay: 1});
   });
+
 
 function clear_textbox()
 {
@@ -53,8 +45,8 @@ modulo = 'consulta_gerencia'
 
 q = document.getElementById('celda_id').value
 q +=":"+document.getElementById('numero_ot_id').value
-q +=":"+document.getElementById('nombre_operario_id').value
 q +=":"+document.getElementById('sector_id').value
+q +=":"+document.getElementById('nombre_operario_id').value
 q +=":"+document.getElementById('fecha_inicio_id').value
 q +=":"+document.getElementById('fecha_final_id').value
 
@@ -119,12 +111,24 @@ return xmlHttp;
  <tbody>
      <tr>
     <!-- BEGIN input_der -->
-         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" /></td>
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" tabindex="1" /></td>
     <!-- END input_der -->
     </tr><tr>
-    <!-- BEGIN input_cen -->
-         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" /></td>
-    <!-- END input_cen -->
+    <td><h6>Sector: </h6></td>
+    <td><select name="sector_name" id="sector_id" tabindex="2" >
+    <!-- BEGIN select_sector -->
+         <option value="{NAME_DATO}">{NAME_DATO}</option>
+    <!-- END select_sector -->
+   </select>
+    </td>
+    <td><h6>Nombre Operario: </h6></td>
+    <td>
+      <div id="option_operario">
+      <select name="nombre_operador" id="nombre_operario_id" tabindex="3">
+       <option value="-99">  </option>
+      </select> 
+    </div>
+    </td>
    </tr>
 </tbody>
 </table>
@@ -133,7 +137,7 @@ return xmlHttp;
 <tbody>
     <tr>
     <!-- BEGIN FECHAS -->
-    <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="Click calendario" /></td>
+    <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="Click calendario" tabindex="4" /></td>
     <!-- END FECHAS -->
     </tr>
 </tbody>
@@ -143,7 +147,7 @@ return xmlHttp;
 <tbody>
     <tr>
     <td><h6>Tipo de Busqueda: </h6></td>
-    <td><select name="tipo_busqueda" id="tipo_busqueda_id">
+    <td><select name="tipo_busqueda" id="tipo_busqueda_id" tabindex="5" >
     <!-- BEGIN BUSQUEDA -->
     <h6>{DATO}</h6><option value="{NAME_DATO}">{NAME_DATO}</option>
     <!-- END BUSQUEDA -->
@@ -153,7 +157,7 @@ return xmlHttp;
 </tbody>
 </table>
      <div align="right">
-        <input type="submit" name="Submit" value="Buscar" />
+        <input type="submit" name="Submit" value="Buscar" tabindex="6" />
      </div>
 </form>
 </div>
