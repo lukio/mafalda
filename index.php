@@ -13,6 +13,7 @@ session_start();
 header("Cache-control: private"); //IE 6 Fix
 $ruta = 'include';
 set_include_path(get_include_path() . PATH_SEPARATOR . $ruta);
+ini_set("session.gc_maxlifetime", "18000"); 
 
 //Agregar si viene desde la IP que esta seteada
 if(!isset($_SESSION['user_autenticado']) and $_SESSION['IP']!=IP_CLIENTE){
@@ -77,37 +78,36 @@ if(!isset($_SESSION['user_autenticado']) and $_SESSION['IP']!=IP_CLIENTE){
             require_once('exportar.php');
             require_once('include/autentifica.php');
             $action = $_GET['action'];
+            $modulo = $_GET['modulo'];
+            unset($_GET['action']);
+            unset($_GET['modulo']);
 
             if ($action == "serie"){
-                buscar_nserie($_GET['q']);
-                exit();
-            }
-            if ($action == "exportar_serie"){
-                buscar_nserie_csv($_GET['q']);
+                buscar_nserie($modulo, $_GET['q']);
                 exit();
             }
             elseif ($action == "lote_embalado"){
-                buscar_lote_embalado($_GET['q']);
+                buscar_lote_embalado($modulo, $_GET['q']);
                 exit();
             }
             elseif ($action == "lote_produccion"){
-                buscar_lote_produccion($_GET['q']);
+                buscar_lote_produccion($modulo, $_GET['q']);
                 exit();
             }
             elseif ($action == "tabla_probatuti"){
-                buscar_tabla_probatuti($_GET['q']);
+                buscar_tabla_probatuti($modulo, $_GET['q']);
                 exit();
             }
             elseif ($action == "ot_por_lote"){
-                buscar_ot_por_lote($_GET['q']);
+                buscar_ot_por_lote($modulo, $_GET['q']);
                 exit();
             }
             elseif ($action == "p_orden"){
-                buscar_p_orden_trabajo($_GET['q']);
+                buscar_p_orden_trabajo($modulo, $_GET['q']);
                 exit();
             }
             elseif ($action == "orden_mecanizado"){
-                buscar_orden_mecanizado($_GET['q']);
+                buscar_orden_mecanizado($modulo, $_GET['q']);
                 exit();
             }
             elseif ($action == "login"){

@@ -72,6 +72,8 @@ q +=":"+document.getElementById('sector_id').value
 q +=":"+document.getElementById('nombre_operario_id').value
 q +=":"+document.getElementById('fecha_inicio_id').value
 q +=":"+document.getElementById('fecha_final_id').value
+q +=":"+document.getElementById('marca_id').value
+q +=":"+document.getElementById('modelo_id').value
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -160,6 +162,22 @@ return xmlHttp;
       </select> 
     </div>
     </td>
+     <tr>
+    <td><h6>Marca: </h6></td>
+    <td><select name="marca_name" id="marca_id" tabindex="6" >
+    <!-- BEGIN select_marca -->
+         <option value="{NAME_DATO}">{NAME_DATO}</option>
+    <!-- END select_marca -->
+   </select>
+    </td>
+    <td><h6>Modelo: </h6></td>
+    <td><select name="modelo_name" id="modelo_id" tabindex="7" >
+    <!-- BEGIN select_modelo -->
+         <option value="{NAME_DATO}">{NAME_DATO}</option>
+    <!-- END select_modelo -->
+   </select>
+    </td>
+   </tr>
    </tr>
 </tbody>
 </table>
@@ -198,6 +216,7 @@ return xmlHttp;
 <p>
 
 <span id="resultado_div"></span>
+<span id="resultado_ot"></span>
 </p>
 
 </div>

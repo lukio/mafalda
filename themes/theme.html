@@ -18,7 +18,7 @@ function clear_textbox()
     document.getElementById('lote_produccion_id').value = ""
 }
 
-function ajax_ot(action, valor1){
+function ajax_ot(modulo, action, valor1){
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -30,6 +30,7 @@ var url="index.php"
 url=url+"?q="+valor1
 //evaluar si esta definido action. 
 url=url+"&action="+action
+url=url+"&modulo="+modulo
 //
 url=url+"&sid="+Math.random()
 xmlHttp.onreadystatechange=stateChanged2
@@ -52,7 +53,11 @@ url=url+"&action="+action
 url=url+"&modulo="+modulo
 //
 url=url+"&sid="+Math.random()
-xmlHttp.onreadystatechange=stateChanged
+if (action == "p_orden"){
+    xmlHttp.onreadystatechange=stateChanged2
+}else { 
+    xmlHttp.onreadystatechange=stateChanged
+}
 xmlHttp.open("GET",url,true)
 xmlHttp.send(null)
 }

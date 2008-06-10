@@ -8,11 +8,10 @@
  buscar_lote_produccion();
 */
 
-function buscar_nserie($ncelda){
+function buscar_nserie($modulo, $ncelda){
 
     require_once('dbinfo.php');
     require_once ('MDB2.php');
-
     /* variables
      * $ncelda
      *
@@ -114,10 +113,10 @@ function buscar_nserie($ncelda){
         $it->loadTemplatefile('fabrica.html', true, true); //seleccionamos la plantilla
 
         print "NUMERO DE SERIE: ".$ncelda."<br />";
-
         // Enlaces Tabla Probatuti y num ot por lote
         $it->setCurrentBlock("LINKS");
         $it->setVariable("N_SERIE", $ncelda);
+        $it->setVariable("MODULO", $modulo);
         $it->setVariable("LOTEPRO", $res_impedancias['0']);
         $it->parseCurrentBlock("LINKS");
         
@@ -146,6 +145,7 @@ function buscar_nserie($ncelda){
         // Tabla Datos generales
         $it->setCurrentBlock("CELDA");
         $it->setVariable("MODELO", $res_lotes['0']);
+        $it->setVariable("MODULO", $modulo);
         $it->setVariable("LOTE_PRODUCCION", $res_impedancias['0']);
         $it->setVariable("LOTE_EMBALADO", $lote_emba);
         $it->setVariable("AREA", $res_lotes['4']);
@@ -177,7 +177,7 @@ function buscar_nserie($ncelda){
 
 }
 
-function buscar_lote_produccion($lote_produccion){
+function buscar_lote_produccion($modulo, $lote_produccion){
     require_once('dbinfo.php');
     require_once('MDB2.php');
 
@@ -238,6 +238,7 @@ function buscar_lote_produccion($lote_produccion){
 
         // Enlaces Tabla Probatuti y num ot por lote
         $it->setCurrentBlock("LINKS");
+        $it->setVariable("MODULO", $modulo);
         $it->setVariable("LOTEPRO", $lote_produccion);
         $it->parseCurrentBlock("LINKS");
         
@@ -263,7 +264,7 @@ function buscar_lote_produccion($lote_produccion){
 
 }
 
-function buscar_lote_embalado($lote_embalado){
+function buscar_lote_embalado($modulo, $lote_embalado){
 
 
     if (!is_numeric($lote_embalado)){
@@ -304,6 +305,7 @@ function buscar_lote_embalado($lote_embalado){
             // Assign data to the inner block
                 $it->setCurrentBlock("LOTEEM");
                 $it->setVariable("N_SERIE", $name['serie']);
+                $it->setVariable("MODULO", $modulo);
                 $it->setVariable("LOTE_PRODUCCION", $name['lotepro']);
                 $it->setVariable("FECHA", $name['fecha']);
                 $it->parseCurrentBlock("LOTEEM");
@@ -313,7 +315,7 @@ function buscar_lote_embalado($lote_embalado){
     }
 }
 
-function buscar_tabla_probatuti($ncelda){
+function buscar_tabla_probatuti($modulo, $ncelda){
 
     if (!is_numeric($ncelda)){
             print "Dato de tipo NO VALIDO";
@@ -368,8 +370,7 @@ function buscar_tabla_probatuti($ncelda){
 
 }
 
-function buscar_ot_por_lote($lote_produccion){ 
-
+function buscar_ot_por_lote($modulo, $lote_produccion){ 
 
     if (!is_numeric($lote_produccion)){
             print "Dato de tipo NO VALIDO";
@@ -416,6 +417,7 @@ function buscar_ot_por_lote($lote_produccion){
         foreach($rows as $name) {
             // Assign data to the inner block
                 $it->setCurrentBlock("OTL");
+                $it->setVariable("MODULO", $modulo);
                 $it->setVariable("NROORDEN", $name['nroord']);
                 $it->setVariable("CANTIDAD", $name['cantidad']);
                 $it->setVariable("AREA", $name['area']);
@@ -432,7 +434,7 @@ function buscar_ot_por_lote($lote_produccion){
     }
 }
        
-function buscar_p_orden_trabajo($nroorden){ 
+function buscar_p_orden_trabajo($modulo, $nroorden){ 
 
     if (!is_numeric($nroorden)){
             print "Dato de tipo NO VALIDO";
@@ -509,7 +511,7 @@ function buscar_p_orden_trabajo($nroorden){
     }
 }
             
-function buscar_orden_mecanizado($nro_ordenmecanizado){ 
+function buscar_orden_mecanizado($modulo, $nro_ordenmecanizado){ 
 
 
     if (!is_numeric($nro_ordenmecanizado)){

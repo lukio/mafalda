@@ -41,6 +41,11 @@ ORDER BY Lotes.Modelo
 WITH OWNERACCESS OPTION;
 
 
+
+/* Desglosado en dos consultas.
+- por modelo : se podria ver que traiga todas las CD y no la CD-30. 
+- por marca: se podria ver de no poner que no traiga TODO y que ademas agregar el tipo de modelo ejemplo CD 
+*/
 Cantidad embaldas por Modelo, ordenado por Modelo
 
 SELECT Modelos.Modelo, Marcas.Marca, ModeloMarcaEmb.CantEmb

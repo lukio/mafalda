@@ -126,7 +126,7 @@ html>body #content {
         background: #366;
 /*        border: 5px green solid; */
         text-align:center; /* part 2 of 2 centering hack */
-        height:220px;
+        height:230px;
         width: 540px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;

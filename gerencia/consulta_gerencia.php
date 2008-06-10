@@ -50,12 +50,9 @@ function pagina_consulta_gerencia ($action){
     if (PEAR::isError($mdb2)) {
              die($mdb2->getMessage());
     }
-    $query = "SELECT operaciones.operacion from operaciones"; 
+    $query = "SELECT operaciones.operacion from operaciones order by operacion"; 
     $operaciones =& $mdb2->queryCol($query);
 
-    if (PEAR::isError($res)) {
-                die($res->getMessage());
-    }
     require_once 'include/pear/Sigma.php'; //insertamos la libreria
     $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
     $it->loadTemplatefile('consulta_gerencia.html'); //seleccionamos la plantilla
@@ -70,16 +67,24 @@ function pagina_consulta_gerencia ($action){
                    "Fecha Final: ", "text", "fecha_final", "12", "fecha_final_id"
             );
     $data_busqueda = array (
-                   "Embalado por fecha", "Probatuti por operario y fecha", "Probatuti por sector y fecha", 
-                   "Ensayos por operario y fecha", "Cableado (OT Asignada)", "Lima (OT Asignada)", 
+                   "Embalado por fecha", "Cantidad embalado por modelo", "Cantidad embalado por marca", "Probatuti por operario y fecha", "Probatuti por sector y fecha", 
+                   "Ensayos por operario y fecha",
+                   "Ensayos por modelo y fecha",
+                   "Ensayos por fecha",
+                    "Cableado (OT Asignada)", "Lima (OT Asignada)", 
                    "Num OT por fecha", "OT por operario"
             );
+    $query = "SELECT marcas.marca from marcas order by marca"; 
+    $marcas =& $mdb2->queryCol($query);
+    $query = "SELECT Modelos.Modelo from Modelos order by modelo"; 
+    $modelos =& $mdb2->queryCol($query);
     sort($data_busqueda); // ordenamos el listado de busquedas
-    sort($operaciones);
     mostrar_inputs($data_der,"input_der", $it);
     mostrar_select($operaciones, "select_sector", $it);
     mostrar_inputs($data_fecha,"FECHAS", $it);
     mostrar_select($data_busqueda,"BUSQUEDA", $it);
+    mostrar_select($marcas, "select_marca", $it);
+    mostrar_select($modelos, "select_modelo", $it);
     
     $it->show(); //mostramos el resultado
 }
@@ -87,20 +92,34 @@ function pagina_consulta_gerencia ($action){
 function cual_action($action, $q){
 /*
     En $action viene el tipo de busqueda
+    El array tipo de busqueda se completa en $data_busqueda en la funcion pagina_consulta_gerencia()
     En $q viene todas las variables en orden:
     $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final
 */
-
-    $q = explode (':', $q); 
+ini_set("session.gc_maxlifetime", "18000");
+    $q = explode (':', $q);
 
     switch($action){
         case "Probatuti por operario y fecha": proba_oper_fecha($q); break;
-        case "baja": baja(); break;
+        case "Probatuti por sector y fecha": proba_sector_fecha($q); break;
+        case "Cantidad embalado por modelo": cant_embalada_modelo($q); break;
+        case "Cantidad embalado por marca": cant_embalada_marca($q); break;
+        case "Embalado por fecha": embalada_fecha($q); break;
+        case "Ensayos por operario y fecha": ensayos_fecha_operador($q); break;
+        case "Ensayos por modelo y fecha": ensayos_fecha_modelo($q); break;
+        case "Ensayos por fecha": ensayos_fecha($q); break;
+        case "serie": require_once('fabrica.php');  buscar_nserie('consulta_gerencia', $q[0] ); break;
+        case "tabla_probatuti": require_once('fabrica.php'); buscar_tabla_probatuti('consulta_gerencia',$q[0]); break;
+        case "ot_por_lote": require_once('fabrica.php'); buscar_ot_por_lote('consulta_gerencia',$q[0]); break;
+        case "lote_produccion": require_once('fabrica.php'); buscar_lote_produccion('consulta_gerencia',$q[0]); break;
+        case "lote_embalado": require_once('fabrica.php'); buscar_lote_embalado('consulta_gerencia',$q[0]); break;
+        case "p_orden": require_once('fabrica.php'); buscar_p_orden_trabajo('consulta_gerencia',$q[0]); break;
+        case "orden_mecanizado": require_once('fabrica.php'); buscar_orden_mecanizado('consulta_gerencia',$q[0]); break;
         case "modificacion": modificacion(); break;
         case "procesa": procesa($action[1]); break;
         case "borrarmodelo": borra_modelo($action[1]); break;
         case "modificamodelo":modifica_modelo($action[1]); break;
-        default: print "No existe tal acción"; 
+        default: print "No existe tal acción: gerencia"; 
     }
 
 }
@@ -140,7 +159,7 @@ else
     if (!$chequeo['nom_operario'] or !$chequeo['apellido_operario'] or !$chequeo['fechai'] or !$chequeo['fechaf'] or !$chequeo['comp_fechas']){
             print "Dato de tipo NO VALIDO<br />";
             /*Decir cuales valores son incorrectos*/
-            var_dump($chequeo); 
+            //var_dump($chequeo); 
     }else{
         require_once('dbinfo.php');
         require_once('MDB2.php');
@@ -162,7 +181,7 @@ else
                       LEFT JOIN Impedancias ON Probatuti.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote)
                       RIGHT JOIN Operarios ON Probatuti.operador = Operarios.OperProba
                 WHERE Operarios.Nombre=".$mdb2->quote($a,'text')." AND Probatuti.Fecha>=".$mdb2->quote($fecha_inicio,'date')." And Probatuti.Fecha<=".$mdb2->quote($fecha_final,'date')." 
-                order by probatuti.fecha, Probatuti.serie";
+                order by Lotes.Modelo, Probatuti.serie";
 
 //                  WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')." order by embalado.serie";
 
@@ -175,10 +194,6 @@ else
         require_once 'include/pear/Sigma.php'; //insertamos la libreria
         $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
         $it->loadTemplatefile('probatuti_oper_fecha_gerencia.html', true, true); //seleccionamos la plantilla
-
-        // Enlaces Tabla Probatuti y num ot por lote
-        $it->setCurrentBlock("LINKS");
-        $it->parseCurrentBlock("LINKS");
 
         foreach($rows as $name) {
             // Assign data to the inner block
@@ -218,6 +233,520 @@ $dif = mktime(0,0,0,$mes1,$dia1, $año1) - mktime(0,0,0, $mes2,$dia2,$año2);
 return ($dif);
 }
 
+function proba_sector_fecha($q){
+/*
+    En $q viene todas las variables en orden:
+    $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final
+*/
 
+$nom_operario = $q[3];
+$sector = $q[2];
+$nomyapellido = explode (",",$nom_operario);
 
+$fechai = explode("/", $q[4]);
+$fechaf  = explode ("/", $q[5]);
+/* Chequear si nom_operario es alpha, si las fechas son validas y no se superponen. */
+
+$chequeo = array();
+//$chequeo['nom_operario'] = ctype_alpha(trim($nomyapellido[0])) ? true: false;
+//$chequeo['apellido_operario'] = ctype_alpha(trim($nomyapellido[1])) ? true: false;
+$chequeo['sector'] = ctype_alpha(trim($sector)) ? true: false;
+$chequeo['nom_operario'] = true;
+$chequeo['apellido_operario'] = true;
+/* 
+ funcionamiento: bool checkdate  ( int $month  , int $day  , int $year  ) 
+*/
+$chequeo['fechai'] = checkdate($fechai[1],$fechai[0],$fechai[2]);
+$chequeo['fechaf'] = checkdate($fechaf[1],$fechaf[0],$fechaf[2]);
+
+// es true si fecha_inicio es menor a la segunda
+// compara_fechas('yyyy/mm/dd','yyyy/mm/dd');
+if (compara_fechas($fechai[2]."/".$fechai[1]."/".$fechai[0], $fechaf[2]."/".$fechaf[1]."/".$fechaf[0]) > 0)
+    $chequeo['comp_fechas'] = false;
+else
+    $chequeo['comp_fechas'] = true;
+
+    if (!$chequeo['sector'] or !$chequeo['fechai'] or !$chequeo['fechaf'] or !$chequeo['comp_fechas']){
+            print "Dato de tipo NO VALIDO<br />";
+            /*Decir cuales valores son incorrectos*/
+            //var_dump($chequeo); 
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        /*
+        La fecha la espera en el orden mm/dd/yyyy
+        */
+        $fecha_inicio = $fechai[1]."/".$fechai[0]."/".$fechai[2];
+        $fecha_final = $fechaf[1]."/".$fechaf[0]."/".$fechaf[2];
+
+        $query = "SELECT Operarios.Nombre, Operarios.Apellido, Probatuti.Fecha as fecha, Lotes.Modelo as modelo, Probatuti.serie as serie
+                 FROM (((Probatuti LEFT JOIN Operaciones ON Probatuti.Area = Operaciones.IdOperacion) 
+                      LEFT JOIN Impedancias ON Probatuti.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote)
+                      RIGHT JOIN Operarios ON Probatuti.operador = Operarios.OperProba
+                WHERE Operaciones.Operacion=".$mdb2->quote($sector,'text')." AND Probatuti.Fecha>=".$mdb2->quote($fecha_inicio,'date')." And Probatuti.Fecha<=".$mdb2->quote($fecha_final,'date')." 
+                order by Lotes.Modelo, Probatuti.serie";
+
+//                  WHERE ID_Grupo=".$mdb2->quote($lote_embalado,'integer')." order by embalado.serie";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('probatuti_sector_fecha_gerencia.html', true, true); //seleccionamos la plantilla
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("PROBA_GERENCIA");
+                $it->setVariable("OPERADOR",$name['nombre']." ".$name['apellido']);
+                $it->setVariable("SECTOR", $sector);
+                $it->setVariable("MODELO", $name['modelo']);
+                $it->setVariable("N_SERIE", $name['serie']);
+                $it->setVariable("FECHA", $name['fecha']);
+                $it->parseCurrentBlock("PROBA_GERENCIA");
+            $it->parse("row_lemba");
+        }
+       $it->show(); 
+    }
+}
+
+function cant_embalada_modelo($q){
+/*
+    En $q viene todas las variables en orden:
+    $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final, marca, modelo
+*/
+$modelo = $q[7];
+$chequeo_mod = true; //harcoding hasta que evalue el modelo
+
+    if (!$chequeo_mod){
+            print "Dato de tipo NO VALIDO<br />";
+            /*Decir cuales valores son incorrectos*/
+            //var_dump($chequeo); 
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        /*
+        La fecha la espera en el orden mm/dd/yyyy
+        */
+        $query ="SELECT Modelos.Modelo, Marcas.Marca, ModeloMarcaEmb.CantEmb
+                 FROM Modelos INNER JOIN (ModeloMarcaEmb INNER JOIN Marcas ON ModeloMarcaEmb.ID_Marca = Marcas.Id) ON Modelos.Id = ModeloMarcaEmb.ID_Modelo
+                 where Modelos.Modelo = ".$mdb2->quote($modelo,'text')."
+                ORDER BY Modelos.Modelo";
+
+        $res =& $mdb2->queryAll($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('cantidad_embalado_modelo_gerencia.html', true, true); //seleccionamos la plantilla
+
+        $it->setCurrentBlock("LINKS");
+        $it->setVariable("MODOMARCA", "modelo");
+        $it->setVariable("MODELO", $modelo);
+        $it->parseCurrentBlock("LINKS");
+
+        foreach($res as $name) {
+            foreach ($name as $cell){
+            // Assign data to the inner block
+                $it->setCurrentBlock("CANT_EMB_MOD");
+                $it->setVariable("DATO", $cell);
+                $it->parseCurrentBlock("CANT_EMB_MOD");
+        }
+            $it->parse("row");
+        }
+       $it->show(); 
+    }
+}
+function cant_embalada_marca($q){
+/*
+    En $q viene todas las variables en orden:
+    $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final, marca, modelo
+*/
+$marca = $q[6];
+$chequeo['marca'] = ctype_alpha(trim($marca)) ? true: false;
+
+    if (!$chequeo['marca']){
+            print "Dato de tipo NO VALIDO<br />";
+            /*Decir cuales valores son incorrectos*/
+            //var_dump($chequeo); 
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        /*
+        La fecha la espera en el orden mm/dd/yyyy
+        */
+        $query ="SELECT Modelos.Modelo, Marcas.Marca, ModeloMarcaEmb.CantEmb
+                 FROM Modelos INNER JOIN (ModeloMarcaEmb INNER JOIN Marcas ON ModeloMarcaEmb.ID_Marca = Marcas.Id) ON Modelos.Id = ModeloMarcaEmb.ID_Modelo
+                 where Marcas.Marca = ".$mdb2->quote($marca,'text')."
+                ORDER BY Modelos.Modelo";
+
+        $res =& $mdb2->queryAll($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('cantidad_embalado_modelo_gerencia.html', true, true); //seleccionamos la plantilla
+
+        $it->setCurrentBlock("LINKS");
+        $it->setVariable("MODOMARCA", "marca");
+        $it->setVariable("MODELO", $marca);
+        $it->parseCurrentBlock("LINKS");
+
+        foreach($res as $name) {
+            foreach ($name as $cell){
+            // Assign data to the inner block
+                $it->setCurrentBlock("CANT_EMB_MOD");
+                $it->setVariable("DATO", $cell);
+                $it->parseCurrentBlock("CANT_EMB_MOD");
+        }
+            $it->parse("row");
+        }
+       $it->show(); 
+}
+}
+
+function embalada_fecha($q){
+/*
+    En $q viene todas las variables en orden:
+    $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final, marca, modelo
+*/
+
+$fechai = explode("/", $q[4]);
+$fechaf  = explode ("/", $q[5]);
+/* Chequear si nom_operario es alpha, si las fechas son validas y no se superponen. */
+
+$chequeo = array();
+/* 
+ funcionamiento: bool checkdate  ( int $month  , int $day  , int $year  ) 
+*/
+$chequeo['fechai'] = checkdate($fechai[1],$fechai[0],$fechai[2]);
+$chequeo['fechaf'] = checkdate($fechaf[1],$fechaf[0],$fechaf[2]);
+
+// es true si fecha_inicio es menor a la segunda
+// compara_fechas('yyyy/mm/dd','yyyy/mm/dd');
+if (compara_fechas($fechai[2]."/".$fechai[1]."/".$fechai[0], $fechaf[2]."/".$fechaf[1]."/".$fechaf[0]) > 0)
+    $chequeo['comp_fechas'] = false;
+else
+    $chequeo['comp_fechas'] = true;
+
+    if (!$chequeo['fechai'] or !$chequeo['fechaf'] or !$chequeo['comp_fechas']){
+            print "Dato de tipo NO VALIDO<br />";
+            /*Decir cuales valores son incorrectos*/
+            //var_dump($chequeo); 
+    }else{
+
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        /*
+        La fecha la espera en el orden mm/dd/yyyy
+        */
+        $fecha_inicio = $fechai[1]."/".$fechai[0]."/".$fechai[2];
+        $fecha_final = $fechaf[1]."/".$fechaf[0]."/".$fechaf[2];
+
+        $query = "SELECT embalado.serie as serie, lotes.modelo, embalado.id_grupo, embalado.fecha
+                  FROM (EMBALADO LEFT JOIN Impedancias ON EMBALADO.serie = Impedancias.Serie) LEFT JOIN Lotes ON Impedancias.Lote = Lotes.Lote
+                  WHERE embalado.fecha>=".$mdb2->quote($fecha_inicio,'date')." and embalado.fecha<=".$mdb2->quote($fecha_final,'date')."
+                  order by embalado.fecha, lotes.modelo";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('embalado_fecha_gerencia.html', true, true); //seleccionamos la plantilla
+
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("PROBA_GERENCIA");
+                $it->setVariable("N_SERIE", $name['serie']);
+                $it->setVariable("MODELO", $name['modelo']);
+                $it->setVariable("LOTEEMBALADO", $name['id_grupo']);
+                $it->setVariable("FECHA", $name['fecha']);
+                $it->parseCurrentBlock("PROBA_GERENCIA");
+            $it->parse("row_lemba");
+        }
+       $it->show(); 
+    }
+}
+
+function ensayos_fecha($q){
+/*
+    En $q viene todas las variables en orden:
+    $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final, marca, modelo
+*/
+
+$nom_operario = $q[3];
+$modelo = $q[7];
+$nomyapellido = explode (",",$nom_operario);
+
+$fechai = explode("/", $q[4]);
+$fechaf  = explode ("/", $q[5]);
+/* Chequear si nom_operario es alpha, si las fechas son validas y no se superponen. */
+
+$chequeo = array();
+//$chequeo['nom_operario'] = ctype_alpha(trim($nomyapellido[0])) ? true: false;
+//$chequeo['apellido_operario'] = ctype_alpha(trim($nomyapellido[1])) ? true: false;
+$chequeo['nom_operario'] = true;
+$chequeo['apellido_operario'] = true;
+/* 
+ funcionamiento: bool checkdate  ( int $month  , int $day  , int $year  ) 
+*/
+$chequeo['fechai'] = checkdate($fechai[1],$fechai[0],$fechai[2]);
+$chequeo['fechaf'] = checkdate($fechaf[1],$fechaf[0],$fechaf[2]);
+
+// es true si fecha_inicio es menor a la segunda
+// compara_fechas('yyyy/mm/dd','yyyy/mm/dd');
+if (compara_fechas($fechai[2]."/".$fechai[1]."/".$fechai[0], $fechaf[2]."/".$fechaf[1]."/".$fechaf[0]) > 0)
+    $chequeo['comp_fechas'] = false;
+else
+    $chequeo['comp_fechas'] = true;
+
+    if (!$chequeo['nom_operario'] or !$chequeo['apellido_operario'] or !$chequeo['fechai'] or !$chequeo['fechaf'] or !$chequeo['comp_fechas']){
+            print "Dato de tipo NO VALIDO<br />";
+            /*Decir cuales valores son incorrectos*/
+            //var_dump($chequeo); 
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        /*
+        La fecha la espera en el orden mm/dd/yyyy
+        */
+        $fecha_inicio = $fechai[1]."/".$fechai[0]."/".$fechai[2];
+        $fecha_final = $fechaf[1]."/".$fechaf[0]."/".$fechaf[2];
+        $a = trim($nomyapellido[1]);
+
+        $query = "SELECT ENSAYOS.MODELO, ENSAYOS.NRO_SERIE, ENSAYOS.RANG_NOM, ENSAYOS.RANGO_INI, ENSAYOS.FECHA
+                  FROM ENSAYOS
+                  WHERE ENSAYOS.FECHA>=".$mdb2->quote($fecha_inicio,'date')." And ENSAYOS.FECHA<=".$mdb2->quote($fecha_final,'date')."
+                  ORDER BY ENSAYOS.MODELO, ensayos.fecha";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('ensayo_fecha_gerencia.html', true, true); //seleccionamos la plantilla
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("PROBA_GERENCIA");
+                $it->setVariable("N_SERIE", $name['nro_serie']);
+                $it->setVariable("MODELO", $name['modelo']);
+                $it->setVariable("RANGO_NOM", $name['rang_nom']);
+                $it->setVariable("RANGO_INI", $name['rango_ini']);
+                $it->setVariable("FECHA", $name['fecha']);
+                $it->parseCurrentBlock("PROBA_GERENCIA");
+            $it->parse("row_lemba");
+        }
+       $it->show(); 
+    }
+}
+
+function ensayos_fecha_operador($q){
+/*
+    En $q viene todas las variables en orden:
+    $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final, marca, modelo
+*/
+
+$nom_operario = $q[3];
+$modelo = $q[7];
+$nomyapellido = explode (",",$nom_operario);
+
+$fechai = explode("/", $q[4]);
+$fechaf  = explode ("/", $q[5]);
+/* Chequear si nom_operario es alpha, si las fechas son validas y no se superponen. */
+
+$chequeo = array();
+//$chequeo['nom_operario'] = ctype_alpha(trim($nomyapellido[0])) ? true: false;
+//$chequeo['apellido_operario'] = ctype_alpha(trim($nomyapellido[1])) ? true: false;
+$chequeo['nom_operario'] = true;
+$chequeo['apellido_operario'] = true;
+/* 
+ funcionamiento: bool checkdate  ( int $month  , int $day  , int $year  ) 
+*/
+$chequeo['fechai'] = checkdate($fechai[1],$fechai[0],$fechai[2]);
+$chequeo['fechaf'] = checkdate($fechaf[1],$fechaf[0],$fechaf[2]);
+
+// es true si fecha_inicio es menor a la segunda
+// compara_fechas('yyyy/mm/dd','yyyy/mm/dd');
+if (compara_fechas($fechai[2]."/".$fechai[1]."/".$fechai[0], $fechaf[2]."/".$fechaf[1]."/".$fechaf[0]) > 0)
+    $chequeo['comp_fechas'] = false;
+else
+    $chequeo['comp_fechas'] = true;
+
+    if (!$chequeo['nom_operario'] or !$chequeo['apellido_operario'] or !$chequeo['fechai'] or !$chequeo['fechaf'] or !$chequeo['comp_fechas']){
+            print "Dato de tipo NO VALIDO<br />";
+            /*Decir cuales valores son incorrectos*/
+            //var_dump($chequeo); 
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        /*
+        La fecha la espera en el orden mm/dd/yyyy
+        */
+        $fecha_inicio = $fechai[1]."/".$fechai[0]."/".$fechai[2];
+        $fecha_final = $fechaf[1]."/".$fechaf[0]."/".$fechaf[2];
+        $a = trim($nomyapellido[1]);
+
+        $query = "SELECT ENSAYOS.MODELO, ENSAYOS.NRO_SERIE, ENSAYOS.RANG_NOM, ENSAYOS.RANGO_INI, ENSAYOS.FECHA
+                  FROM ENSAYOS
+                  WHERE ENSAYOS.FECHA>=".$mdb2->quote($fecha_inicio,'date')." And ENSAYOS.FECHA<=".$mdb2->quote($fecha_final,'date')." and ensayos.operador=".$mdb2->quote($a,'text')."
+                  ORDER BY ENSAYOS.MODELO, ensayos.fecha";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('ensayo_fecha_gerencia.html', true, true); //seleccionamos la plantilla
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("PROBA_GERENCIA");
+                $it->setVariable("N_SERIE", $name['nro_serie']);
+                $it->setVariable("MODELO", $name['modelo']);
+                $it->setVariable("RANGO_NOM", $name['rang_nom']);
+                $it->setVariable("RANGO_INI", $name['rango_ini']);
+                $it->setVariable("FECHA", $name['fecha']);
+                $it->parseCurrentBlock("PROBA_GERENCIA");
+            $it->parse("row_lemba");
+        }
+       $it->show(); 
+    }
+}
+
+function ensayos_fecha_modelo($q){
+/*
+    En $q viene todas las variables en orden:
+    $q = serie, ot, sector, nom_operario, fecha_inicio, fecha_final, marca, modelo
+*/
+
+$nom_operario = $q[3];
+$modelo = $q[7];
+$nomyapellido = explode (",",$nom_operario);
+
+$fechai = explode("/", $q[4]);
+$fechaf  = explode ("/", $q[5]);
+/* Chequear si nom_operario es alpha, si las fechas son validas y no se superponen. */
+
+$chequeo = array();
+//$chequeo['nom_operario'] = ctype_alpha(trim($nomyapellido[0])) ? true: false;
+//$chequeo['apellido_operario'] = ctype_alpha(trim($nomyapellido[1])) ? true: false;
+$chequeo['nom_operario'] = true;
+$chequeo['apellido_operario'] = true;
+/* 
+ funcionamiento: bool checkdate  ( int $month  , int $day  , int $year  ) 
+*/
+$chequeo['fechai'] = checkdate($fechai[1],$fechai[0],$fechai[2]);
+$chequeo['fechaf'] = checkdate($fechaf[1],$fechaf[0],$fechaf[2]);
+
+// es true si fecha_inicio es menor a la segunda
+// compara_fechas('yyyy/mm/dd','yyyy/mm/dd');
+if (compara_fechas($fechai[2]."/".$fechai[1]."/".$fechai[0], $fechaf[2]."/".$fechaf[1]."/".$fechaf[0]) > 0)
+    $chequeo['comp_fechas'] = false;
+else
+    $chequeo['comp_fechas'] = true;
+
+    if (!$chequeo['nom_operario'] or !$chequeo['apellido_operario'] or !$chequeo['fechai'] or !$chequeo['fechaf'] or !$chequeo['comp_fechas']){
+            print "Dato de tipo NO VALIDO<br />";
+            /*Decir cuales valores son incorrectos*/
+            //var_dump($chequeo); 
+    }else{
+        require_once('dbinfo.php');
+        require_once('MDB2.php');
+
+        // Conecto a DB Flexar
+        $mdb2 =& MDB2::singleton($dsn, $options);
+        if (PEAR::isError($mdb2)) {
+                 die($mdb2->getMessage());
+        }
+        /*
+        La fecha la espera en el orden mm/dd/yyyy
+        */
+        $fecha_inicio = $fechai[1]."/".$fechai[0]."/".$fechai[2];
+        $fecha_final = $fechaf[1]."/".$fechaf[0]."/".$fechaf[2];
+        $a = trim($nomyapellido[1]);
+
+        $query = "SELECT ENSAYOS.MODELO, ENSAYOS.NRO_SERIE, ENSAYOS.RANG_NOM, ENSAYOS.RANGO_INI, ENSAYOS.FECHA
+                  FROM ENSAYOS
+                  WHERE ENSAYOS.FECHA>=".$mdb2->quote($fecha_inicio,'date')." And ENSAYOS.FECHA<=".$mdb2->quote($fecha_final,'date')." and ensayos.modelo=".$mdb2->quote($modelo,'text')."
+                  ORDER BY ENSAYOS.MODELO, ensayos.fecha";
+
+        $res =& $mdb2->query($query);
+
+        if (PEAR::isError($res)) {
+                    die($res->getMessage());
+        }
+        $rows = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+        require_once 'include/pear/Sigma.php'; //insertamos la libreria
+        $it = new HTML_Template_Sigma('themes'); //declaramos el objeto
+        $it->loadTemplatefile('ensayo_fecha_gerencia.html', true, true); //seleccionamos la plantilla
+
+        foreach($rows as $name) {
+            // Assign data to the inner block
+                $it->setCurrentBlock("PROBA_GERENCIA");
+                $it->setVariable("N_SERIE", $name['nro_serie']);
+                $it->setVariable("MODELO", $name['modelo']);
+                $it->setVariable("RANGO_NOM", $name['rang_nom']);
+                $it->setVariable("RANGO_INI", $name['rango_ini']);
+                $it->setVariable("FECHA", $name['fecha']);
+                $it->parseCurrentBlock("PROBA_GERENCIA");
+            $it->parse("row_lemba");
+        }
+       $it->show(); 
+    }
+}
 ?>
