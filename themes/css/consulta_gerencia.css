@@ -32,9 +32,10 @@ strong, b {
         }
 p {
         font-size: 11px;
-        line-height: 22px;
-        margin-top: 20px;
+        line-height: 18px;
+        margin-top: 15px;
         margin-bottom: 10px; 
+        text-align: center;
         }
 
 /* weird ie5win bug: all line-height to font-size ratios must agree or box gets pushed around. UPDATE: this has turned out to be very rare. my current recommendation is IGNORE this warning. at the moment i'm leaving it in only in case the issue turns up again. possibly the original bug in march 2001 was caused by an unusual combination of factors, although this solved it at the time.*/
@@ -107,14 +108,13 @@ img {
         margin-left: auto;  /* opera does not like 'margin:20px auto' */
         background: #ffd;
 /*        border: 5px solid #ccc;*/
-        text-align:left; /* part 2 of 2 centering hack */
-        width: 795px; /* ie5win fudge begins */
+        text-align:center; /* part 2 of 2 centering hack */
+        width: 895px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
-        width: 795px;
         }
 html>body #content {
-        width: 795px; /* ie5win fudge ends */
+        width: 895px; /* ie5win fudge ends */
         }
 #header {
         padding-left: 10px;
@@ -190,23 +190,24 @@ td{
 
 table.fabrica{ 
     background-color: #fafafa;
-    border: 0px #000000 solid;
-    border-collapse: collapse;
-    border-spacing: 0px; 
+    border: 1px #000000 solid;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-spacing: 0px;
 }
 
 
 td.fabricaTitulo{ 
     background-color: #99CCCC;
-    border: 1px #000000 solid;
+    border: 0px #000000 solid;
     font-family: Verdana;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 10px;
     color: #000; 
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 0px;
+    padding-bottom: 2px;
     padding-left: 2px;
-    padding-right: 5px; 
+    padding-right: 2px; 
 }
 
 
@@ -214,13 +215,13 @@ td.fabricatd{
     text-align: center;
     font-family: Arial;
 /*    font-weight: bold; */
-    font-size: 12px;
+    font-size: 11px;
     color: #000;
     background-color: #fafafa;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     padding-left: 2px;
-    padding-right: 5px; 
+    padding-right: 2px; 
 }
 
 /* barra de navegaacion */
@@ -243,3 +244,17 @@ a.nav:hover {
     color:#fff; 
     background:#000;
 }
+.colmask {
+        clear:both;
+/*        float:center;*/
+        width:100%;         /* width of whole page */
+        overflow:hidden;    /* This chops off any overhanging divs */
+    }
+.col1 {
+        float:left;
+        width:380px;
+    }
+.col2 {
+        float:right;
+        width:500px;
+    }

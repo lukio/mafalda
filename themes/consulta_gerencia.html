@@ -23,11 +23,14 @@
     $('#fecha_inicio_id').datepicker({dateFormat: 'dd/mm/yy'}); 
     $('#fecha_final_id').datepicker({dateFormat: 'dd/mm/yy'});
 
+    /* Se carga la primera vez */
+    valor_sector = $("#sector_id").val();
+    $.get("gerencia/search.php", { sector: valor_sector }, function(data){ $("#option_operario").html(data);});
+    /*Se carga cada vez que el select de sector tiene un cambio*/
    $('#sector_id').change(function() {
         valor_sector = $("#sector_id").val();
         $.get("gerencia/search.php", { sector: valor_sector }, function(data){ $("#option_operario").html(data);});
       });
-
   });
 
 
@@ -36,6 +39,26 @@ function clear_textbox()
     document.getElementById('celda_id').value = ""
     document.getElementById('lote_embalado_id').value = ""
     document.getElementById('lote_produccion_id').value = ""
+}
+
+function ajax_dentro(modulo, action, valor){
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?q="+valor
+//evaluar si esta definido action. 
+url=url+"&modulo="+modulo
+url=url+"&action="+action
+//
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged_2
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
 }
 
 function ajax_index(){
@@ -73,6 +96,14 @@ function stateChanged()
 if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
  {
  document.getElementById("resultado_div").innerHTML=xmlHttp.responseText
+ }
+}
+
+function stateChanged_2()
+{
+if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+ {
+ document.getElementById("info").innerHTML=xmlHttp.responseText
  }
 }
 

@@ -37,7 +37,7 @@ xmlHttp.open("GET",url,true)
 xmlHttp.send(null)
 }
 
-function ajax_dentro(action, valor1){
+function ajax_dentro(modulo, action, valor1){
 
 xmlHttp=GetXmlHttpObject()
 if (xmlHttp==null)
@@ -49,6 +49,7 @@ var url="index.php"
 url=url+"?q="+valor1
 //evaluar si esta definido action. 
 url=url+"&action="+action
+url=url+"&modulo="+modulo
 //
 url=url+"&sid="+Math.random()
 xmlHttp.onreadystatechange=stateChanged
