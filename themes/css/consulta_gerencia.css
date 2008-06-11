@@ -119,14 +119,29 @@ html>body #content {
 #header {
         padding-left: 10px;
         padding-right: 10px;
-        margin-top: 20px;
-        margin-bottom: 10px;
+        padding-top: 10px;
         margin-right: auto;
         margin-left: auto;  /* opera does not like 'margin:20px auto' */
         background: #366;
 /*        border: 5px green solid; */
         text-align:center; /* part 2 of 2 centering hack */
-        height:230px;
+        height:220px;
+        width: 540px; /* ie5win fudge begins */
+        voice-family: "\"}\"";
+        voice-family:inherit;
+        width: 540px;
+        }
+#preheader {
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 8px;
+        margin-bottom: 5px;
+        margin-right: auto;
+        margin-left: auto;  /* opera does not like 'margin:20px auto' */
+        background: #356;
+/*        border: 5px green solid; */
+        text-align:center; /* part 2 of 2 centering hack */
+        height:50px;
         width: 540px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
@@ -226,18 +241,15 @@ td.fabricatd{
 
 /* barra de navegaacion */
 a.nav, a.nav:link, a.nav:visited {
-    width:140px; 
-    height:25px; 
+    width:130px; 
+    height:15px; 
     background:#221; 
     border:1px solid #000; 
     margin-top:0px; 
-    text-align:center; 
     text-decoration:none; 
     font-family:verdana, arial, sans-serif; 
-    font-size:12px; 
+    font-size:10px; 
     color:#ddd; 
-    line-height:25px; 
-    overflow:hidden; 
     float:left;
 }
 a.nav:hover {
