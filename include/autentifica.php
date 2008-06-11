@@ -82,7 +82,7 @@ function autentifica(){
     }else{
         $_SESSION['user_autenticado'] = 1;
         $_SESSION['IP']=IP_CLIENTE;
-        header("Location: ../index.php");
+        header("Location: ../index.php?modulo=consulta_gerencia");
     }
 
 }

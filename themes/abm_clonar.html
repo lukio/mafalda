@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 <head><title>Mafalda - Gerencia Consulta Flexar</title>
-<link rel="stylesheet" type="text/css" media="all" href="themes/css/gerencia.css" />
+<link rel="stylesheet" type="text/css" media="all" href="themes/css/consulta_planos.css" />
 
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="MSSmartTagsPreventParsing" content="TRUE" />
@@ -91,9 +91,18 @@ return xmlHttp;
 
 </head>
 <body>
-<div id="header">
+<div id="preheader">
 <div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
-<div align=right><h6><a href="#" onclick="ajax_index('abm_modelos', 'alta')" id=>[alta]</a> <a href="#" onclick="ajax_index('abm_modelos', 'baja')" id=>[baja]</a> <a href="#" onclick="ajax_index('abm_modelos', 'modificacion')" id=>[modificacion]</a> <a href="#" onclick="ajax_index('abm_modelos', 'clonar')" id=>[clonar]</a></h6></div>
+    <a class="nav" href="index.php?modulo=consulta_gerencia" title="Consulta Gerencia" id="consulta_gerencia">Consulta Gerencia</a>
+    <a class="nav" href="index.php?modulo=abm_modelos&action=clonar" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
+    <a class="nav" href="index.php?modulo=consulta_planos" title="Buscar Planos" id="buscar_panos">Buscar Planos</a>
+</div>
+<div id="header">
+<div align=right>
+<a class="nav1" href="#" onclick="ajax_index('abm_modelos', 'alta')" id="alta" title="alta de modelos">alta de modelo</a>
+<a class="nav1" href="#" onclick="ajax_index('abm_modelos', 'baja')" id="baja" title="baja de modelos">baja de modelo</a> 
+<a class="nav1" href="#" onclick="ajax_index('abm_modelos', 'modificacion')" id="modificacion" title="modificacion de modelos">modificacion</a> 
+<a class="nav1" href="#" onclick="ajax_index('abm_modelos', 'clonar')" id="clonar" title="clonar modelo">clonar modelo</a></div>
 </div>
 
 <div id="content">

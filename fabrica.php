@@ -214,7 +214,7 @@ function buscar_lote_produccion($modulo, $lote_produccion){
             exit();
         }
         // devuelve varias filas
-        $query = "SELECT Impedancias.Serie AS NroSerie, round(Impedancias.ImpSG,3), ROUND(Impedancias.ImpRB,3), round(Impedancias.ImpRs,3) 
+        $query = "SELECT Impedancias.Serie AS NroSerie, round(Impedancias.ImpSG,3) as impsg, ROUND(Impedancias.ImpRB,3) as imprb, round(Impedancias.ImpRs,3) as imprs 
                   FROM Impedancias
                   WHERE Impedancias.Lote=? order by impedancias.serie";
 
@@ -227,7 +227,7 @@ function buscar_lote_produccion($modulo, $lote_produccion){
              die($mdb2->getMessage());
          }
         $statement->Free();
-        $row_impedancias = $result_impedancias->fetchAll();
+        $row_impedancias = $result_impedancias->fetchAll(MDB2_FETCHMODE_ASSOC);
 
         $mdb2->disconnect();       
         
@@ -252,11 +252,11 @@ function buscar_lote_produccion($modulo, $lote_produccion){
         // Datos de los numero de serie de ese Lote
         foreach($row_impedancias as $name) {
             // Assign data to the inner block
-            foreach($name as $cell) {
-                $it->setCurrentBlock("IMPE");
-                $it->setVariable("DATO", utf8_encode($cell));
-                $it->parseCurrentBlock("IMPE");
-            }
+                $it->setVariable("N_SERIE", $name['nroserie']);
+                $it->setVariable("MODULO", $modulo);
+                $it->setVariable("IMPSG", $name['impsg']);
+                $it->setVariable("IMPRB", $name['imprb']);
+                $it->setVariable("IMPRS", $name['imprs']);
             $it->parse("row_imp");
         }
             $it->show();
@@ -501,6 +501,7 @@ function buscar_p_orden_trabajo($modulo, $nroorden){
             // Assign data to the inner block
                 $it->setCurrentBlock("OT_L");
                 $it->setVariable("LOTE", $name['lote']);
+                $it->setVariable("MODULO", $modulo);
                 $it->setVariable("MODELO", $name['modelo']);
                 $it->setVariable("CANTIDAD", $name['cantidad']);
                 $it->parseCurrentBlock("OT_L");

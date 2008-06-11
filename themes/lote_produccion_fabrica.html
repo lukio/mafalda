@@ -12,14 +12,15 @@
  </table> 
 <br />
  <table class="fabrica"> 
-<tr><td class="fabricatd">Numeros de serie en lote produccion</td></tr>
+<tr><td class="fabricatd">Nº serie lote prod</td></tr>
     <tr><td class="fabricaTitulo">numero serie</td><td class="fabricaTitulo">imp-sg</td><td class="fabricaTitulo">imp-rb</td><td class="fabricaTitulo">imp-rs</td></tr>
 <!-- BEGIN row_imp --> 
 <tr>
 <!-- BEGIN IMPE -->  
-   <td class="fabricatd">
-    {DATO}
-   </td>
+   <td class="fabricatd"><a href="#" onclick="ajax_dentro('{MODULO}', 'serie',{N_SERIE})">{N_SERIE}</a></td>
+   <td class="fabricatd">{IMPSG}</td> 
+   <td class="fabricatd">{IMPRB}</td> 
+   <td class="fabricatd">{IMPRS}</td> 
 <!-- END IMPE -->  
 </tr>
 <!-- END row_imp --> 

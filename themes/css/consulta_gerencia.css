@@ -109,12 +109,12 @@ img {
         background: #ffd;
 /*        border: 5px solid #ccc;*/
         text-align:center; /* part 2 of 2 centering hack */
-        width: 895px; /* ie5win fudge begins */
+        width: 950px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
         }
 html>body #content {
-        width: 895px; /* ie5win fudge ends */
+        width: 950px; /* ie5win fudge ends */
         }
 #header {
         padding-left: 10px;
@@ -125,7 +125,7 @@ html>body #content {
         background: #366;
 /*        border: 5px green solid; */
         text-align:center; /* part 2 of 2 centering hack */
-        height:220px;
+        height:195px;
         width: 540px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
@@ -134,18 +134,15 @@ html>body #content {
 #preheader {
         padding-left: 10px;
         padding-right: 10px;
-        margin-top: 8px;
+        margin-top: 5px;
         margin-bottom: 5px;
         margin-right: auto;
         margin-left: auto;  /* opera does not like 'margin:20px auto' */
         background: #356;
-/*        border: 5px green solid; */
-        text-align:center; /* part 2 of 2 centering hack */
-        height:50px;
+        height:45px;
         width: 540px; /* ie5win fudge begins */
         voice-family: "\"}\"";
         voice-family:inherit;
-        width: 540px;
         }
 #footer {
         padding: 0px;
@@ -197,6 +194,7 @@ select {
 table.header {
         border: 1px #000000 solid;
         border-spacing: 5px;
+        margin-bottom: 8px;
 }
 td{
     padding-right: 5px;
@@ -264,7 +262,7 @@ a.nav:hover {
     }
 .col1 {
         float:left;
-        width:380px;
+        width:400px;
     }
 .col2 {
         float:right;
