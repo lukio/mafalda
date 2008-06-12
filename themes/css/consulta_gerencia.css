@@ -1,3 +1,14 @@
+html {
+        margin: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 0px;
+        font-family: arial, helvetica, sans-serif;
+        color: #ccc;
+        background-color: #333;
+        text-align: right;
+        font-size: 11px;
+/* part 1 of 2 centering hack */
+
+}
 body {
         margin: 0px 0px 0px 0px;
         padding: 0px 0px 0px 0px;
@@ -36,10 +47,11 @@ p {
         line-height: 18px;
         margin-top: 15px;
         margin-bottom: 10px; 
-        text-align: center;
+        text-align: left;
         }
 
-/* weird ie5win bug: all line-height to font-size ratios must agree or box gets pushed around. UPDATE: this has turned out to be very rare. my current recommendation is IGNORE this warning. at the moment i'm leaving it in only in case the issue turns up again. possibly the original bug in march 2001 was caused by an unusual combination of factors, although this solved it at the time.*/
+/* weird ie5win bug: all line-height to font-size ratios must agree or box gets pushed around. UPDATE: this has turned out to be very rare. my current recommendation is IGNORE this warning.
+ at the moment i'm leaving it in only in case the issue turns up again. possibly the original bug in march 2001 was caused by an unusual combination of factors, although this solved it at the time.*/
 
 h1 {
         font-size: 24px;
@@ -228,7 +240,7 @@ td.fabricatd{
     text-align: center;
     font-family: Arial;
 /*    font-weight: bold; */
-    font-size: 12px;
+    font-size: 11px;
     color: #000;
     background-color: #fafafa;
     padding-top: 2px;
@@ -291,21 +303,3 @@ a.nav:hover {
         width:46%;              /* right column content width (column width minus left and right padding) */
         left:56%;               /* (right column width) plus (left column left and right padding) plus (right column left padding) */
     }
-
-
-
-
-
-
-
-
-/*
-.col1 {
-        float:left;
-        width:400px;
-    }
-.col2 {
-        float:right;
-        width:500px;
-    }
-*/
