@@ -12,8 +12,8 @@
 <meta name="robots" content="all" />
 <meta name="author" content="Lucho Rossi" />
 <meta name="description" content="Consultar Flexar" />
-<script src="include/jquery-1.2.6.js"></script>
-<script  src="include/ui.datepicker.js"></script>
+<script type="text/javascript" src="include/jquery-1.2.6.js"></script>
+<script type="text/javascript" src="include/ui.datepicker.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -137,14 +137,13 @@ return xmlHttp;
 <div id="preheader">
 <div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
     <a class="nav" href="index.php?modulo=consulta_gerencia" title="Consulta Gerencia" id="consulta_gerencia">Consulta Gerencia</a>
-    <a class="nav" href="index.php?modulo=abm_modelos&action=clonar" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
+    <a class="nav" href="index.php?modulo=abm_modelos&amp;action=clonar" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
     <a class="nav" href="index.php?modulo=consulta_planos" title="Buscar Planos" id="buscar_panos">Buscar Planos</a>
-</div>
 </div>
 <div id="header">
 <div align="left">
  <form action="javascript:ajax_index();" id="form_gerencia_id">
- <table class="header">
+ <table class="header" summary="">
  <tbody>
      <tr>
     <!-- BEGIN input_der -->
@@ -162,7 +161,7 @@ return xmlHttp;
     <td>
       <div id="option_operario">
       <select name="nombre_operador" id="nombre_operario_id" tabindex="3">
-       <option value="-99">  </option>
+       <option value="x">x</option>
       </select> 
     </div>
     </td>
@@ -182,10 +181,9 @@ return xmlHttp;
    </select>
     </td>
    </tr>
-   </tr>
 </tbody>
 </table>
-<table class="header">
+<table class="header" summary="">
 <tbody>
     <tr>
     <!-- BEGIN FECHAS -->
@@ -194,13 +192,13 @@ return xmlHttp;
     </tr>
 </tbody>
 </table>
-<table class="header">
+<table class="header" summary="">
 <tbody>
     <tr>
     <td><h6>Tipo de Busqueda: </h6></td>
     <td><select name="tipo_busqueda" id="tipo_busqueda_id" tabindex="5" >
     <!-- BEGIN BUSQUEDA -->
-    <h6>{DATO}</h6><option value="{NAME_DATO}">{NAME_DATO}</option>
+    <option value="{NAME_DATO}">{NAME_DATO}</option>
     <!-- END BUSQUEDA -->
     </select>
     </td>
@@ -216,9 +214,8 @@ return xmlHttp;
 
 <div id="content">
 <p>
-
-<span id="resultado_div"></span>
-<span id="resultado_ot"></span>
+<div id="resultado_div"></div>
+<div id="resultado_ot"></div>
 </p>
 
 </div>

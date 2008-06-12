@@ -1,5 +1,12 @@
 Mafalda Changelog
 
+2008/06/11: Version 0.9.3
+============================
+- Cambio vision de panel consulta gerencia
+- Agregadas todas las consultas en archivo consultas_leo.txt al panel de consulta gerencia
+- ABM modelos se tuvo que reordenar asi que no esta funcionando
+- Exportar a csv de las consultas gerencia no funciona
+
 2008/05/26: Version 0.9.2
 ============================
 - Exportar a csv en cada consulta (configurado el csv con separado por "," sin comilla doble y con decimal "."

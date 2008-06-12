@@ -1,23 +1,24 @@
-
-<div class=colmask>
-<div class=col1>
-<div align=right><h5><a href="exportar.php?f=buscar_ot_gerencia_fecha_csv">[Exportar]</a></h5></div>
-<table class="fabrica"> 
-<tr><td class="fabricaTitulo">sector</td><td class="fabricaTitulo">modelo</td><td class="fabricaTitulo">n_serie</td><td class="fabricaTitulo">lote_pro</td><td class="fabricaTitulo">fecha_lote</td><td class="fabricaTitulo">fecha_repa</td><td class="fabricaTitulo">descrip_diagno</td></tr>
-<!-- BEGIN row_lemba --> 
-  <tr>
-<!-- BEGIN REPA_GERENCIA -->
-   <td class="fabricatd">{SECTOR}</td>
-   <td class="fabricatd"><a href="#" onclick="ajax_dentro('consulta_gerencia','modelo',{MODELO})">{MODELO}</a></td>
-   <td class="fabricatd"><a href="#" onclick="ajax_dentro('consulta_gerencia','serie',{NRO_SERIE})">{NRO_SERIE}</a></td>
-   <td class="fabricatd"><a href="#" onclick="ajax_dentro('consulta_gerencia','lote_produccion',{LOTEPRO})">{LOTEPRO}</a></td>
-   <td class="fabricatd">{FECHALOTE}</td>
-   <td class="fabricatd">{FECHAREPA}</td>
-   <td class="fabricatd">{DESCRIPCION}</td>
-<!-- END REPA_GERENCIA -->
-  </tr>
-<!-- END row_lemba --> 
- </table>
-</div>
-<div class=col2 id="info">Informacion</div>
+<div class="colmask doublepage">
+    <div class="colleft">
+        <div class="col1">
+            <h5><a href="exportar.php?f=buscar_ot_gerencia_fecha_csv">[Exportar]</a></h5>
+            <table class="fabrica"> 
+            <tr><td class="fabricaTitulo">sector</td><td class="fabricaTitulo">modelo</td><td class="fabricaTitulo">n_serie</td><td class="fabricaTitulo">lote_pro</td><td class="fabricaTitulo">fecha_lote</td><td class="fabricaTitulo">fecha_repa</td><td class="fabricaTitulo">descrip_diagno</td></tr>
+            <!-- BEGIN row_lemba --> 
+              <tr>
+            <!-- BEGIN REPA_GERENCIA -->
+               <td class="fabricatd">{SECTOR}</td>
+               <td class="fabricatd"><a href="#" onclick="ajax_dentro('consulta_gerencia','modelo',{MODELO})">{MODELO}</a></td>
+               <td class="fabricatd"><a href="#" onclick="ajax_dentro('consulta_gerencia','serie',{NRO_SERIE})">{NRO_SERIE}</a></td>
+               <td class="fabricatd"><a href="#" onclick="ajax_dentro('consulta_gerencia','lote_produccion',{LOTEPRO})">{LOTEPRO}</a></td>
+               <td class="fabricatd">{FECHALOTE}</td>
+               <td class="fabricatd">{FECHAREPA}</td>
+               <td class="fabricatd">{DESCRIPCION}</td>
+            <!-- END REPA_GERENCIA -->
+              </tr>
+            <!-- END row_lemba --> 
+             </table>
+        </div>
+        <div class="col2" id="info">Informacion</div>
+    </div>
 </div>
