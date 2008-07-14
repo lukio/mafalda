@@ -29,7 +29,9 @@ if (PEAR::isError($res)) {
 }
 echo "<select name='nombre_operador' id='nombre_operario_id' tabindex='3'>";
 foreach ($operarios as $name) {
-		echo "<option value=\"".utf8_encode($name['apellido']).", ".utf8_encode($name['nombre'])."\">".utf8_encode($name['apellido']).", ".utf8_encode($name['nombre'])."</option>";
+//		echo "<option value=\"".utf8_encode($name['apellido']).", ".utf8_encode($name['nombre'])."\">".utf8_encode($name['apellido']).", ".utf8_encode($name['nombre'])."</option>";
+		echo "<option value=\"".$name['apellido'].", ".$name['nombre']."\">".$name['apellido'].", ".$name['nombre']."</option>";
+//		echo "<option value=\"".htmlentities($name['apellido']).", ".htmlentities($name['nombre'])."\">".htmlentities($name['apellido']).", ".htmlentities($name['nombre'])."</option>";
 	}
 
 echo "</select>";

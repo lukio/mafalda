@@ -51,8 +51,8 @@ function pagina_consulta_planos (){
                        "Plano Buscado: ", "text", "plano_buscado", "10", "plano_buscado_id", "plano_buscado",
                     );
     $data_busqueda = array();
-    $directorio = "/home/lukio/tmp/";
-    //$directorio = "\\\\mailserver\\Planos\\";
+    //$directorio = "/home/lukio/tmp/";
+    $directorio = "\\\\mailserver\\Planos\\";
     $listado_archivos = scandir($directorio);
     foreach ($listado_archivos as $folder){
         if (is_dir($directorio.$folder) and ($folder != "." and $folder != ".."))
@@ -78,8 +78,8 @@ function cual_action($action, $q){
 }
 function plano_buscado($q){
     $string_y_subfolder = explode(":",$q);
-    $directorio = "/home/lukio/tmp/".$string_y_subfolder[1]."/";
-    //$directorio = "\\\\mailserver\\Planos\\".$string_y_subfolder[1]."\\";
+    //$directorio = "/home/lukio/tmp/".$string_y_subfolder[1]."/";
+    $directorio = "\\\\mailserver\\Planos\\".$string_y_subfolder[1]."\\";
     $listado_archivos = scandir($directorio);
     foreach ($listado_archivos as $file)
         //echo "<p>".similar_text($file,$q)."<p />";

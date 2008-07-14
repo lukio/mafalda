@@ -9,7 +9,7 @@ function mostrar_select($data,$bloque, $it){
     for($i=0 ; $i < count($data);) {
         $it->setCurrentBlock($bloque); //buscamos bloque
 
-        $it->setVariable('NAME_DATO',$data[$i++]);
+        $it->setVariable('NAME_DATO',utf8_encode($data[$i++]));
 
         $it->parseCurrentBlock($bloque); //generamos la parte del bloque analizado
     }
@@ -97,6 +97,9 @@ function pagina_consulta_gerencia ($action){
 }
 
 function cual_action($action, $q){
+if (!isset($_SESSION['user_autenticado'])) {
+    die("Usuario no autenticado");
+}
 /*
     En $action viene el tipo de busqueda
     El array tipo de busqueda se completa en $data_busqueda en la funcion pagina_consulta_gerencia()
@@ -796,6 +799,7 @@ else
     }else{
         require_once('dbinfo.php');
         require_once('MDB2.php');
+//header("Content-Type: text/html; charset=iso-8859-1");
 
         // Conecto a DB Flexar
         $mdb2 =& MDB2::singleton($dsn, $options);
@@ -808,7 +812,10 @@ else
         $fecha_inicio = $fechai[1]."/".$fechai[0]."/".$fechai[2];
         $fecha_final = $fechaf[1]."/".$fechaf[0]."/".$fechaf[2];
         $a = trim($nomyapellido[1]);
+
+        print "operario: sindecode: ".$a;
         $nombre = utf8_decode($a);
+        print "operario: decode: ".$nombre;
 
         $query = "SELECT Operarios.Apellido, Operarios.Nombre, operaciones.operacion, OrdenesDeTrabajo.FechaInicio, OrdenesDeTrabajo.NroOrden, DatosOrden.Lote,
                          Lotes.Modelo, DatosOrden.Cantidad

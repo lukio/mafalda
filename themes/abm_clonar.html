@@ -92,40 +92,35 @@ return xmlHttp;
 </head>
 <body>
 <div id="preheader">
-<div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
+<h6><a href="index.php?action=logout">[logout]</a></h6>
     <a class="nav" href="index.php?modulo=consulta_gerencia" title="Consulta Gerencia" id="consulta_gerencia">Consulta Gerencia</a>
-    <a class="nav" href="index.php?modulo=abm_modelos&action=clonar" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
+    <a class="nav" href="index.php?modulo=abm_modelos&amp;action=clonar" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
     <a class="nav" href="index.php?modulo=consulta_planos" title="Buscar Planos" id="buscar_panos">Buscar Planos</a>
 </div>
 <div id="header">
-<div align=right>
 <a class="nav1" href="#" onclick="ajax_index('abm_modelos', 'alta')" id="alta" title="alta de modelos">alta de modelo</a>
 <a class="nav1" href="#" onclick="ajax_index('abm_modelos', 'baja')" id="baja" title="baja de modelos">baja de modelo</a> 
 <a class="nav1" href="#" onclick="ajax_index('abm_modelos', 'modificacion')" id="modificacion" title="modificacion de modelos">modificacion</a> 
-<a class="nav1" href="#" onclick="ajax_index('abm_modelos', 'clonar')" id="clonar" title="clonar modelo">clonar modelo</a></div>
+<a class="nav1" href="#" onclick="ajax_index('abm_modelos', 'clonar')" id="clonar" title="clonar modelo">clonar modelo</a>
 </div>
 
 <div id="content">
-<pre>
-    <form action="#" name="form_fabrica" id="form_fabrica_id">
-    <div align="center">
-    <table>
+    <form action="#" name="form_fabrica">
+    <table summary="">
         <tbody>
             <tr>
                 <td>
-                <select name="bajamodelo" id="bajamodelo_id">
+                <select id="bajamodelo_id">
                     <!-- BEGIN MODELOS -->
-                    <option>{MODELO}</option>
+                    <option value="{MODELO}">{MODELO}</option>
                     <!-- END MODELOS -->
                 </select>
                 </td>
                 <td><a href="#" onclick="ajax_abm('abm_modelos','clonarmodelo:'+document.getElementById('bajamodelo_id').value)">[Clonar Modelo]</a> </td> 
-            <tr>
+            </tr>
         </tbody>
     </table>
-    </div>
     </form>
-</pre>
 </div>
 <div id="footer">
         <!-- INCLUDE footer.inc -->

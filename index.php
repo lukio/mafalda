@@ -115,7 +115,7 @@ if(!isset($_SESSION['user_autenticado']) and $_SESSION['IP']!=IP_CLIENTE){
                 exit();
             }
             else
-                die("action no definida");
+                die("action no definida: no autentificado");
     }
 
 }else{
