@@ -1,0 +1,30 @@
+
+<table class="fabrica"> 
+<tr><td class="fabricatd">OT's</td></tr>
+    <tr><td class="fabricaTitulo">nombre</td><td class="fabricaTitulo">apellido</td><td class="fabricaTitulo">area</td><td class="fabricaTitulo">fecha inicio</td><td class="fabricaTitulo">fecha term</td><td class="fabricaTitulo">Termino</td></tr>
+<!-- BEGIN row_ot --> 
+<tr>
+<!-- BEGIN OTL -->  
+    <td class="fabricatd">{NOMBRE}</td>
+    <td class="fabricatd">{APELLIDO}</td>
+    <td class="fabricatd">{AREA}</td>
+    <td class="fabricatd">{FECHA_INI}</td>
+    <td class="fabricatd">{FECHA_FIN}</td>
+    <td class="fabricatd">{TERMINO}</td>
+<!-- END OTL -->  
+</tr>
+<!-- END row_ot --> 
+ </table> 
+<table class="fabrica"> 
+<tr><td class="fabricatd">OT's Lotes</td></tr>
+    <tr><td class="fabricaTitulo">lotes</td><td class="fabricaTitulo">modelo del lote</td><td class="fabricaTitulo">cantidad</td></tr>
+<!-- BEGIN row_ot_l --> 
+<tr>
+<!-- BEGIN OT_L -->  
+    <td class="fabricatd"><a href="#" onclick="ajax_dentro('{MODULO}','lote_produccion',{LOTE})">{LOTE}</a></td>
+    <td class="fabricatd">{MODELO}</td>
+    <td class="fabricatd">{CANTIDAD}</td>
+<!-- END OT_L -->  
+</tr>
+<!-- END row_ot_l --> 
+ </table> 

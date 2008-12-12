@@ -1,0 +1,19 @@
+Para el funcionamiento de este script, es necesaria la utilización de un
+servidor web con PHP.
+
+Revisar el fichero consulta.php para reemplazar los datos de conexion a la 
+base de datos y campos en la consulta sql.
+
+La estructura de la base de datos "Diccionario" que esta utilizando, es:
+id			smallint
+Palabra		varchar(50)
+Texto		text
+
+Si se desea utilizar ASP, ASP.NET o perl, reemplazar unicamente el fichero
+consulta.php, y modificar el contenido de la variable "Servidor" en el fichero
+ajax.js
+
+ATENCION: Estos scripts no funciona si no se utilizan en un servidor web
+del modo http://....
+
+http://www.lawebdelprogramador.com

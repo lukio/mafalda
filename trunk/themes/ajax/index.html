@@ -1,0 +1,19 @@
+<!-- http://www.lawebdelprogramador.com -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>AJAX: Autocompletar</title>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript" src="ajax.js"></script>
+</head>
+
+<body>
+	<p>Código que ayuda a autocompletar el texto segun contenido de la base de datos</p>
+
+		<input type="text" id="input" onkeyup="javascript:autocompletar('lista',this.value);" />
+		<span id="reloj"><img src='image.gif' border=0 /></span>
+	<!-- div que mostrara la lista de coincidencias -->
+	<div id="lista"></div>
+</body>
+</html>

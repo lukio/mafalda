@@ -1,0 +1,27 @@
+<!-- BEGIN LINKS -->
+<div align=right><h5> <a href="#" onclick="ajax_dentro('{MODULO}', 'ot_por_lote', {LOTEPRO})" id=>[Numero OT por Lote]</a> <a href="exportar.php?f=buscar_lote_produccion_csv&q={LOTEPRO}">[Exportar]</a></h5></div>
+<!-- END LINKS -->
+<table class="fabrica"> 
+<tr><td class="fabricatd">Datos varios del Lote y Modelo</td></tr>
+    <tr><td class="fabricaTitulo">modelo</td><td class="fabricaTitulo">merma</td><td class="fabricaTitulo">fecha</td><td class="fabricaTitulo">tol. sens</td><td class="fabricaTitulo">tol. cero</td><td class="fabricaTitulo">imp-salida</td><td class="fabricaTitulo">imp-entrada</td></tr>
+<!-- BEGIN LOTES -->  
+   <td class="fabricatd">
+    {DATO}
+   </td>
+<!-- END LOTES -->  
+ </table> 
+<br />
+ <table class="fabrica"> 
+<tr><td class="fabricatd">Nº serie lote prod</td></tr>
+    <tr><td class="fabricaTitulo">numero serie</td><td class="fabricaTitulo">imp-sg</td><td class="fabricaTitulo">imp-rb</td><td class="fabricaTitulo">imp-rs</td></tr>
+<!-- BEGIN row_imp --> 
+<tr>
+<!-- BEGIN IMPE -->  
+   <td class="fabricatd"><a href="#" onclick="ajax_dentro('{MODULO}', 'serie',{N_SERIE})">{N_SERIE}</a></td>
+   <td class="fabricatd">{IMPSG}</td> 
+   <td class="fabricatd">{IMPRB}</td> 
+   <td class="fabricatd">{IMPRS}</td> 
+<!-- END IMPE -->  
+</tr>
+<!-- END row_imp --> 
+ </table> 

@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head><title>Mafalda - Gerencia Consulta Flexar</title>
+<link rel="stylesheet" type="text/css" media="all" href="themes/css/gerencia.css" />
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="MSSmartTagsPreventParsing" content="TRUE" />
+<meta http-equiv="expires" content="-1" />
+<meta http-equiv= "pragma" content="no-cache" />
+<meta name="robots" content="all" />
+<meta name="author" content="Lucho Rossi" />
+<meta name="description" content="Consultas Flexar" />
+
+<script type="text/javascript">
+<!--
+function ajax_abm(modulo, action){
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?modulo="+modulo
+//evaluar si esta definido action. 
+url=url+"&action="+action
+
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
+
+function ajax_index(modulo, action){
+
+//modelabajar = getElementById('bajamodelo_id').value
+
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?modulo="+modulo
+//evaluar si esta definido action. 
+url=url+"&action="+action
+//url=url+"&1="+num1
+
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
+
+function stateChanged()
+{
+if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+ {
+ document.getElementById("resultado_div").innerHTML=xmlHttp.responseText
+ }
+}
+
+function GetXmlHttpObject()
+{
+var xmlHttp=null;
+try
+ {
+ // Firefox, Opera 8.0+, Safari
+ xmlHttp=new XMLHttpRequest();
+ }
+catch (e)
+ {
+ //Internet Explorer
+ try
+  {
+  xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+  }
+ catch (e)
+  {
+  xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+ }
+return xmlHttp;
+}
+function funcion2()
+{
+
+alert("hola");
+
+}
+
+//-->
+</script>
+
+</head><body>
+<div id="header">
+<div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
+<div align=right><h6><a href="#" onclick="ajax_index('abm_modelos', 'alta')" id=>[alta]</a> <a href="#" onclick="ajax_index('abm_modelos', 'baja')" id=>[baja]</a> <a href="#" onclick="ajax_index('abm_modelos', 'modificacion')" id=>[modificacion]</a> <a href="#" onclick="ajax_index('abm_modelos', 'clonar')" id=>[clonar]</a></h6></div>
+</div>
+<div id="content">
+<pre>
+<form action="index.php" name="form_fabrica" id="form_fabrica_id" method=GET>
+<input type="hidden" name="modulo" value="abm_modelos">
+<input type="hidden" name="action" value="procesa:alta">
+<table>
+    <tbody>
+        <tr>
+            <!-- BEGIN 1 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 1 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 2 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 2 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 3 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 3 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 4 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 4 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 5 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 5 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 6 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 6 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 7 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 7 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 8 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 8 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 9 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 9 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 10 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 10 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 11 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 11 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 12 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 12 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 13 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" {VALUE}></td>
+            <!-- END 13 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 14 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" {VALUE}></td>
+            <!-- END 14 -->
+        </tr>
+        <tr>
+            <!-- BEGIN 15 -->
+            <td>{DATO}</td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="{VALUE}"></td>
+            <!-- END 15 -->
+        </tr>
+</tbody>
+</table>
+</pre>
+</div>
+<!-- BEGIN FIN_FORM -->
+ <div align="right">
+    <input type="{TIPO}" name="{NOMBRE}" value="{VALUE}">
+</div>
+</form>
+<!-- END FIN_FORM -->
+<div id="footer">
+        <!-- INCLUDE footer.inc -->
+</div>

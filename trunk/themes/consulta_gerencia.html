@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head><title>Mafalda - Consulta Flexar</title>
+<link rel="stylesheet" type="text/css" media="all" href="themes/css/consulta_gerencia.css" />
+<style type="text/css">@import url(themes/css/ui.datepicker.css);</style> 
+
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+<meta name="MSSmartTagsPreventParsing" content="TRUE" />
+<meta http-equiv="expires" content="-1" />
+<meta http-equiv= "pragma" content="no-cache" />
+<meta name="robots" content="all" />
+<meta name="author" content="Lucho Rossi" />
+<meta name="description" content="Consultar Flexar" />
+<script type="text/javascript" src="include/jquery-1.2.6.js"></script>
+<script type="text/javascript" src="include/ui.datepicker.js"></script>
+
+<script type="text/javascript">
+<!--
+  $(document).ready(function(){
+//$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true, 
+  //  buttonImage: 'calendar.gif', buttonText: 'Calendar'});
+    $('#fecha_inicio_id').datepicker({dateFormat: 'dd/mm/yy'}); 
+    $('#fecha_final_id').datepicker({dateFormat: 'dd/mm/yy'});
+
+    /* Se carga la primera vez */
+    valor_sector = $("#sector_id").val();
+    $.get("gerencia/search.php", { sector: valor_sector }, function(data){ $("#option_operario").html(data);});
+    /*Se carga cada vez que el select de sector tiene un cambio*/
+   $('#sector_id').change(function() {
+        valor_sector = $("#sector_id").val();
+        $.get("gerencia/search.php", { sector: valor_sector }, function(data){ $("#option_operario").html(data);});
+      });
+  });
+
+
+function clear_textbox()
+{
+    document.getElementById('celda_id').value = ""
+    document.getElementById('lote_embalado_id').value = ""
+    document.getElementById('lote_produccion_id').value = ""
+}
+
+function ajax_dentro(modulo, action, valor){
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?q="+valor
+//evaluar si esta definido action. 
+url=url+"&modulo="+modulo
+url=url+"&action="+action
+//
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged_2
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
+
+function ajax_index(){
+
+action = document.getElementById('tipo_busqueda_id').value
+modulo = 'consulta_gerencia'
+
+q = document.getElementById('celda_id').value
+q +=":"+document.getElementById('numero_ot_id').value
+q +=":"+document.getElementById('sector_id').value
+q +=":"+document.getElementById('nombre_operario_id').value
+q +=":"+document.getElementById('fecha_inicio_id').value
+q +=":"+document.getElementById('fecha_final_id').value
+q +=":"+document.getElementById('marca_id').value
+q +=":"+document.getElementById('modelo_id').value
+
+xmlHttp=GetXmlHttpObject()
+if (xmlHttp==null)
+ {
+ alert ("Browser no soporta HTTP Request")
+ return
+ }
+var url="index.php"
+url=url+"?q="+q
+//evaluar si esta definido action. 
+url=url+"&modulo="+modulo
+url=url+"&action="+action
+//
+url=url+"&sid="+Math.random()
+xmlHttp.onreadystatechange=stateChanged
+xmlHttp.open("GET",url,true)
+xmlHttp.send(null)
+}
+
+function stateChanged()
+{
+if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+ {
+ document.getElementById("resultado_div").innerHTML=xmlHttp.responseText
+ }
+}
+
+function stateChanged_2()
+{
+if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
+ {
+ document.getElementById("info").innerHTML=xmlHttp.responseText
+ }
+}
+
+function GetXmlHttpObject()
+{
+var xmlHttp=null;
+try
+ {
+ // Firefox, Opera 8.0+, Safari
+ xmlHttp=new XMLHttpRequest();
+ }
+catch (e)
+ {
+ //Internet Explorer
+ try
+  {
+  xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+  }
+ catch (e)
+  {
+  xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+ }
+return xmlHttp;
+}
+//-->
+</script>
+</head><body>
+<div id="preheader">
+<div align="right"><h6><a href="index.php?action=logout">[logout]</a></h6></div>
+    <a class="nav" href="index.php?modulo=consulta_gerencia" title="Consulta Gerencia" id="consulta_gerencia">Consulta Gerencia</a>
+    <a class="nav" href="index.php?modulo=abm_modelos&amp;action=clonar" title="ABM Modelos" id="abm_modelos">ABM Modelos</a>
+    <a class="nav" href="index.php?modulo=consulta_planos" title="Buscar Planos" id="buscar_panos">Buscar Planos</a>
+</div>
+<div id="header">
+<div align="left">
+ <form action="javascript:ajax_index();" id="form_gerencia_id">
+ <table class="header" summary="">
+ <tbody>
+     <tr>
+    <!-- BEGIN input_der -->
+         <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" tabindex="1" /></td>
+    <!-- END input_der -->
+    </tr><tr>
+    <td><h6>Sector: </h6></td>
+    <td><select name="sector_name" id="sector_id" tabindex="2" >
+    <!-- BEGIN select_sector -->
+         <option value="{NAME_DATO}">{NAME_DATO}</option>
+    <!-- END select_sector -->
+   </select>
+    </td>
+    <td><h6>Nombre Operario: </h6></td>
+    <td>
+      <div id="option_operario">
+      <select name="nombre_operador" id="nombre_operario_id" tabindex="3">
+       <option value="x">x</option>
+      </select> 
+    </div>
+    </td>
+     <tr>
+    <td><h6>Marca: </h6></td>
+    <td><select name="marca_name" id="marca_id" tabindex="6" >
+    <!-- BEGIN select_marca -->
+         <option value="{NAME_DATO}">{NAME_DATO}</option>
+    <!-- END select_marca -->
+   </select>
+    </td>
+    <td><h6>Modelo: </h6></td>
+    <td><select name="modelo_name" id="modelo_id" tabindex="7" >
+    <!-- BEGIN select_modelo -->
+         <option value="{NAME_DATO}">{NAME_DATO}</option>
+    <!-- END select_modelo -->
+   </select>
+    </td>
+   </tr>
+</tbody>
+</table>
+<table class="header" summary="">
+<tbody>
+    <tr>
+    <!-- BEGIN FECHAS -->
+    <td><h6>{DATO}</h6></td><td><input type="{TYPE_DATO}" name="{NAME_DATO}" size="{SIZE_DATO}" id="{ID_DATO}" value="Click calendario" tabindex="4" /></td>
+    <!-- END FECHAS -->
+    </tr>
+</tbody>
+</table>
+<table class="header" summary="">
+<tbody>
+    <tr>
+    <td><h6>Tipo de Busqueda: </h6></td>
+    <td><select name="tipo_busqueda" id="tipo_busqueda_id" tabindex="5" >
+    <!-- BEGIN BUSQUEDA -->
+    <option value="{NAME_DATO}">{NAME_DATO}</option>
+    <!-- END BUSQUEDA -->
+    </select>
+    </td>
+    </tr>
+</tbody>
+</table>
+     <div align="right">
+        <input type="submit" name="Submit" value="Buscar" tabindex="6" />
+     </div>
+</form>
+</div>
+</div>
+
+<div id="content">
+<p>
+<div id="resultado_div"></div>
+<div id="resultado_ot"></div>
+</p>
+
+</div>
+
+<div id="footer">
+        <!-- INCLUDE footer.inc -->
+</div>
+
+</body>
+</html>
