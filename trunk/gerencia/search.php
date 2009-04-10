@@ -1,5 +1,6 @@
 <?php
 $sector = $_GET["sector"];
+
 if (!$sector) return;
 $items = array();
 $ruta = '../include';
